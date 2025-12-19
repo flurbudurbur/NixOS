@@ -15,33 +15,39 @@
   networking.networkmanager.enable = true;
 
   time.timeZone = "Europe/Amsterdam";
-
-  # services.xserver.enable = true;
-
-  services.xserver = {
-    enable = true;
-    autoRepeatDelay = 200;
-    autoRepeatInterval = 35;
-    windowManager.qtile.enable = true;
-  };
+  
+  programs.hyprland.enable = true;
   services.displayManager.ly.enable = true;
 
- users.users.flur = {
-   isNormalUser = true;
-   extraGroups = [ "wheel" ];
-   packages = with pkgs; [
-     tree
-   ];
- };
+  hardware.nvidia = {
+    modesetting.enable = true;
+    open = true;
+  };
+
+  hardware.graphics.enable = true;
+
+  users.users.flur = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" ];
+    packages = with pkgs; [
+      tree
+    ];
+  };
 
   programs.firefox.enable = true;
 
- environment.systemPackages = with pkgs; [
-   vim 
-   wget
-   git
-   alacritty
- ];
+  environment.systemPackages = with pkgs; [
+    vim 
+    wget
+    git
+    alacritty
+    waybar
+    kitty
+    wofi
+    hyprpaper
+    mako
+    pciutils
+  ];
 
 fonts.packages = with pkgs; [
   nerd-fonts.jetbrains-mono

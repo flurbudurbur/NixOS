@@ -5,9 +5,9 @@
 	home.homeDirectory = "/home/flur";
 	programs.git = {
 		enable = true;
-		userEmail = "69259138+flurbudurbur@users.noreply.github.com";
-		userName = "flurbudurbur";
-		extraConfig = {
+		settings = {
+			user.email = "69259138+flurbudurbur@users.noreply.github.com";
+			user.name = "flurbudurbur";
 			init.defaultBranch = "main";
 		};
 	};
