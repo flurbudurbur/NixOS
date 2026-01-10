@@ -130,7 +130,7 @@ in
 				"$mainMod, R, exec, $menu"
 				"$mainMod, P, pseudo,"
 				"$mainMod, J, togglesplit,"
-				"$mainMod, L, exec, hyprlock,"
+				"$mainMod, L, exec, hyprlock"
 				"$mainMod, SPACE, exec, hyprlauncher"
 				"ALT, SPACE, exec, $menu,"
 				# Move focus
