@@ -16,6 +16,7 @@ in
 {
 	wayland.windowManager.hyprland = {
 		enable = true;
+		systemd.enable = false;  # UWSM handles systemd integration
 		settings = {
 			# Monitor config (per-hostname)
 			monitor = monitors;
@@ -108,8 +109,12 @@ in
 				disable_hyprland_logo = true;
 			};
 
+			cursor = {
+				no_hardware_cursors = true;
+			};
+
 			exec-once = [
-				"hyprpaper"
+				# hyprpaper is managed by systemd via home-manager
 			];
 
 			input = {
