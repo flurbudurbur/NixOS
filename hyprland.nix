@@ -133,6 +133,8 @@ in
 				"$mainMod, L, exec, hyprlock"
 				"$mainMod, SPACE, exec, hyprlauncher"
 				"ALT, SPACE, exec, $menu,"
+				# Maximize window
+				"ALT, up, fullscreen, 1"
 				# Move focus
 				"$mainMod, left, movefocus, l"
 				"$mainMod, right, movefocus, r"

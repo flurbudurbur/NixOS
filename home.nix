@@ -6,6 +6,7 @@
 		./hyprlock.nix
 		./waybar.nix
 		./hyprlauncher.nix
+		./tmux.nix
 	];
 
 	home = {
@@ -13,6 +14,8 @@
 		homeDirectory = "/home/flur";
 
 		packages = with pkgs; [
+			rose-pine-gtk-theme
+			rose-pine-icon-theme
 			discord
 			lazygit
 			gnupg
@@ -32,6 +35,42 @@
 		};
 
 		stateVersion = "25.11";
+	};
+
+	gtk = {
+		enable = true;
+		theme = {
+			name = "rose-pine-moon";
+			package = pkgs.rose-pine-gtk-theme;
+		};
+		iconTheme = {
+			name = "rose-pine-moon";
+			package = pkgs.rose-pine-icon-theme;
+		};
+	};
+
+	qt = {
+		enable = true;
+		platformTheme.name = "gtk";
+		style.name = "gtk2";
+	};
+
+	dconf.settings = {
+		"org/gnome/desktop/interface" = {
+			color-scheme = "prefer-dark";
+		};
+	};
+
+	services.hyprpaper = {
+		enable = true;
+		settings = {
+			preload = [
+				"~/.config/wallpapers/wallpaper.jpg"
+			];
+			wallpaper = [
+				",~/.config/wallpapers/wallpaper.jpg"
+			];
+		};
 	};
 
 	programs = {
