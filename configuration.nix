@@ -1,60 +1,98 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      /etc/nixos/hardware-configuration.nix
-    ];
+  imports = [
+    ./hardware-configuration.nix
+  ];
 
-  # Use the systemd-boot EFI boot loader.
+  # Nix Settings
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nixpkgs.config.allowUnfree = true;
+
+  # Boot
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "flurPC";
+  # Hardware
+  hardware.graphics.enable = true;
 
-  networking.networkmanager.enable = true;
-
-  time.timeZone = "Europe/Amsterdam";
-  
-  programs.hyprland.enable = true;
-  services.displayManager.ly.enable = true;
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
 
   hardware.nvidia = {
     modesetting.enable = true;
     open = true;
   };
 
-  hardware.graphics.enable = true;
+  # Networking
+  networking.hostName = "flurPC";
+  networking.networkmanager.enable = true;
 
+  # Localization
+  time.timeZone = "Europe/Amsterdam";
+
+  # Users
   users.users.flur = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "input" ];
     packages = with pkgs; [
       tree
     ];
   };
+  
+  # Security
+  security.rtkit.enable = true;
+  security.pam.services.hyprlock = {};
 
-  programs.firefox.enable = true;
+  # Services
+  services = {
+    pulseaudio.enable = false;
 
+    greetd = {
+      enable = true;
+      settings = {
+        default_session = {
+          command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd Hyprland";
+          user = "greeter";
+        };
+      };
+    };
+
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+    };
+  };
+
+  # Programs
+  programs = {
+    hyprland.enable = true;
+    steam.enable = true;
+  };
+
+  # Packages
   environment.systemPackages = with pkgs; [
-    vim 
-    wget
+    vim
     git
-    alacritty
-    waybar
-    kitty
-    wofi
-    hyprpaper
-    mako
     pciutils
+    tree
+    wget
+    alacritty
+    kitty
+    mako
+    waybar
+    wofi
   ];
 
-fonts.packages = with pkgs; [
-  nerd-fonts.jetbrains-mono
-];
+  fonts.packages = with pkgs; [
+    nerd-fonts.jetbrains-mono
+  ];
 
-nix.settings.experimental-features = [ "nix-command" "flakes" ];
- system.stateVersion = "25.11";
-
+  # System
+  system.stateVersion = "25.11";
 }
 
