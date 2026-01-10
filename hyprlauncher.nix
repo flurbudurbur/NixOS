@@ -12,23 +12,23 @@
 	'';
 
 	xdg.configFile."hyprlauncher/style.css".text = ''
-		/* Waybar-inspired Catppuccin theme */
+		/* Rosé Pine theme */
 		window {
-			background-color: rgba(30, 30, 46, 0.9);
+			background-color: rgba(25, 23, 36, 0.9);
 			border-radius: 10px;
-			border: 2px solid rgba(137, 180, 250, 0.3);
+			border: 2px solid rgba(235, 188, 186, 0.3);
 		}
 
 		entry {
 			font-family: monospace;
 			font-size: 13px;
-			color: #cdd6f4;
+			color: #e0def4;
 			background-color: transparent;
 			border: none;
 			padding: 8px 12px;
 			margin: 8px;
 			border-radius: 6px;
-			background-color: rgba(30, 30, 46, 0.5);
+			background-color: rgba(31, 29, 46, 0.5);
 		}
 
 		entry:focus {
@@ -43,7 +43,7 @@
 
 		#list row {
 			padding: 8px 12px;
-			color: #cdd6f4;
+			color: #e0def4;
 			font-family: monospace;
 			font-size: 13px;
 			border-radius: 6px;
@@ -51,12 +51,12 @@
 		}
 
 		#list row:selected {
-			background-color: rgba(137, 180, 250, 0.2);
-			color: #89b4fa;
+			background-color: rgba(235, 188, 186, 0.2);
+			color: #ebbcba;
 		}
 
 		#list row:hover {
-			background-color: rgba(137, 180, 250, 0.1);
+			background-color: rgba(235, 188, 186, 0.1);
 		}
 
 		/* Application icon styling */
@@ -70,13 +70,13 @@
 		}
 
 		scrollbar slider {
-			background-color: rgba(137, 180, 250, 0.3);
+			background-color: rgba(196, 167, 231, 0.3);
 			border-radius: 4px;
 			min-width: 6px;
 		}
 
 		scrollbar slider:hover {
-			background-color: rgba(137, 180, 250, 0.5);
+			background-color: rgba(196, 167, 231, 0.5);
 		}
 	'';
 }

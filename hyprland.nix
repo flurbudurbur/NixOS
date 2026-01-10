@@ -29,8 +29,9 @@ in
 			# Environment variables
 			env = [
 				"XCURSOR_SIZE,24"
-				"XCURSOR_THEME,BreezeX-RosePine"
+				"XCURSOR_THEME,BreezeX-RosePine-Linux"
 				"HYPRCURSOR_SIZE,24"
+				"HYPRCURSOR_THEME,BreezeX-RosePine-Linux"
 			];
 
 			# General settings
@@ -38,8 +39,8 @@ in
 				gaps_in = 5;
 				gaps_out = 10;
 				border_size = 2;
-				"col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
-				"col.inactive_border" = "rgba(595959aa)";
+				"col.active_border" = "rgba(ebbcbaee) rgba(c4a7e7ee) 45deg";
+				"col.inactive_border" = "rgba(6e6a86aa)";
 				resize_on_border = false;
 				allow_tearing = false;
 				layout = "dwindle";

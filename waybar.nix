@@ -62,8 +62,8 @@
 			}
 
 			window#waybar {
-				background-color: rgba(30, 30, 46, 0.9);
-				color: #cdd6f4;
+				background-color: rgba(25, 23, 36, 0.9);
+				color: #e0def4;
 			}
 
 			#workspaces {
@@ -72,19 +72,39 @@
 
 			#workspaces button {
 				padding: 0 5px;
-				color: #cdd6f4;
+				color: #e0def4;
 				background: transparent;
 				border: none;
 				min-width: 20px;
 			}
 
 			#workspaces button.active {
-				color: #89b4fa;
-				background: rgba(137, 180, 250, 0.2);
+				color: #ebbcba;
+				background: rgba(235, 188, 186, 0.2);
 			}
 
 			#workspaces button:hover {
-				background: rgba(137, 180, 250, 0.1);
+				background: rgba(235, 188, 186, 0.1);
+			}
+
+			#clock {
+				color: #c4a7e7;
+			}
+
+			#cpu {
+				color: #eb6f92;
+			}
+
+			#memory {
+				color: #f6c177;
+			}
+
+			#network {
+				color: #9ccfd8;
+			}
+
+			#pulseaudio {
+				color: #31748f;
 			}
 
 			#clock, #cpu, #memory, #network, #pulseaudio, #tray {
