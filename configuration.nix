@@ -36,6 +36,7 @@
   users.users.flur = {
     isNormalUser = true;
     extraGroups = [ "wheel" "input" ];
+    shell = pkgs.zsh;
     packages = with pkgs; [
       tree
     ];
@@ -74,7 +75,10 @@
       withUWSM = true;
     };
     steam.enable = true;
+    zsh.enable = true;
   };
+
+  environment.shells = with pkgs; [ zsh ];
 
   # Packages
   environment.systemPackages = with pkgs; [

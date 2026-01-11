@@ -82,59 +82,59 @@
 				init.defaultBranch = "main";
 			};
 		};
-		bash = {
+		zsh = {
 			enable = true;
+			enableCompletion = true;
+			autosuggestion.enable = true;
+			syntaxHighlighting.enable = true;
+			history = {
+				size = 10000;
+				save = 10000;
+			};
 			shellAliases = {
 				btw = "echo I use Nixos, btw";
 				nrt = "nixos-rebuild test --sudo --flake /home/flur/nixos-system";
 				nrs = "nixos-rebuild switch --sudo --flake /home/flur/nixos-system";
 			};
-			initExtra = ''
-			# Oh My Bash
-			export OSH="${config.home.homeDirectory}/.oh-my-bash"
-
-			# Rose Pine theme colors
-			OSH_THEME="robbyrussell"
-
-			# Uncomment the following line to enable command auto-correction.
-			ENABLE_CORRECTION="true"
-
-			# Completions
-			completions=(
-				git
-				ssh
-			)
-
-			# Aliases
-			aliases=(
-				general
-			)
-
-			# Plugins
-			plugins=(
-				git
-				bash-preexec
-			)
-
-			# Source Oh My Bash if installed
-			if [ -f "$OSH/oh-my-bash.sh" ]; then
-				source "$OSH/oh-my-bash.sh"
-			fi
-
-			# Rose Pine color palette for terminal
-			export ROSE_PINE_BASE="#191724"
-			export ROSE_PINE_SURFACE="#1f1d2e"
-			export ROSE_PINE_OVERLAY="#26233a"
-			export ROSE_PINE_MUTED="#6e6a86"
-			export ROSE_PINE_SUBTLE="#908caa"
-			export ROSE_PINE_TEXT="#e0def4"
-			export ROSE_PINE_LOVE="#eb6f92"
-			export ROSE_PINE_GOLD="#f6c177"
-			export ROSE_PINE_ROSE="#ebbcba"
-			export ROSE_PINE_PINE="#31748f"
-			export ROSE_PINE_FOAM="#9ccfd8"
-			export ROSE_PINE_IRIS="#c4a7e7"
-		'';
+			oh-my-zsh = {
+				enable = true;
+				plugins = [ "git" "sudo" "tmux" "podman" ];
+			};
+		};
+		starship = {
+			enable = true;
+			enableZshIntegration = true;
+			settings = {
+				palette = "rose-pine";
+				palettes.rose-pine = {
+					base = "#191724";
+					surface = "#1f1d2e";
+					overlay = "#26233a";
+					muted = "#6e6a86";
+					subtle = "#908caa";
+					text = "#e0def4";
+					love = "#eb6f92";
+					gold = "#f6c177";
+					rose = "#ebbcba";
+					pine = "#31748f";
+					foam = "#9ccfd8";
+					iris = "#c4a7e7";
+				};
+				format = "$directory$git_branch$git_status$character";
+				character = {
+					success_symbol = "[➜](foam)";
+					error_symbol = "[➜](love)";
+				};
+				directory = {
+					style = "bold iris";
+				};
+				git_branch = {
+					style = "bold rose";
+				};
+				git_status = {
+					style = "bold gold";
+				};
+			};
 		};
 		ssh = {
 			enableDefaultConfig = false;
@@ -155,6 +155,7 @@
 		alacritty = {
 			enable = true;
 			settings = {
+				terminal.shell = "${pkgs.zsh}/bin/zsh";
 				font = {
 					normal = {
 						family = "FiraCode Nerd Font";
@@ -220,6 +221,8 @@
 				size = 12;
 			};
 			settings = {
+				# Enable ligatures
+				disable_ligatures = "never";
 				# Rose Pine theme
 				foreground = "#e0def4";
 				background = "#191724";
