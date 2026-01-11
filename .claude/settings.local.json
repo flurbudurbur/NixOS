@@ -4,7 +4,8 @@
       "Bash(nix search:*)",
       "WebFetch(domain:rosepinetheme.com)",
       "WebSearch",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(nix flake check:*)"
     ],
     "deny": [],
     "ask": []

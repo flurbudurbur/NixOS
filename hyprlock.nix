@@ -1,5 +1,8 @@
 { config, pkgs, ... }:
 
+let
+  c = import ./colors.nix;
+in
 {
   programs.hyprlock = {
     enable = true;
@@ -26,11 +29,11 @@
           monitor = "";
           dots_center = true;
           fade_on_empty = false;
-          font_color = "rgb(202, 211, 245)";
-          inner_color = "rgb(91, 96, 120)";
-          outer_color = "rgb(24, 25, 38)";
+          font_color = c.rgb c.text;
+          inner_color = c.rgb c.overlay;
+          outer_color = c.rgb c.base;
           outline_thickness = 5;
-          placeholder_text = ''<span foreground="##cad3f5">Password...</span>'';
+          placeholder_text = "<span foreground=\"##${c.strip c.text}\">Password...</span>";
           shadow_passes = 2;
         }
       ];
@@ -40,7 +43,7 @@
         {
           monitor = "";
           text = ''cmd[update:1000] echo "<span>$(date +"%H:%M")</span>"'';
-          color = "rgb(202, 211, 245)";
+          color = c.rgb c.text;
           font_size = 120;
           font_family = "JetBrains Mono";
           position = "0, 200";
@@ -51,7 +54,7 @@
         {
           monitor = "";
           text = ''cmd[update:1000] echo "<span>$(date +"%A, %B %d")</span>"'';
-          color = "rgb(202, 211, 245)";
+          color = c.rgb c.text;
           font_size = 20;
           font_family = "JetBrains Mono";
           position = "0, 100";

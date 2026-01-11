@@ -1,3 +1,6 @@
+let
+	c = import ./colors.nix;
+in
 {
 	programs.waybar = {
 		enable = true;
@@ -47,7 +50,7 @@
 				pulseaudio = {
 					format = "VOL {volume}%";
 					format-muted = "MUTED";
-					on-click = "pavucontrol";
+					on-click = "pwvucontrol";
 				};
 
 				tray = {
@@ -62,8 +65,8 @@
 			}
 
 			window#waybar {
-				background-color: rgba(25, 23, 36, 0.9);
-				color: #e0def4;
+				background-color: ${c.rgba c.base "0.9"};
+				color: ${c.text};
 			}
 
 			#workspaces {
@@ -72,39 +75,39 @@
 
 			#workspaces button {
 				padding: 0 5px;
-				color: #e0def4;
+				color: ${c.text};
 				background: transparent;
 				border: none;
 				min-width: 20px;
 			}
 
 			#workspaces button.active {
-				color: #ebbcba;
-				background: rgba(235, 188, 186, 0.2);
+				color: ${c.rose};
+				background: ${c.rgba c.rose "0.2"};
 			}
 
 			#workspaces button:hover {
-				background: rgba(235, 188, 186, 0.1);
+				background: ${c.rgba c.rose "0.1"};
 			}
 
 			#clock {
-				color: #c4a7e7;
+				color: ${c.iris};
 			}
 
 			#cpu {
-				color: #eb6f92;
+				color: ${c.love};
 			}
 
 			#memory {
-				color: #f6c177;
+				color: ${c.gold};
 			}
 
 			#network {
-				color: #9ccfd8;
+				color: ${c.foam};
 			}
 
 			#pulseaudio {
-				color: #31748f;
+				color: ${c.pine};
 			}
 
 			#clock, #cpu, #memory, #network, #pulseaudio, #tray {

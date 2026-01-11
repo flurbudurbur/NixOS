@@ -1,6 +1,7 @@
 { hostname }:
 
 let
+  c = import ./colors.nix;
   monitorConfigs = {
     flurPC = [
       "DP-2,2560x1440@165,0x0,1"
@@ -33,6 +34,7 @@ in
 				"XCURSOR_THEME,BreezeX-RosePine-Linux"
 				"HYPRCURSOR_SIZE,24"
 				"HYPRCURSOR_THEME,BreezeX-RosePine-Linux"
+				"GTK_THEME,rose-pine-moon"
 			];
 
 			# General settings
@@ -40,8 +42,8 @@ in
 				gaps_in = 5;
 				gaps_out = 10;
 				border_size = 2;
-				"col.active_border" = "rgba(ebbcbaee) rgba(c4a7e7ee) 45deg";
-				"col.inactive_border" = "rgba(6e6a86aa)";
+				"col.active_border" = "${c.hypr c.rose "ee"} ${c.hypr c.iris "ee"} 45deg";
+				"col.inactive_border" = c.hypr c.muted "aa";
 				resize_on_border = false;
 				allow_tearing = false;
 				layout = "dwindle";
@@ -137,7 +139,7 @@ in
 				"$mainMod, P, pseudo,"
 				"$mainMod, J, togglesplit,"
 				"$mainMod, L, exec, hyprlock"
-				"$mainMod, SPACE, exec, hyprlauncher"
+				"$mainMod, SPACE, exec, walker"
 				"ALT, SPACE, exec, $menu,"
 				# Maximize window
 				"ALT, up, fullscreen, 1"

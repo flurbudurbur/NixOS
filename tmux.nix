@@ -1,5 +1,8 @@
 { pkgs, ... }:
 
+let
+  c = import ./colors.nix;
+in
 {
   programs.tmux = {
     enable = true;
@@ -55,14 +58,14 @@
       bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle
       bind-key -T copy-mode-vi y send-keys -X copy-selection-closing-target
 
-      # Status bar styling (Gruvbox Dark Medium)
-      set -g status-style 'bg=#282828 fg=#ebdbb2'
-      set -g status-left '#[bg=#d65d0e,fg=#282828,bold] #S #[bg=#282828] '
-      set -g status-right '#[bg=#504945,fg=#ebdbb2] %Y-%m-%d %H:%M '
-      set -g window-status-current-style 'bg=#504945,fg=#ebdbb2,bold'
-      set -g window-status-style 'bg=#282828,fg=#a89984'
-      set -g pane-border-style 'fg=#504945'
-      set -g pane-active-border-style 'fg=#d65d0e'
+      # Status bar styling (Rose Pine Moon)
+      set -g status-style 'bg=${c.base} fg=${c.text}'
+      set -g status-left '#[bg=${c.rose},fg=${c.base},bold] #S #[bg=${c.base}] '
+      set -g status-right '#[bg=${c.overlay},fg=${c.text}] %Y-%m-%d %H:%M '
+      set -g window-status-current-style 'bg=${c.highlightMed},fg=${c.text},bold'
+      set -g window-status-style 'bg=${c.base},fg=${c.muted}'
+      set -g pane-border-style 'fg=${c.overlay}'
+      set -g pane-active-border-style 'fg=${c.rose}'
     '';
 
     plugins = with pkgs.tmuxPlugins; [

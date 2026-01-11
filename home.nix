@@ -1,11 +1,15 @@
 { config, pkgs, hostname, ... }:
 
+let
+	c = import ./colors.nix;
+in
 {
 	imports = [
 		(import ./hyprland.nix { inherit hostname; })
 		./hyprlock.nix
+		./hypridle.nix
 		./waybar.nix
-		./hyprlauncher.nix
+		./walker.nix
 		./tmux.nix
 	];
 
@@ -23,7 +27,7 @@
 			hyprpaper
 			teams-for-linux
 			xplr
-			pavucontrol
+			pwvucontrol
 		];
 
 		pointerCursor = {
@@ -58,6 +62,10 @@
 	dconf.settings = {
 		"org/gnome/desktop/interface" = {
 			color-scheme = "prefer-dark";
+			gtk-theme = "rose-pine-moon";
+			icon-theme = "rose-pine-moon";
+			cursor-theme = "BreezeX-RosePine-Linux";
+			cursor-size = 24;
 		};
 	};
 
@@ -105,20 +113,20 @@
 			enable = true;
 			enableZshIntegration = true;
 			settings = {
-				palette = "rose-pine";
-				palettes.rose-pine = {
-					base = "#191724";
-					surface = "#1f1d2e";
-					overlay = "#26233a";
-					muted = "#6e6a86";
-					subtle = "#908caa";
-					text = "#e0def4";
-					love = "#eb6f92";
-					gold = "#f6c177";
-					rose = "#ebbcba";
-					pine = "#31748f";
-					foam = "#9ccfd8";
-					iris = "#c4a7e7";
+				palette = "rose-pine-moon";
+				palettes.rose-pine-moon = {
+					base = c.base;
+					surface = c.surface;
+					overlay = c.overlay;
+					muted = c.muted;
+					subtle = c.subtle;
+					text = c.text;
+					love = c.love;
+					gold = c.gold;
+					rose = c.rose;
+					pine = c.pine;
+					foam = c.foam;
+					iris = c.iris;
 				};
 				format = "$directory$git_branch$git_status$character";
 				character = {
@@ -180,36 +188,36 @@
 				};
 				colors = {
 					primary = {
-						foreground = "#e0def4";
-						background = "#191724";
+						foreground = c.text;
+						background = c.base;
 					};
 					cursor = {
-						text = "#e0def4";
-						cursor = "#524f67";
+						text = c.text;
+						cursor = c.highlightHigh;
 					};
 					selection = {
-						text = "#e0def4";
-						background = "#403d52";
+						text = c.text;
+						background = c.highlightMed;
 					};
 					normal = {
-						black = "#26233a";
-						red = "#eb6f92";
-						green = "#31748f";
-						yellow = "#f6c177";
-						blue = "#9ccfd8";
-						magenta = "#c4a7e7";
-						cyan = "#ebbcba";
-						white = "#e0def4";
+						black = c.ansi.black;
+						red = c.ansi.red;
+						green = c.ansi.green;
+						yellow = c.ansi.yellow;
+						blue = c.ansi.blue;
+						magenta = c.ansi.magenta;
+						cyan = c.ansi.cyan;
+						white = c.ansi.white;
 					};
 					bright = {
-						black = "#6e6a86";
-						red = "#eb6f92";
-						green = "#31748f";
-						yellow = "#f6c177";
-						blue = "#9ccfd8";
-						magenta = "#c4a7e7";
-						cyan = "#ebbcba";
-						white = "#e0def4";
+						black = c.ansi.brightBlack;
+						red = c.ansi.brightRed;
+						green = c.ansi.brightGreen;
+						yellow = c.ansi.brightYellow;
+						blue = c.ansi.brightBlue;
+						magenta = c.ansi.brightMagenta;
+						cyan = c.ansi.brightCyan;
+						white = c.ansi.brightWhite;
 					};
 				};
 			};
@@ -223,46 +231,46 @@
 			settings = {
 				# Enable ligatures
 				disable_ligatures = "never";
-				# Rose Pine theme
-				foreground = "#e0def4";
-				background = "#191724";
-				selection_foreground = "#e0def4";
-				selection_background = "#403d52";
-				cursor = "#524f67";
-				cursor_text_color = "#e0def4";
-				url_color = "#c4a7e7";
+				# Rose Pine Moon theme
+				foreground = c.text;
+				background = c.base;
+				selection_foreground = c.text;
+				selection_background = c.highlightMed;
+				cursor = c.highlightHigh;
+				cursor_text_color = c.text;
+				url_color = c.iris;
 
 				# Black
-				color0 = "#26233a";
-				color8 = "#6e6a86";
+				color0 = c.ansi.black;
+				color8 = c.ansi.brightBlack;
 
 				# Red
-				color1 = "#eb6f92";
-				color9 = "#eb6f92";
+				color1 = c.ansi.red;
+				color9 = c.ansi.brightRed;
 
 				# Green
-				color2 = "#31748f";
-				color10 = "#31748f";
+				color2 = c.ansi.green;
+				color10 = c.ansi.brightGreen;
 
 				# Yellow
-				color3 = "#f6c177";
-				color11 = "#f6c177";
+				color3 = c.ansi.yellow;
+				color11 = c.ansi.brightYellow;
 
 				# Blue
-				color4 = "#9ccfd8";
-				color12 = "#9ccfd8";
+				color4 = c.ansi.blue;
+				color12 = c.ansi.brightBlue;
 
 				# Magenta
-				color5 = "#c4a7e7";
-				color13 = "#c4a7e7";
+				color5 = c.ansi.magenta;
+				color13 = c.ansi.brightMagenta;
 
 				# Cyan
-				color6 = "#ebbcba";
-				color14 = "#ebbcba";
+				color6 = c.ansi.cyan;
+				color14 = c.ansi.brightCyan;
 
 				# White
-				color7 = "#e0def4";
-				color15 = "#e0def4";
+				color7 = c.ansi.white;
+				color15 = c.ansi.brightWhite;
 
 				# Window settings
 				window_padding_width = 10;
