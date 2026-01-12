@@ -1,4 +1,4 @@
-{ config, pkgs, hostname, ... }:
+{ pkgs, hostname, ... }:
 
 let
 	c = import ./colors.nix;
@@ -13,6 +13,7 @@ in
 		./tmux.nix
 		./fastfetch.nix
 		./nvim.nix
+		./nixcord.nix
 	];
 
 	home = {
@@ -26,7 +27,6 @@ in
 		packages = with pkgs; [
 			rose-pine-gtk-theme
 			rose-pine-icon-theme
-			discord
 			lazygit
 			gnupg
 			claude-code

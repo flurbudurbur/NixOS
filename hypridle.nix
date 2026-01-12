@@ -1,8 +1,9 @@
-{ config, pkgs, ... }:
+{ hypridle, ... }:
 
 {
   services.hypridle = {
     enable = true;
+    package = hypridle;  # Use the git version instead of nixpkgs
     settings = {
       general = {
         lock_cmd = "pidof hyprlock || hyprlock";
