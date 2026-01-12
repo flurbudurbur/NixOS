@@ -52,8 +52,8 @@ in
 			decoration = {
 				rounding = 10;
 				rounding_power = 2;
-				active_opacity = 1.0;
-				inactive_opacity = 1.0;
+				active_opacity = 0.95;
+				inactive_opacity = 0.85;
 				shadow = {
 					enabled = true;
 					range = 4;
@@ -204,6 +204,12 @@ in
 			# Window rules
 			windowrule = [
 				"nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0"
+			];
+
+			windowrulev2 = [
+				# Transparency exceptions (opaque windows)
+				# Add applications here that should NOT be transparent
+				# Example: "opacity 1.0 1.0,class:(application-name)"
 			];
 		};
 	};

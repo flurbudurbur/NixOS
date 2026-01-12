@@ -58,20 +58,15 @@ in
       bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle
       bind-key -T copy-mode-vi y send-keys -X copy-selection-closing-target
 
-      # Status bar styling (Rose Pine Moon)
-      set -g status-style 'bg=${c.base} fg=${c.text}'
-      set -g status-left '#[bg=${c.rose},fg=${c.base},bold] #S #[bg=${c.base}] '
-      set -g status-right '#[bg=${c.overlay},fg=${c.text}] %Y-%m-%d %H:%M '
-      set -g window-status-current-style 'bg=${c.highlightMed},fg=${c.text},bold'
-      set -g window-status-style 'bg=${c.base},fg=${c.muted}'
-      set -g pane-border-style 'fg=${c.overlay}'
-      set -g pane-active-border-style 'fg=${c.rose}'
+      # Rose Pine theme configuration
+      set -g @rose_pine_variant 'moon'
     '';
 
     plugins = with pkgs.tmuxPlugins; [
       sensible
       vim-tmux-navigator
       yank
+      rose-pine
     ];
   };
 

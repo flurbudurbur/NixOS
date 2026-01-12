@@ -15,9 +15,16 @@
 			url = "github:nix-community/home-manager/release-25.11";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
+		nix-flatpak = {
+			url = "github:gmodena/nix-flatpak?ref=latest";
+		};
+		nixvim = {
+			url = "github:nix-community/nixvim/nixos-25.11";
+			inputs.nixpkgs.follows = "nixpkgs";
+		};
 	};
 
-	outputs = { self, nixpkgs, home-manager, zen-browser, ... }: {
+	outputs = { self, nixpkgs, home-manager, zen-browser, nix-flatpak, nixvim, ... }: {
 		nixosConfigurations.flurPC = nixpkgs.lib.nixosSystem {
 			system = "x86_64-linux";
 			modules = [
@@ -33,6 +40,8 @@
 						backupFileExtension = "backup";
 						sharedModules = [
 							zen-browser.homeModules.default
+							nix-flatpak.homeManagerModules.nix-flatpak
+							nixvim.homeModules.nixvim
 						];
 					};
 				}

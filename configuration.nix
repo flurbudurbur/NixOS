@@ -13,7 +13,12 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Hardware
-  hardware.graphics.enable = true;
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
+
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.bluetooth = {
     enable = true;
@@ -49,16 +54,29 @@
   # Services
   services = {
     pulseaudio.enable = false;
+    flatpak.enable = true;
 
-    greetd = {
+    # KeyD service config for setting caps lock as control
+    keyd = {
       enable = true;
-      settings = {
-        default_session = {
-          command = "${pkgs.hyprland}/bin/Hyprland --config /etc/greetd/hyprland-greeter.conf";
-          user = "greeter";
+      keyboards = {
+        # File name, can be whatevs
+        default = {
+          ids = ["*"];
+          settings = {
+            main = {
+              capslock = "layer(control)";
+              control = "capslock";
+            };
+          };
         };
       };
     };
+
+    # GNOME services for better app integration
+    gvfs.enable = true;  # Mount, trash, and other functionalities
+    gnome.gnome-keyring.enable = true;  # Password/secret storage
+    gnome.gnome-online-accounts.enable = false;  # Disable cloud accounts
 
     pipewire = {
       enable = true;
@@ -73,6 +91,7 @@
     hyprland = {
       enable = true;
       withUWSM = true;
+      xwayland.enable = true;
     };
     regreet = {
       enable = true;
@@ -90,37 +109,41 @@
     zsh.enable = true;
   };
 
+  xdg.portal = {
+    enable = true;
+    extraPortals = [
+      pkgs.xdg-desktop-portal-gtk
+      pkgs.xdg-desktop-portal-hyprland
+    ];
+    configPackages = [ pkgs.hyprland ];
+    xdgOpenUsePortal = true;
+  };
+
   environment.shells = with pkgs; [ zsh ];
 
   # Packages
   environment.systemPackages = with pkgs; [
-    vim
     git
     pciutils
     tree
     wget
     alacritty
-    kitty
     mako
     waybar
     kdePackages.dolphin
     wofi
     rose-pine-gtk-theme
+    vlc
+    lutris
+    wineWowPackages.stagingFull
+    winetricks
+    btop
   ];
 
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
     nerd-fonts.fira-code
   ];
-
-  # Greeter Hyprland config
-  environment.etc."greetd/hyprland-greeter.conf".text = ''
-    misc {
-      disable_hyprland_logo = true
-      disable_splash_rendering = true
-    }
-    exec-once = regreet; hyprctl dispatch exit
-  '';
 
   # System
   system.stateVersion = "25.11";
