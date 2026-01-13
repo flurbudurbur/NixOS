@@ -1,5 +1,5 @@
 let
-	c = import ./colors.nix;
+	c = import ../../../modules/colors.nix;
 in
 {
 	programs.waybar = {

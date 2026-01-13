@@ -1,0 +1,10 @@
+{ ... }:
+{
+  imports = [
+    ./hyprland
+    ./hyprlock.nix
+    ./hypridle.nix
+    ./waybar
+    ./walker
+  ];
+}

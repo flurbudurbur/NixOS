@@ -31,34 +31,44 @@
 		};
 	};
 
-	outputs = inputs@{ nixpkgs, home-manager, ... }: {
-		nixosConfigurations.flurPC = nixpkgs.lib.nixosSystem {
-			system = "x86_64-linux";
-			modules = [
-				./hosts/flurPC/hardware-configuration.nix
-				./configuration.nix
-				home-manager.nixosModules.home-manager
-				{
-					home-manager = {
-						useGlobalPkgs = true;
-						useUserPackages = true;
-						users.flur = import ./home.nix;
-						extraSpecialArgs = {
-							hostname = "flurPC";
-							hypridle = inputs.hypridle.packages.x86_64-linux.default;
-						};
-						backupFileExtension = "backup";
-						sharedModules = let
-							inherit (inputs) zen-browser nix-flatpak nixvim nixcord;
-						in [
-							zen-browser.homeModules.default
-							nix-flatpak.homeManagerModules.nix-flatpak
-							nixvim.homeModules.nixvim
-							nixcord.homeModules.nixcord
-						];
-					};
-			  }
-      ];
-		};
+	outputs = inputs @ {
+    nixpkgs,
+    home-manager,
+    ...
+    }: {
+		nixosConfigurations = {
+      flurPC = let
+          username = "flur";
+          specialArgs = { inherit username; };
+        in
+          nixpkgs.lib.nixosSystem {
+		    	  system = "x86_64-linux";
+			      modules = [
+				      ./hosts/flurPC
+				      ./users/flur/nixos.nix
+			    	  home-manager.nixosModules.home-manager
+				      {
+				    	  home-manager = {
+				    		  useGlobalPkgs = true;
+				    		  useUserPackages = true;
+				    		  users.flur = import ./users/flur/home.nix;
+				    		  extraSpecialArgs = {
+					      		hostname = "flurPC";
+					          hypridle = inputs.hypridle.packages.x86_64-linux.default;
+				    	  	};
+					      	backupFileExtension = "backup";
+					  	    sharedModules = let
+					  		    inherit (inputs) zen-browser nix-flatpak nixvim nixcord;
+					  	    in [
+					  		    zen-browser.homeModules.default
+					  		    nix-flatpak.homeManagerModules.nix-flatpak
+					  		    nixvim.homeModules.nixvim
+					  		    nixcord.homeModules.nixcord
+					  	    ];
+					      };
+			        }
+            ];
+      };
+    };
 	};
 }

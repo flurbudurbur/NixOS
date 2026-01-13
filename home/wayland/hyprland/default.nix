@@ -1,7 +1,7 @@
 { hostname, ... }:
 
 let
-  c = import ./colors.nix;
+  c = import ../../../modules/colors.nix;
   monitorConfigs = {
     flurPC = [
       "DP-2,2560x1440@165,0x0,1"
