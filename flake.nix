@@ -39,19 +39,18 @@
 		nixosConfigurations = {
       flurPC = let
           username = "flur";
-          specialArgs = { inherit username; };
         in
           nixpkgs.lib.nixosSystem {
 		    	  system = "x86_64-linux";
 			      modules = [
 				      ./hosts/flurPC
-				      ./users/flur/nixos.nix
+				      ./users/${username}/nixos.nix
 			    	  home-manager.nixosModules.home-manager
 				      {
 				    	  home-manager = {
 				    		  useGlobalPkgs = true;
 				    		  useUserPackages = true;
-				    		  users.flur = import ./users/flur/home.nix;
+				    		  users.${username} = import ./users/${username}/home.nix;
 				    		  extraSpecialArgs = {
 					      		hostname = "flurPC";
 					          hypridle = inputs.hypridle.packages.x86_64-linux.default;
