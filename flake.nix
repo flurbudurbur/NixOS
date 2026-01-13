@@ -12,10 +12,7 @@
 				home-manager.follows = "home-manager";
 			};
 		};
-    nixcord = {
-      url = "github:FlameFlag/nixcord";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
+    nixcord.url = "github:FlameFlag/nixcord/5de40d608552b2c7967230a0f2a2dc381686241e";
 		home-manager = {
 			url = "github:nix-community/home-manager/release-25.11";
 			inputs.nixpkgs.follows = "nixpkgs";
@@ -34,7 +31,7 @@
 		};
 	};
 
-	outputs = inputs@{ self, nixpkgs, home-manager, zen-browser, nix-flatpak, nixvim, hypridle, ... }: {
+	outputs = inputs@{ nixpkgs, home-manager, ... }: {
 		nixosConfigurations.flurPC = nixpkgs.lib.nixosSystem {
 			system = "x86_64-linux";
 			modules = [
@@ -48,18 +45,20 @@
 						users.flur = import ./home.nix;
 						extraSpecialArgs = {
 							hostname = "flurPC";
-							hypridle = hypridle.packages.x86_64-linux.default;
+							hypridle = inputs.hypridle.packages.x86_64-linux.default;
 						};
 						backupFileExtension = "backup";
-						sharedModules = [
+						sharedModules = let
+							inherit (inputs) zen-browser nix-flatpak nixvim nixcord;
+						in [
 							zen-browser.homeModules.default
 							nix-flatpak.homeManagerModules.nix-flatpak
-						  nixvim.homeModules.nixvim
-              inputs.nixcord.homeModules.nixcord
+							nixvim.homeModules.nixvim
+							nixcord.homeModules.nixcord
 						];
 					};
-				}
-			];
+			  }
+      ];
 		};
 	};
 }

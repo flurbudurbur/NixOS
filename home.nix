@@ -240,26 +240,26 @@ in
 				fi
 			'';
 		};
-    nixcord = {
-      enable = true;
+      # Wait for this issue to be resolved:
+      # https://github.com/FlameFlag/nixcord/issues/166
 
+      #nixcord = {
+      #enable = true;
+      
       # Enable Vesktop client (user's preference)
-      vesktop.enable = true;
-
-      # Enable Vencord (default Discord client with mods)
-      discord.vencord.enable = true;
-
+      #vesktop.enable = true;
+      
       # Configuration
-      config = {
+      #config = {
         # Load rose-pine theme from official URL
-        themeLinks = [
-          "https://raw.githubusercontent.com/rose-pine/discord/refs/heads/main/dist/rose-pine-moon.css"
-        ];
+      #themeLinks = [
+      #   "https://raw.githubusercontent.com/rose-pine/discord/refs/heads/main/dist/rose-pine-moon.css"
+      # ];
 
         # Enable custom CSS support
-        useQuickCss = true;
-      };
-    };
+      # useQuickCss = true;
+      #};
+    #};
 		starship = {
 			enable = true;
 			enableZshIntegration = true;

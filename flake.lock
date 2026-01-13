@@ -269,37 +269,37 @@
       "inputs": {
         "flake-compat": "flake-compat",
         "flake-parts": "flake-parts",
-        "nixpkgs": [
-          "nixpkgs-unstable"
-        ]
+        "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1768204969,
-        "narHash": "sha256-UsLPy9WEXvB+jf4VqFSYfV1MWh9AjYGdaOlAx3tVQv8=",
+        "lastModified": 1767975239,
+        "narHash": "sha256-iot1y3Sv05Q4CJEqaqBGz8+DkUa5C03wkurRHjD5h3Q=",
         "owner": "FlameFlag",
         "repo": "nixcord",
-        "rev": "8a3be0740c4db6b7227ca1b840915a193c34df10",
+        "rev": "5de40d608552b2c7967230a0f2a2dc381686241e",
         "type": "github"
       },
       "original": {
         "owner": "FlameFlag",
         "repo": "nixcord",
+        "rev": "5de40d608552b2c7967230a0f2a2dc381686241e",
         "type": "github"
       }
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1765838191,
-        "narHash": "sha256-m5KWt1nOm76ILk/JSCxBM4MfK3rYY7Wq9/TZIIeGnT8=",
+        "lastModified": 1766885793,
+        "narHash": "sha256-P6RVkrM9JLCW6xBjSwHfgTOQ1JwBUma5xe5LI8xAPC0=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "c6f52ebd45e5925c188d1a20119978aa4ffd5ef6",
+        "rev": "9ef261221d1e72399f2036786498d78c38185c46",
         "type": "github"
       },
       "original": {
-        "id": "nixpkgs",
+        "owner": "NixOS",
         "ref": "nixos-25.11",
-        "type": "indirect"
+        "repo": "nixpkgs",
+        "type": "github"
       }
     },
     "nixpkgs-lib": {
@@ -329,6 +329,21 @@
       "original": {
         "id": "nixpkgs",
         "ref": "nixos-unstable",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1765838191,
+        "narHash": "sha256-m5KWt1nOm76ILk/JSCxBM4MfK3rYY7Wq9/TZIIeGnT8=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "c6f52ebd45e5925c188d1a20119978aa4ffd5ef6",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-25.11",
         "type": "indirect"
       }
     },
@@ -385,7 +400,7 @@
         "hypridle": "hypridle",
         "nix-flatpak": "nix-flatpak",
         "nixcord": "nixcord",
-        "nixpkgs": "nixpkgs",
+        "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixvim": "nixvim",
         "zen-browser": "zen-browser"

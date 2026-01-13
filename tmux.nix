@@ -57,6 +57,9 @@
 
       # Rose Pine theme configuration
       set -g @rose_pine_variant 'moon'
+      
+      # My own additions
+      set-option -g status-position top
     '';
 
     plugins = with pkgs.tmuxPlugins; [
