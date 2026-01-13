@@ -20,4 +20,27 @@
 
   programs.home-manager.enable = true;
   programs.zen-browser.enable = true;
+
+  stylix = {
+    enable = true;
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/rose-pine-moon.yaml";
+    opacity.terminal = 0.95;
+    fonts = {
+      monospace = {
+        package = pkgs.nerd-fonts.fira-code;
+        name = "FiraCode Nerd Font";
+      };
+      sansSerif = {
+        package = pkgs.nerd-fonts.fira-code;
+        name = "FiraCode Nerd Font";
+      };
+      serif = {
+        package = pkgs.nerd-fonts.fira-code;
+        name = "FiraCode Nerd Font";
+      };
+      sizes = {
+        terminal = 12;
+      };
+    };
+  };
 }

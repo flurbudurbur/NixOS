@@ -1,7 +1,6 @@
 { hostname, ... }:
 
 let
-  c = import ../../../modules/colors.nix;
   monitorConfigs = {
     flurPC = [
       "DP-2,2560x1440@165,0x0,1"
@@ -32,7 +31,6 @@ in
 				"XCURSOR_THEME,BreezeX-RosePine-Linux"
 				"HYPRCURSOR_SIZE,24"
 				"HYPRCURSOR_THEME,BreezeX-RosePine-Linux"
-				"GTK_THEME,rose-pine-moon"
 			];
 
 			# General settings
@@ -40,8 +38,6 @@ in
 				gaps_in = 5;
 				gaps_out = 10;
 				border_size = 2;
-				"col.active_border" = "${c.hypr c.rose "ee"} ${c.hypr c.iris "ee"} 45deg";
-				"col.inactive_border" = c.hypr c.muted "aa";
 				resize_on_border = false;
 				allow_tearing = false;
 				layout = "dwindle";
@@ -56,7 +52,6 @@ in
 					enabled = true;
 					range = 4;
 					render_power = 3;
-					color = "rgba(1a1a1aee)";
 				};
 				blur = {
 					enabled = true;

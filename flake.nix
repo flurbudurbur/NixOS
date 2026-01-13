@@ -12,6 +12,10 @@
 				home-manager.follows = "home-manager";
 			};
 		};
+    stylix = {
+      url = "github:nix-community/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixcord.url = "github:FlameFlag/nixcord/5de40d608552b2c7967230a0f2a2dc381686241e";
 		home-manager = {
 			url = "github:nix-community/home-manager/release-25.11";
@@ -34,6 +38,7 @@
 	outputs = inputs @ {
     nixpkgs,
     home-manager,
+    stylix,
     ...
     }: {
 		nixosConfigurations = {
@@ -45,6 +50,7 @@
 			      modules = [
 				      ./hosts/flurPC
 				      ./users/${username}/nixos.nix
+              stylix.nixosModules.stylix
 			    	  home-manager.nixosModules.home-manager
 				      {
 				    	  home-manager = {
@@ -57,12 +63,13 @@
 				    	  	};
 					      	backupFileExtension = "backup";
 					  	    sharedModules = let
-					  		    inherit (inputs) zen-browser nix-flatpak nixvim nixcord;
+					  		    inherit (inputs) zen-browser nix-flatpak nixvim nixcord stylix;
 					  	    in [
 					  		    zen-browser.homeModules.default
 					  		    nix-flatpak.homeManagerModules.nix-flatpak
 					  		    nixvim.homeModules.nixvim
 					  		    nixcord.homeModules.nixcord
+					  		    stylix.homeModules.stylix
 					  	    ];
 					      };
 			        }
