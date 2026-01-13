@@ -1,4 +1,4 @@
-{ hostname }:
+{ hostname, ... }:
 
 let
   c = import ./colors.nix;
@@ -12,8 +12,6 @@ let
   };
   monitors = monitorConfigs.${hostname} or [ ",preferred,auto,1" ];
 in
-{ config, pkgs, ... }:
-
 {
 	wayland.windowManager.hyprland = {
 		enable = true;
@@ -204,12 +202,6 @@ in
 			# Window rules
 			windowrule = [
 				"nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0"
-			];
-
-			windowrulev2 = [
-				# Transparency exceptions (opaque windows)
-				# Add applications here that should NOT be transparent
-				# Example: "opacity 1.0 1.0,class:(application-name)"
 			];
 		};
 	};

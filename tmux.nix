@@ -1,8 +1,5 @@
 { pkgs, ... }:
 
-let
-  c = import ./colors.nix;
-in
 {
   programs.tmux = {
     enable = true;
@@ -60,9 +57,6 @@ in
 
       # Rose Pine theme configuration
       set -g @rose_pine_variant 'moon'
-
-      # My own additions
-      set-option -g status-position top
     '';
 
     plugins = with pkgs.tmuxPlugins; [
@@ -76,16 +70,15 @@ in
   # Tmuxinator project configs managed by Nix
   xdg.configFile."tmuxinator/dev.yml".text = ''
     name: dev
-    root: ~/Developer
+    root: ~/nixos-system
 
     windows:
       - code:
           layout: main-vertical
           panes:
-            -
-            -
+            - nvim .
+            - claude
       - git: lazygit
-      - sys: btop
       - scratch:
   '';
 }

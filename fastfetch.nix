@@ -1,8 +1,5 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
-let
-  c = import ./colors.nix;
-in
 {
   home.packages = [ pkgs.fastfetch ];
 
