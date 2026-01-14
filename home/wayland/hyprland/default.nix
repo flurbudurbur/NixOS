@@ -132,7 +132,6 @@ in
 				"$mainMod, P, pseudo,"
 				"$mainMod, J, togglesplit,"
 				"$mainMod, L, exec, hyprlock"
-				"$mainMod, SPACE, exec, walker"
 				"ALT, SPACE, exec, $menu,"
 				# Maximize window
 				"ALT, up, fullscreen, 1"
