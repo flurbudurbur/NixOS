@@ -22,7 +22,6 @@
   # Services
   services = {
     pulseaudio.enable = false;
-    flatpak.enable = true;
     keyd = {
       enable = true;
       keyboards.default = {

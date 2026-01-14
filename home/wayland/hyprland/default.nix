@@ -197,6 +197,13 @@ in
 			windowrule = [
 				"nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0"
 			];
+
+			windowrulev2 = [
+				# pwvucontrol - small floating audio control window
+				"float, class:(com.saivert.pwvucontrol)"
+				"size 600 400, class:(com.saivert.pwvucontrol)"
+				"move 50% 50, class:(com.saivert.pwvucontrol)"
+			];
 		};
 	};
 }

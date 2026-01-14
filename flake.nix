@@ -21,9 +21,6 @@
 			url = "github:nix-community/home-manager/release-25.11";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
-		nix-flatpak = {
-			url = "github:gmodena/nix-flatpak?ref=latest";
-		};
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -37,6 +34,10 @@
 			url = "github:hyprwm/hypridle";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 	};
 
 	outputs = inputs @ {
@@ -56,10 +57,13 @@
 				      ./users/${username}/nixos.nix
               stylix.nixosModules.stylix
               # Stylix/home-manager issue
-              # Follow issues: 
+              # Follow issues:
               # - https://github.com/nix-community/home-manager/pull/6172
               # - https://github.com/nix-community/stylix/issues/865
-              { nixpkgs.config.allowUnfree = true; }
+              {
+                nixpkgs.config.allowUnfree = true;
+                nixpkgs.overlays = [ inputs.nur.overlays.default ];
+              }
 			    	  home-manager.nixosModules.home-manager
 				      {
 				    	  home-manager = {
@@ -73,10 +77,9 @@
 				    	  	};
 					      	backupFileExtension = "backup";
 					  	    sharedModules = let
-					  		    inherit (inputs) zen-browser nix-flatpak nixvim nixcord stylix;
+					  		    inherit (inputs) zen-browser nixvim nixcord stylix;
 					  	    in [
 					  		    zen-browser.homeModules.default
-					  		    nix-flatpak.homeManagerModules.nix-flatpak
 					  		    nixvim.homeModules.nixvim
 					  		    nixcord.homeModules.nixcord
 					  		    stylix.homeModules.stylix

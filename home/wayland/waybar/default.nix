@@ -12,9 +12,9 @@ in
 				position = "top";
 				height = 30;
 				spacing = 4;
-				modules-left = [ "hyprland/workspaces" "hyprland/window" ];
+				modules-left = [ "hyprland/workspaces" "hyprland/window" "mpris" ];
 				modules-center = [ "clock" ];
-				modules-right = [ "pulseaudio" "network" "cpu" "memory" "tray" ];
+				modules-right = [ "custom/notification" "wireplumber" "bluetooth" "network" "cpu" "memory" "tray" ];
 
 				"hyprland/workspaces" = {
 					format = "{name}";
@@ -23,6 +23,47 @@ in
 
 				"hyprland/window" = {
 					max-length = 50;
+					separate-outputs = true;
+				};
+
+				mpris = {
+					format = "{player_icon} {title} - {artist}";
+					format-paused = "{status_icon} {title} - {artist}";
+					player-icons = {
+						default = "";
+						spotify = "";
+						firefox = "";
+					};
+					status-icons = {
+						playing = "";
+						paused = "";
+					};
+					max-length = 60;
+					on-click = "playerctl play-pause";
+					on-click-right = "playerctl next";
+					on-scroll-up = "playerctl previous";
+					on-scroll-down = "playerctl next";
+				};
+
+				"custom/notification" = {
+					tooltip = false;
+					format = "{icon} {}";
+					format-icons = {
+						notification = "<span foreground='${c.love}'><sup></sup></span>";
+						none = "";
+						dnd-notification = "<span foreground='${c.love}'><sup></sup></span>";
+						dnd-none = "";
+						inhibited-notification = "<span foreground='${c.love}'><sup></sup></span>";
+						inhibited-none = "";
+						dnd-inhibited-notification = "<span foreground='${c.love}'><sup></sup></span>";
+						dnd-inhibited-none = "";
+					};
+					return-type = "json";
+					exec = "${../../../modules/custom/scripts/dunst-status.sh}";
+					on-click = "dunstctl history-pop";
+					on-click-right = "dunstctl close-all";
+					on-click-middle = "dunstctl set-paused toggle";
+					restart-interval = 1;
 				};
 
 				clock = {
@@ -41,16 +82,33 @@ in
 				};
 
 				network = {
-					format-wifi = "WiFi {signalStrength}%";
+					format-wifi = "WIFI {signalStrength}%";
 					format-ethernet = "ETH";
-					format-disconnected = "Disconnected";
+					format-disconnected = "DISC";
 					tooltip-format = "{ifname}: {ipaddr}";
 				};
 
-				pulseaudio = {
+				wireplumber = {
 					format = "VOL {volume}%";
-					format-muted = "MUTED";
+					format-muted = " MUTED";
+					format-icons = [ "" "" "" ];
 					on-click = "pwvucontrol";
+					on-click-right = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
+					scroll-step = 1;
+					tooltip-format = "{node_name}";
+				};
+
+				bluetooth = {
+					format = "BT ON";
+					format-connected = "BT {num_connections}";
+					format-connected-battery = "BT {device_battery_percentage}%";
+					format-disabled = "BT DISABLED";
+					format-off = "BT OFF";
+					tooltip-format = "{controller_alias}\t{controller_address}\n\n{num_connections} CONNECTED";
+					tooltip-format-connected = "{controller_alias}\t{controller_address}\n\n{num_connections} CONNECTED\n\n{device_enumerate}";
+					tooltip-format-enumerate-connected = "{device_alias}\t{device_address}";
+					tooltip-format-enumerate-connected-battery = "{device_alias}\t{device_address}\t{device_battery_percentage}%";
+					on-click = "blueman-manager";
 				};
 
 				tray = {
@@ -62,11 +120,23 @@ in
 			* {
 				font-family: "Bricolage Grotesque", sans-serif;
 				font-size: 13px;
+				border: none;
+				border-radius: 0;
 			}
 
 			window#waybar {
+				background-color: transparent;
+			}
+
+			.modules-left, .modules-center, .modules-right {
 				background-color: ${c.rgba c.base "0.9"};
-				color: ${c.text};
+				border-radius: 10px;
+				margin-top: 10px;
+				margin-left: 10px;
+				margin-right: 10px;
+				margin-bottom: 0;
+				padding: 0 10px;
+				transition: all 0.3s ease-in-out;
 			}
 
 			#workspaces button {
@@ -80,11 +150,27 @@ in
 			#workspaces button.active {
 				color: ${c.rose};
 				background: ${c.rgba c.rose "0.2"};
-        border: none;
+				border: none;
 			}
 
 			#workspaces button:hover {
 				background: ${c.rgba c.rose "0.1"};
+			}
+
+			#window {
+				color: ${c.text};
+			}
+
+			#mpris {
+				color: ${c.rose};
+			}
+
+			#mpris.paused {
+				color: ${c.muted};
+			}
+
+			#custom-notification {
+				color: ${c.text};
 			}
 
 			#clock {
@@ -103,11 +189,24 @@ in
 				color: ${c.foam};
 			}
 
-			#pulseaudio {
+			#wireplumber {
 				color: ${c.pine};
 			}
 
-			#clock, #cpu, #memory, #network, #pulseaudio, #tray {
+			#bluetooth {
+				color: ${c.iris};
+			}
+
+			#bluetooth.disabled,
+			#bluetooth.off {
+				color: ${c.muted};
+			}
+
+			#tray {
+				color: ${c.text};
+			}
+
+			#clock, #cpu, #memory, #network, #wireplumber, #bluetooth, #tray, #window, #mpris, #custom-notification {
 				padding: 0 10px;
 			}
 

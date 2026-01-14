@@ -17,6 +17,7 @@
     zip
     p7zip
     unrar
+    nur.repos.foolnotion.qobuz-linux
   ];
 
   programs.btop.settings = {
@@ -35,25 +36,6 @@
     settings = {
       preload = [ "${../../wallpaper.jpg}" ];
       wallpaper = [ ",${../../wallpaper.jpg}" ];
-    };
-  };
-
-  services.flatpak = {
-    enable = true;
-    update.onActivation = true;
-    remotes = [{
-      name = "flathub";
-      location = "https://flathub.org/repo/flathub.flatpakrepo";
-    }];
-    packages = [ "com.usebottles.bottles" ];
-    overrides = {
-      "com.usebottles.bottles" = {
-        Context.filesystems = [
-          "xdg-config/gtk-3.0:ro"
-          "xdg-run/dconf"
-        ];
-        Environment.GTK_USE_PORTAL = "1";
-      };
     };
   };
 }
