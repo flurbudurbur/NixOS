@@ -7,5 +7,6 @@
     ./nvim.nix
     ./nixcord.nix
     ./zen-browser.nix
+    ./gpg.nix
   ];
 }

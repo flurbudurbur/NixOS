@@ -42,11 +42,19 @@
       alsa.support32Bit = true;
       pulse.enable = true;
     };
+    # PC/SC Smart Card Daemon for Yubikey
+    pcscd = {
+      enable = true;
+      plugins = [ pkgs.ccid ];
+    };
   };
 
   # Security
   security.rtkit.enable = true;
   security.pam.services.hyprlock = {};
+
+  # Hardware support for GPG smartcards (Yubikey)
+  hardware.gpgSmartcards.enable = true;
 
   # Locale
   time.timeZone = "Europe/Amsterdam";

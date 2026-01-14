@@ -7,6 +7,11 @@
     ./fastfetch.nix
   ];
 
+  # GPG environment variable for terminal pinentry
+  home.sessionVariables = {
+    GPG_TTY = "$(tty)";
+  };
+
   programs.zsh = {
     enable = true;
     enableCompletion = true;
