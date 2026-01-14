@@ -33,8 +33,8 @@
   services.hyprpaper = {
     enable = true;
     settings = {
-      preload = [ "~/.config/wallpapers/wallpaper.jpg" ];
-      wallpaper = [ ",~/.config/wallpapers/wallpaper.jpg" ];
+      preload = [ "${../../wallpaper.jpg}" ];
+      wallpaper = [ ",${../../wallpaper.jpg}" ];
     };
   };
 
