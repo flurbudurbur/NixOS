@@ -24,6 +24,10 @@
 		nix-flatpak = {
 			url = "github:gmodena/nix-flatpak?ref=latest";
 		};
+    firefox-addons = {
+      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 		nixvim = {
 			url = "github:nix-community/nixvim/nixos-25.11";
 			inputs.nixpkgs.follows = "nixpkgs";
@@ -65,6 +69,7 @@
 				    		  extraSpecialArgs = {
 					      		hostname = "flurPC";
 					          hypridle = inputs.hypridle.packages.x86_64-linux.default;
+					          firefox-addons = inputs.firefox-addons;
 				    	  	};
 					      	backupFileExtension = "backup";
 					  	    sharedModules = let
