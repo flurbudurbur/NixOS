@@ -67,7 +67,7 @@ in
       border: 1px solid @overlay;
       border-radius: 10px;
       color: @text;
-      font-family: "FiraCode Nerd Font", monospace;
+      font-family: "Bricolage Grotesque", sans-serif;
       font-size: 14px;
       padding: 12px 16px;
       margin: 12px;
@@ -95,7 +95,7 @@ in
       margin: 2px 0;
       background-color: transparent;
       color: @text;
-      font-family: "FiraCode Nerd Font", monospace;
+      font-family: "Bricolage Grotesque", sans-serif;
       font-size: 13px;
     }
 
@@ -169,7 +169,7 @@ in
     /* Type indicator box */
     #typeahead {
       color: @foam;
-      font-family: "FiraCode Nerd Font", monospace;
+      font-family: "Bricolage Grotesque", sans-serif;
       font-size: 12px;
     }
 
@@ -183,7 +183,7 @@ in
 
     #ai {
       color: @text;
-      font-family: "FiraCode Nerd Font", monospace;
+      font-family: "Bricolage Grotesque", sans-serif;
       font-size: 13px;
     }
   '';

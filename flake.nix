@@ -13,7 +13,7 @@
 			};
 		};
     stylix = {
-      url = "github:nix-community/stylix";
+      url = "github:nix-community/stylix/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixcord.url = "github:FlameFlag/nixcord/5de40d608552b2c7967230a0f2a2dc381686241e";
@@ -51,6 +51,11 @@
 				      ./hosts/flurPC
 				      ./users/${username}/nixos.nix
               stylix.nixosModules.stylix
+              # Stylix/home-manager issue
+              # Follow issues: 
+              # - https://github.com/nix-community/home-manager/pull/6172
+              # - https://github.com/nix-community/stylix/issues/865
+              { nixpkgs.config.allowUnfree = true; }
 			    	  home-manager.nixosModules.home-manager
 				      {
 				    	  home-manager = {

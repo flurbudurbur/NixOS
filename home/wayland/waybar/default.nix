@@ -60,17 +60,13 @@ in
 		};
 		style = ''
 			* {
-				font-family: monospace;
+				font-family: "Bricolage Grotesque", sans-serif;
 				font-size: 13px;
 			}
 
 			window#waybar {
 				background-color: ${c.rgba c.base "0.9"};
 				color: ${c.text};
-			}
-
-			#workspaces {
-				/* Workspaces are horizontal by default in Waybar */
 			}
 
 			#workspaces button {
@@ -84,6 +80,7 @@ in
 			#workspaces button.active {
 				color: ${c.rose};
 				background: ${c.rgba c.rose "0.2"};
+        border: none;
 			}
 
 			#workspaces button:hover {
