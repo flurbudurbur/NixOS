@@ -18,6 +18,10 @@
     p7zip
     unrar
     nur.repos.foolnotion.qobuz-linux
+
+    # Wine with 32/64-bit support and Wayland
+    wineWowPackages.waylandFull
+    winetricks
   ];
 
   programs.btop.settings = {
