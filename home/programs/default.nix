@@ -8,5 +8,8 @@
     ./nixcord.nix
     ./zen-browser.nix
     ./gpg.nix
+    ./persepolis.nix
+    ./flatpak.nix
+    ./mullvad-vpn.nix
   ];
 }

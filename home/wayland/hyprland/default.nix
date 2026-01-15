@@ -21,8 +21,8 @@ in
 
 			# Programs
 			"$terminal" = "alacritty";
-			"$fileManager" = "alacritty -e xplr";
-			"$menu" = "wofi --show drun";
+			"$fileManager" = "nautilus";
+			"$menu" = "wofi --show-icons --show drun";
 			"$mainMod" = "SUPER";
 
 			# Environment variables
@@ -125,6 +125,7 @@ in
 			bind = [
 				"$mainMod, Q, exec, $terminal"
 				"$mainMod SHIFT, Q, exec, $terminal -e tmux new-session"
+        "$mainMod SHIFT, S, exec, $terminal -e grimblast copy area"
 				"$mainMod, C, killactive,"
 				"$mainMod, M, exit,"
 				"$mainMod, E, exec, $fileManager"

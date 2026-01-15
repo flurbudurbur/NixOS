@@ -38,6 +38,7 @@
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.7.0";
 	};
 
 	outputs = inputs @ {
@@ -76,13 +77,12 @@
 					          firefox-addons = inputs.firefox-addons;
 				    	  	};
 					      	backupFileExtension = "backup";
-					  	    sharedModules = let
-					  		    inherit (inputs) zen-browser nixvim nixcord stylix;
-					  	    in [
-					  		    zen-browser.homeModules.default
-					  		    nixvim.homeModules.nixvim
-					  		    nixcord.homeModules.nixcord
-					  		    stylix.homeModules.stylix
+					  	    sharedModules = [
+					  		    inputs.zen-browser.homeModules.default
+					  		    inputs.nixvim.homeModules.nixvim
+					  		    inputs.nixcord.homeModules.nixcord
+					  		    inputs.stylix.homeModules.stylix
+					  		    inputs.nix-flatpak.homeManagerModules.nix-flatpak
 					  	    ];
 					      };
 			        }

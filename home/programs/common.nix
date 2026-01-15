@@ -9,7 +9,6 @@
     claude-code
     hyprpaper
     teams-for-linux
-    xplr
     pwvucontrol
     nautilus
     file-roller
@@ -18,6 +17,9 @@
     p7zip
     unrar
     nur.repos.foolnotion.qobuz-linux
+    flatpak
+    popcorntime
+    proton-pass
 
     # Wine with 32/64-bit support and Wayland
     wineWowPackages.waylandFull

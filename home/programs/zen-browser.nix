@@ -98,11 +98,27 @@
             texture = 0.5;
           };
         };
+        "Horny" = {
+          id = "2ece0c15-fb7d-4871-a56e-35fbf9b74f58";
+          position = 1001;
+          icon = "💕";
+          theme = {
+            type = "gradient";
+            colors = [
+              { red = 234; green = 110; blue = 145; }
+            ];
+            opacity = 0.35;
+            texture = 0.5;
+          };
+        };
       };
 
       # Pinned tabs
       pinsForce = true;
       pins = {
+
+        # Personal
+
         "Qobuz" = {
           id = "1aa50237-dccb-4840-b576-486d0e66278f";
           url = "https://play.qobuz.com/discover";
@@ -142,6 +158,15 @@
           url = "https://github.com/FlameFlag/nixcord";
           workspace = "428ffc5e-ba75-4401-836c-bfc921ff6a98";
           position = 105;
+        };
+
+        # Horny
+
+        "F95zone" = {
+          id = "25c39932-151e-46ad-893d-bcd15fdf561f";
+          url = "https://f95zone.to/forums/games.2/";
+          workspace = "2ece0c15-fb7d-4871-a56e-35fbf9b74f58";
+          position = 100;
         };
       };
 

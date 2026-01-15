@@ -51,7 +51,6 @@
     alacritty
     mako
     waybar
-    kdePackages.dolphin
     wofi
     rose-pine-gtk-theme
     vlc
