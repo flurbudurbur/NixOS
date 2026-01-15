@@ -50,10 +50,6 @@
             name = "NixPKGS";
             urls = [{
               template = "https://search.nixos.org/packages?channel=25.11&query={searchTerms}";
-              params = [{
-                name = "query";
-                value = "searchTerms";
-              }];
             }];
             icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
             definedAliases = [ "@nx" "@nixos" ];
@@ -62,10 +58,6 @@
             name = "Options";
             urls = [{
               template = "https://search.nixos.org/options?channel=25.11&query={searchTerms}";
-              params = [{
-                name = "query";
-                value = "searchTerms";
-              }];
             }];
             icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
             definedAliases = [ "@options" "@op" ];
@@ -74,13 +66,17 @@
             name = "srx";
             urls = [{
               template = "https://srx.flur.dev/search?q={searchTerms}";
-              params = [{
-                name = "query";
-                value = "searchTerms";
-              }];
             }];
             icon = "🔍";
             definedAliases = [ "@srx" ];
+          };
+          "youtube" = {
+            name = "YouTube";
+            urls = [{
+              template = "https://youtube.com/search?q={searchTerms}";
+            }];
+            icon = "🎧";
+            definedAliases = [ "@yt" "@youtube" ];
           };
         };
       };
@@ -134,6 +130,18 @@
           workspace = "428ffc5e-ba75-4401-836c-bfc921ff6a98";
           isEssential = true;
           position = 103;
+        };
+        "LinkedIn" = {
+          id = "59a8d539-d5c4-4b18-959a-f031c0fbbabe";
+          url = "https://www.linkedin.com/jobs/";
+          workspace = "428ffc5e-ba75-4401-836c-bfc921ff6a98";
+          position = 104;
+        };
+        "NixCord" = {
+          id = "08adc110-c4aa-4443-9fd6-0c3b4de5ef9f";
+          url = "https://github.com/FlameFlag/nixcord";
+          workspace = "428ffc5e-ba75-4401-836c-bfc921ff6a98";
+          position = 105;
         };
       };
 

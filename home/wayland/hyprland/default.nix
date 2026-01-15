@@ -124,6 +124,7 @@ in
 			# Keybindings
 			bind = [
 				"$mainMod, Q, exec, $terminal"
+				"$mainMod SHIFT, Q, exec, $terminal -e tmux new-session"
 				"$mainMod, C, killactive,"
 				"$mainMod, M, exit,"
 				"$mainMod, E, exec, $fileManager"
