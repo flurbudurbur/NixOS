@@ -39,12 +39,22 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.7.0";
+		sops-nix = {
+			url = "github:Mic92/sops-nix";
+			inputs.nixpkgs.follows = "nixpkgs";
+		};
+		nixos-secrets = {
+			url = "git+ssh://git@github.com/flurbudurbur/nix-secrets?shallow=1&ref=main";
+			flake = true;
+		};
 	};
 
 	outputs = inputs @ {
     nixpkgs,
     home-manager,
     stylix,
+    sops-nix,
+    nixos-secrets,
     ...
     }: {
 		nixosConfigurations = {
@@ -57,6 +67,7 @@
 				      ./hosts/flurPC
 				      ./users/${username}/nixos.nix
               stylix.nixosModules.stylix
+              sops-nix.nixosModules.sops
               # Stylix/home-manager issue
               # Follow issues:
               # - https://github.com/nix-community/home-manager/pull/6172
@@ -75,6 +86,7 @@
 					      		hostname = "flurPC";
 					          hypridle = inputs.hypridle.packages.x86_64-linux.default;
 					          firefox-addons = inputs.firefox-addons;
+					          secretsPath = nixos-secrets.secretsPath;
 				    	  	};
 					      	backupFileExtension = "backup";
 					  	    sharedModules = [
@@ -83,10 +95,14 @@
 					  		    inputs.nixcord.homeModules.nixcord
 					  		    inputs.stylix.homeModules.stylix
 					  		    inputs.nix-flatpak.homeManagerModules.nix-flatpak
+					  		    sops-nix.homeManagerModules.sops
 					  	    ];
 					      };
 			        }
             ];
+            specialArgs = {
+              secretsPath = nixos-secrets.secretsPath;
+            };
       };
     };
 	};

@@ -4,6 +4,7 @@
     ./hardware-configuration.nix
     ../../modules/system.nix
     ../../modules/hyprland.nix
+    ../../modules/secrets.nix
   ];
 
   # Boot

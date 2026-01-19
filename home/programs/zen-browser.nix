@@ -1,4 +1,4 @@
-{ pkgs, firefox-addons, ... }:
+{ pkgs, firefox-addons, config, lib, ... }:
 
 {
   programs.zen-browser = {
@@ -24,7 +24,7 @@
       };
       DNSOverHTTPS = {
         Enabled = true;
-        ProviderURL = "https://dns.nextdns.io/aef3c6";
+        ProviderURL = "@NEXTDNS_URL@";
         Locked = true;
         ExcludedDomains = [""];
         Fallback = true;
@@ -227,4 +227,18 @@
       };
     };
   };
+
+  # Substitute secret at activation
+  home.activation.substituteZenBrowserSecrets = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    if [ -f "${config.xdg.configHome}/sops-secrets/nextdns-url" ]; then
+      NEXTDNS_URL=$(cat "${config.xdg.configHome}/sops-secrets/nextdns-url")
+
+      POLICIES_DIR="$HOME/.zen"
+      if [ -d "$POLICIES_DIR" ]; then
+        find "$POLICIES_DIR" -type f \( -name "*.js" -o -name "*.json" \) | while read file; do
+          sed -i "s|@NEXTDNS_URL@|$NEXTDNS_URL|g" "$file" 2>/dev/null || true
+        done
+      fi
+    fi
+  '';
 }

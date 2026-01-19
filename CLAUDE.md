@@ -93,6 +93,8 @@ This configuration uses several external flake inputs beyond standard nixpkgs:
 - **nix-flatpak**: Declarative Flatpak package management
 - **hypridle**: Pinned to main branch (fixes D-Bus crash after suspend)
 - **nixpkgs-unstable**: Available for packages requiring newer versions
+- **sops-nix**: Secret management with GPG/Yubikey encryption
+- **nixos-secrets**: Private repository (`git@github.com:flurbudurbur/nix-secrets.git`) containing encrypted secrets
 
 ## Module Organization
 
@@ -100,6 +102,7 @@ This configuration uses several external flake inputs beyond standard nixpkgs:
 - `system.nix`: Core system configuration (Nix settings, users, fonts, services)
 - `hyprland.nix`: Hyprland window manager and related packages
 - `colors.nix`: Centralized Rose Pine Moon color definitions
+- `secrets.nix`: System-level secrets management with sops-nix (age encryption)
 
 ### Host-Specific (hosts/flurPC/)
 - `default.nix`: Boot loader, networking, hostname, imports system modules
@@ -111,6 +114,7 @@ This configuration uses several external flake inputs beyond standard nixpkgs:
 
 ### Home-Manager (home/)
 - `core.nix`: Basic home configuration (username, directory, cursor theme)
+- `secrets.nix`: User-level secrets management with sops-nix
 - `programs/`: Application configurations and user packages
 - `shell/`: Shell, terminal, and CLI tool configurations
 - `wayland/`: Hyprland and Wayland-specific configurations
@@ -159,6 +163,86 @@ in
 }
 ```
 
+## Secrets Management with sops-nix
+
+This configuration uses **sops-nix** for managing secrets with **age encryption**.
+
+### Architecture
+- **Secrets repository**: `git@github.com:flurbudurbur/nix-secrets.git` (separate from main config)
+- **Encryption**: age key at `/root/.config/sops/age/keys.txt` (user copy at `/home/flur/.config/sops/age/keys.txt`)
+- **System secrets**: Defined in `modules/secrets.nix` (Mullvad VPN configuration)
+- **User secrets**: Defined in `home/secrets.nix` (NextDNS URL, SSH hostname, Git signing key)
+
+### Key Locations
+- **System age key**: `/root/.config/sops/age/keys.txt` (private key for system secrets)
+- **User age key**: `/home/flur/.config/sops/age/keys.txt` (user copy for home-manager secrets)
+- **Public key**: `age1cnnmaf766jhumy92hqtgrxyr8z8vjymrj05j2k6hap57g3c50gmq2uhm36` (documented in nixos-secrets/README.md)
+
+### Managing Secrets
+
+**Edit secrets**:
+```bash
+cd /home/flur/nixos-secrets
+export SOPS_AGE_KEY_FILE=/home/flur/.config/sops/age/keys.txt
+sops secrets/user/nextdns.yaml
+sops secrets/user/ssh-hosts.yaml
+sops secrets/user/git-signing.yaml
+sops secrets/system/mullvad/account-history.enc
+
+# After editing
+git add secrets/
+git commit -m "Update secrets"
+git push
+
+# Update main config
+cd /home/flur/nixos-system
+nix flake lock --update-input nixos-secrets
+sudo nixos-rebuild switch --flake .#flurPC  # No PIN required!
+```
+
+**Add new secrets**:
+1. Create/encrypt file in nixos-secrets repo using age key
+2. Add secret declaration to `modules/secrets.nix` (system) or `home/secrets.nix` (user)
+3. Reference secret in program config (see `git.nix` or `zen-browser.nix` for patterns)
+
+### Program Integration Patterns
+
+**Pattern 1: Read secret at evaluation time** (git.nix):
+```nix
+let
+  secretFile = "${config.xdg.configHome}/sops-secrets/secret-name";
+  secretValue = if builtins.pathExists secretFile
+    then lib.removeSuffix "\n" (lib.fileContents secretFile)
+    else "fallback-value";
+in
+```
+
+**Pattern 2: Substitute at activation time** (zen-browser.nix):
+```nix
+# Use template marker in config
+ProviderURL = "@TEMPLATE_VAR@";
+
+# Add activation script
+home.activation.substituteSecrets = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  ACTUAL_VALUE=$(cat "${config.xdg.configHome}/sops-secrets/secret-name")
+  sed -i "s|@TEMPLATE_VAR@|$ACTUAL_VALUE|g" "$FILE"
+'';
+```
+
+### Deployment Notes
+- **No interactive prompts**: age decryption works non-interactively during nixos-rebuild
+- **Secrets location**:
+  - System: Decrypted to paths specified in `modules/secrets.nix` (e.g., `/etc/mullvad-vpn/`)
+  - User: Decrypted to `~/.config/sops-secrets/`
+- **GPG still used**: Yubikey + GPG still used for Git commit signing (not for secret decryption)
+
+### Migration History
+- **Before 2026-01-19**: Used GPG key 59327CBED7938BDBE74B167D57CF006A8AD85F44 on Yubikey
+- **After 2026-01-19**: Migrated to age encryption for automation-friendly operation
+- **Reason**: GPG+Yubikey requires PIN entry which fails in systemd activation context
+
+See `SOPS-NIX-SETUP.md` for detailed setup documentation and troubleshooting.
+
 ## Important Notes
 
 - **Color imports**: Always use relative imports for colors.nix based on file location
@@ -168,3 +252,4 @@ in
 - **nixcord status**: Currently disabled due to upstream issue #166 (see `home/programs/nixcord.nix`)
 - **Home-manager backups**: Backup files use `.backup` extension (configured in flake.nix)
 - **Flake structure**: Uses home-manager as a NixOS module, not standalone
+- **Secrets repo**: Never commit unencrypted secrets; see `.gitignore` in nixos-secrets repo

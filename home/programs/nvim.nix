@@ -28,6 +28,7 @@ in
 			colorcolumn = "100";
 			cursorline = true;
 			mouse = "a";
+			clipboard = "unnamedplus";  # Use system clipboard
 		};
 
 		globals = {
