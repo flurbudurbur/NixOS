@@ -19,6 +19,7 @@
 
   stylix = {
     targets.zen-browser.profileNames = [ "default" ];
+    targets.starship.enable = false;  # Use custom starship config instead
     enable = true;
     base16Scheme = "${pkgs.base16-schemes}/share/themes/rose-pine-moon.yaml";
     opacity.terminal = 0.95;
