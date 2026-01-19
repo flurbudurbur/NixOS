@@ -1,7 +1,4 @@
 { pkgs, ... }:
-let
-  c = import ../../modules/colors.nix;
-in
 {
   programs.alacritty = {
     enable = true;

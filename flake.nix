@@ -87,6 +87,10 @@
 					          hypridle = inputs.hypridle.packages.x86_64-linux.default;
 					          firefox-addons = inputs.firefox-addons;
 					          secretsPath = nixos-secrets.secretsPath;
+					          nixpkgs-unstable = import inputs.nixpkgs-unstable {
+					            system = "x86_64-linux";
+					            config.allowUnfree = true;
+					          };
 				    	  	};
 					      	backupFileExtension = "backup";
 					  	    sharedModules = [

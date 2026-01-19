@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, nixpkgs-unstable, ... }:
 
 {
   programs.tmux = {
@@ -9,9 +9,6 @@
     baseIndex = 1;
     escapeTime = 0;
     mouse = true;
-
-    # Enable tmuxinator
-    tmuxinator.enable = true;
 
     extraConfig = ''
       # True color support
@@ -69,6 +66,11 @@
       rose-pine
     ];
   };
+
+  # Install tmuxinator from unstable (3.3.7)
+  home.packages = with nixpkgs-unstable; [
+    tmuxinator
+  ];
 
   # Tmuxinator project configs managed by Nix
   xdg.configFile."tmuxinator/dev.yml".text = ''
