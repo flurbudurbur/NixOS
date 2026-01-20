@@ -10,6 +10,7 @@
   # GPG environment variable for terminal pinentry
   home.sessionVariables = {
     GPG_TTY = "$(tty)";
+    SOPS_EDITOR = "nvim";
   };
 
   programs.zsh = {
