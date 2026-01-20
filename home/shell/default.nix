@@ -32,13 +32,10 @@
       plugins = [ "git" "sudo" "tmux" "podman" ];
     };
     initContent = ''
-      # Display system info with fastfetch
-      fastfetch
-
-      # Auto-start tmuxinator "dev" session when opening a terminal
-      if [[ -z "$TMUX" ]]; then
-        if command -v tmuxinator &> /dev/null; then
-          tmuxinator start dev 2>/dev/null || true
+      # Auto-attach to tmuxinator "dev" session (created at login by systemd)
+      if [[ -z "$TMUX" ]] && [[ $- == *i* ]]; then
+        if tmux has-session -t dev 2>/dev/null; then
+          tmux attach-session -t dev
         fi
       fi
     '';
