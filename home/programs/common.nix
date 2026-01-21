@@ -5,7 +5,6 @@
     rose-pine-icon-theme
     lazygit
     gnupg
-    vesktop
     claude-code
     hyprpaper
     teams-for-linux

@@ -11,5 +11,6 @@
     ./persepolis.nix
     ./flatpak.nix
     ./mullvad-vpn.nix
+    ./nixcord.nix
   ];
 }
