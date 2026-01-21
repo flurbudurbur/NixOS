@@ -20,6 +20,7 @@
     flatpak
     popcorntime
     proton-pass
+    grimblast
 
     # Wine with 32/64-bit support and Wayland
     wineWowPackages.waylandFull

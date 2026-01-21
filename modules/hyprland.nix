@@ -51,7 +51,6 @@
     alacritty
     mako
     waybar
-    wofi
     rose-pine-gtk-theme
     vlc
     lutris

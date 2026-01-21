@@ -17,9 +17,9 @@
     org.freedesktop.impl.portal.Settings=gtk
   '';
 
-  # Add Flatpak application directories to XDG data dirs for wofi
+  # Add Flatpak application directories to XDG data dirs for application launchers
   xdg.dataFile."applications/.keep".text = "";
   home.sessionVariables = {
-    XDG_DATA_DIRS = "$HOME/.local/share/flatpak/exports/share:$XDG_DATA_DIRS";
+    XDG_DATA_DIRS = "$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:$XDG_DATA_DIRS";
   };
 }

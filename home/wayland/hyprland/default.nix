@@ -3,8 +3,8 @@
 let
   monitorConfigs = {
     flurPC = [
-      "DP-2,2560x1440@165,0x0,1"
-      "DP-1,2560x1440@165,2560x0,1"
+      "DP-2,2560x1440@165,2560x0,1"
+      "DP-1,2560x1440@165,0x0,1"
     ];
     # Add other hostnames here, e.g.:
     # laptop = [ "eDP-1,1920x1080@60,0x0,1" ];
@@ -22,7 +22,7 @@ in
 			# Programs
 			"$terminal" = "alacritty";
 			"$fileManager" = "nautilus";
-			"$menu" = "wofi --show-icons --show drun";
+			"$menu" = "walker";
 			"$mainMod" = "SUPER";
 
 			# Environment variables
@@ -125,7 +125,7 @@ in
 			bind = [
 				"$mainMod, Q, exec, $terminal"
 				"$mainMod SHIFT, Q, exec, $terminal -e tmux new-session"
-        "$mainMod SHIFT, S, exec, $terminal -e grimblast copy area"
+				"$mainMod SHIFT, S, exec, grimblast copy area"
 				"$mainMod, C, killactive,"
 				"$mainMod, M, exit,"
 				"$mainMod, E, exec, $fileManager"
@@ -134,7 +134,7 @@ in
 				"$mainMod, P, pseudo,"
 				"$mainMod, J, togglesplit,"
 				"$mainMod, L, exec, hyprlock"
-				"ALT, SPACE, exec, $menu,"
+				"ALT, SPACE, exec, $menu"
 				# Maximize window
 				"ALT, up, fullscreen, 1"
 				# Move focus
@@ -166,7 +166,7 @@ in
 				"$mainMod SHIFT, 0, movetoworkspace, 10"
 				# Special workspace
 				"$mainMod, S, togglespecialworkspace, magic"
-				"$mainMod SHIFT, S, movetoworkspace, special:magic"
+				"$mainMod ALT, S, movetoworkspace, special:magic"
 				# Scroll workspaces
 				"$mainMod, mouse_down, workspace, e+1"
 				"$mainMod, mouse_up, workspace, e-1"
@@ -205,6 +205,13 @@ in
 				"float, class:(com.saivert.pwvucontrol)"
 				"size 600 400, class:(com.saivert.pwvucontrol)"
 				"move 50% 50, class:(com.saivert.pwvucontrol)"
+
+				# Walker launcher
+				"float, class:^(walker)$"
+				"center, class:^(walker)$"
+				"size 600 400, class:^(walker)$"
+				"stayfocused, class:^(walker)$"
+				"noborder, class:^(walker)$"
 			];
 		};
 	};
