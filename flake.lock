@@ -651,9 +651,30 @@
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixvim": "nixvim",
         "nur": "nur",
+        "rpgmaker-linux": "rpgmaker-linux",
         "sops-nix": "sops-nix",
         "stylix": "stylix",
         "zen-browser": "zen-browser"
+      }
+    },
+    "rpgmaker-linux": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1769074144,
+        "narHash": "sha256-4r+RSRVmvC80F214D097GaIFSWv+n2MyNWwRMHYtXK8=",
+        "owner": "flurbudurbur",
+        "repo": "rpgmakermlinux-cicpoffs-nix",
+        "rev": "f68daa1b1b2b47f8bba8a715eb6f16be1e7a6b63",
+        "type": "github"
+      },
+      "original": {
+        "owner": "flurbudurbur",
+        "repo": "rpgmakermlinux-cicpoffs-nix",
+        "type": "github"
       }
     },
     "sops-nix": {
