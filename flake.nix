@@ -39,8 +39,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.7.0";
-		rpgmaker-linux = {
-			url = "github:flurbudurbur/rpgmakermlinux-cicpoffs-nix";
+		rpgmaker-linux-nix = {
+			url = "git+file:///home/flur/Dev/rpgmaker-linux-nix";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
 		sops-nix = {
@@ -59,6 +59,7 @@
     stylix,
     sops-nix,
     nixos-secrets,
+    rpgmaker-linux-nix,
     ...
     }: {
 		nixosConfigurations = {
@@ -78,14 +79,21 @@
               # - https://github.com/nix-community/stylix/issues/865
               {
                 nixpkgs.config.allowUnfree = true;
-                nixpkgs.overlays = [ inputs.nur.overlays.default ];
+                nixpkgs.overlays = [ 
+                  inputs.nur.overlays.default
+                  inputs.rpgmaker-linux-nix.overlays.default
+                ];
               }
 			    	  home-manager.nixosModules.home-manager
 				      {
 				    	  home-manager = {
 				    		  useGlobalPkgs = true;
 				    		  useUserPackages = true;
-				    		  users.${username} = import ./users/${username}/home.nix;
+                  users.${username} = {
+                    imports = [
+                      ./users/${username}/home.nix
+                    ];
+                  };
 				    		  extraSpecialArgs = {
 					      		hostname = "flurPC";
 					          hypridle = inputs.hypridle.packages.x86_64-linux.default;
@@ -103,7 +111,7 @@
 					  		    inputs.nixcord.homeModules.nixcord
 					  		    inputs.stylix.homeModules.stylix
 					  		    inputs.nix-flatpak.homeManagerModules.nix-flatpak
-					  		    inputs.rpgmaker-linux.homeManagerModules.default
+					  		    inputs.rpgmaker-linux-nix.homeManagerModules.default
 					  		    sops-nix.homeManagerModules.sops
 					  	    ];
 					      };

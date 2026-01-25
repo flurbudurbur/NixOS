@@ -57,4 +57,28 @@
     wineWowPackages.stagingFull
     winetricks
   ];
+
+  # Hyprland suspend/resume fix for NVIDIA
+  # Prevents race condition by pausing Hyprland before driver suspends
+  systemd.user.services.hyprland-suspend = {
+    description = "Suspend Hyprland before system suspend";
+    before = [ "sleep.target" ];
+    wantedBy = [ "sleep.target" ];
+
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.procps}/bin/pkill -STOP -x Hyprland'";
+    };
+  };
+
+  systemd.user.services.hyprland-resume = {
+    description = "Resume Hyprland after system resume";
+    after = [ "sleep.target" ];
+    wantedBy = [ "sleep.target" ];
+
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.procps}/bin/pkill -CONT -x Hyprland'";
+    };
+  };
 }
