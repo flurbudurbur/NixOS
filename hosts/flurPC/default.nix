@@ -11,6 +11,11 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # NVIDIA suspend/resume kernel parameters
+  boot.kernelParams = [
+    "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
+  ];
+
   # Networking
   networking.hostName = "flurPC";
   networking.networkmanager.enable = true;

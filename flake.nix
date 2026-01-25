@@ -29,20 +29,11 @@
 			url = "github:nix-community/nixvim/nixos-25.11";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
-		# Add hypridle from main branch to fix D-Bus crash after suspend
-		hypridle = {
-			url = "github:hyprwm/hypridle";
-			inputs.nixpkgs.follows = "nixpkgs";
-		};
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.7.0";
-		rpgmaker-linux-nix = {
-			url = "git+file:///home/flur/Dev/rpgmaker-linux-nix";
-			inputs.nixpkgs.follows = "nixpkgs";
-		};
 		sops-nix = {
 			url = "github:Mic92/sops-nix";
 			inputs.nixpkgs.follows = "nixpkgs";
@@ -59,7 +50,6 @@
     stylix,
     sops-nix,
     nixos-secrets,
-    rpgmaker-linux-nix,
     ...
     }: {
 		nixosConfigurations = {
@@ -81,7 +71,6 @@
                 nixpkgs.config.allowUnfree = true;
                 nixpkgs.overlays = [ 
                   inputs.nur.overlays.default
-                  inputs.rpgmaker-linux-nix.overlays.default
                 ];
               }
 			    	  home-manager.nixosModules.home-manager
@@ -96,7 +85,6 @@
                   };
 				    		  extraSpecialArgs = {
 					      		hostname = "flurPC";
-					          hypridle = inputs.hypridle.packages.x86_64-linux.default;
 					          firefox-addons = inputs.firefox-addons;
 					          secretsPath = nixos-secrets.secretsPath;
 					          nixpkgs-unstable = import inputs.nixpkgs-unstable {
@@ -111,7 +99,6 @@
 					  		    inputs.nixcord.homeModules.nixcord
 					  		    inputs.stylix.homeModules.stylix
 					  		    inputs.nix-flatpak.homeManagerModules.nix-flatpak
-					  		    inputs.rpgmaker-linux-nix.homeManagerModules.default
 					  		    sops-nix.homeManagerModules.sops
 					  	    ];
 					      };

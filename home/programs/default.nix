@@ -11,6 +11,5 @@
     ./persepolis.nix
     ./flatpak.nix
     ./mullvad-vpn.nix
-    ./rpgmaker-linux.nix
   ];
 }
