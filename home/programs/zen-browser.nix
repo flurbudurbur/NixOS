@@ -149,9 +149,9 @@
           workspace = "428ffc5e-ba75-4401-836c-bfc921ff6a98";
           position = 104;
         };
-        "NixCord" = {
-          id = "08adc110-c4aa-4443-9fd6-0c3b4de5ef9f";
-          url = "https://github.com/FlameFlag/nixcord";
+        "iTheorie" = {
+          id = "64fd5477-01e6-45e3-a761-4119bc8b7e2d";
+          url = "https://itheorie.nl/";
           workspace = "428ffc5e-ba75-4401-836c-bfc921ff6a98";
           position = 105;
         };
