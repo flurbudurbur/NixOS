@@ -24,7 +24,13 @@
     # Wine with 32/64-bit support and Wayland
     wineWowPackages.waylandFull
     winetricks
+    protonup-ng
+    heroic
   ];
+
+  home.sessionVariables = {
+    STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
+  };
 
   programs.btop.settings = {
     theme_background = false;
