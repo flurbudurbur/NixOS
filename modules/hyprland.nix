@@ -40,8 +40,15 @@
         application_prefer_dark_theme = true;
         theme_name = lib.mkForce "rose-pine-moon-gtk";
       };
+      commands = {
+        reboot = [ "systemctl" "reboot" ];
+        poweroff = [ "systemctl" "poweroff" ];
+      };
     };
   };
+
+  # Configure greetd to launch Hyprland through UWSM
+  services.greetd.settings.default_session.command = "${pkgs.uwsm}/bin/uwsm start -S hyprland-uwsm.desktop";
 
   xdg.portal = {
     enable = true;

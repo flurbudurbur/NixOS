@@ -32,11 +32,7 @@
       HttpsOnlyMode = "enabled";
 
       # Auto-enable all extensions
-      ExtensionSettings = {
-        "*" = {
-          installation_mode = "normal_installed";
-        };
-      };
+      ExtensionSettings."*".installation_mode = "normal_installed";
     };
 
     profiles.default = {
@@ -98,19 +94,19 @@
             texture = 0.5;
           };
         };
-        "Horny" = {
-          id = "2ece0c15-fb7d-4871-a56e-35fbf9b74f58";
-          position = 1001;
-          icon = "💕";
-          theme = {
-            type = "gradient";
-            colors = [
-              { red = 234; green = 110; blue = 145; }
-            ];
-            opacity = 0.35;
-            texture = 0.5;
-          };
-        };
+        #"Horny" = {
+        #  id = "2ece0c15-fb7d-4871-a56e-35fbf9b74f58";
+        #  position = 1001;
+        #  icon = "💕";
+        #  theme = {
+        #    type = "gradient";
+        #    colors = [
+        #      { red = 234; green = 110; blue = 145; }
+        #    ];
+        #    opacity = 0.35;
+        #    texture = 0.5;
+        #  };
+        #};
       };
 
       # Pinned tabs
@@ -162,12 +158,12 @@
 
         # Horny
 
-        "F95zone" = {
-          id = "25c39932-151e-46ad-893d-bcd15fdf561f";
-          url = "https://f95zone.to/forums/games.2/";
-          workspace = "2ece0c15-fb7d-4871-a56e-35fbf9b74f58";
-          position = 100;
-        };
+        #"F95zone" = {
+        #  id = "25c39932-151e-46ad-893d-bcd15fdf561f";
+        #  url = "https://f95zone.to/forums/games.2/";
+        #  workspace = "2ece0c15-fb7d-4871-a56e-35fbf9b74f58";
+        #  position = 100;
+        #};
       };
 
       extensions.packages = with firefox-addons.packages.${pkgs.stdenv.hostPlatform.system}; [
