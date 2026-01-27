@@ -3,6 +3,10 @@
   # Nix settings
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
+  
+  # Auto-optimize store (deduplicate files)
+  nix.optimise.automatic = true;
+  nix.optimise.dates = [ "weekly" ];
 
   # User accounts
   users.users.flur = {
@@ -48,6 +52,12 @@
     };
     # Mullvad VPN daemon
     mullvad-vpn.enable = true;
+  };
+
+  # Bluetooth
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
   };
 
   # Security

@@ -47,9 +47,6 @@
     };
   };
 
-  # Configure greetd to launch Hyprland through UWSM
-  services.greetd.settings.default_session.command = "${pkgs.uwsm}/bin/uwsm start -S hyprland-uwsm.desktop";
-
   xdg.portal = {
     enable = true;
     extraPortals = [

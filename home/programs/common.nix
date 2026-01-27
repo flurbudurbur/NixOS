@@ -20,6 +20,8 @@
     popcorntime
     proton-pass
     grimblast
+    bluetui
+    whatsie
 
     # Wine with 32/64-bit support and Wayland
     wineWowPackages.waylandFull
