@@ -3,7 +3,9 @@
   imports = [
     ./hardware-configuration.nix
     ../../modules/system.nix
-    ../../modules/hyprland.nix
+    ../../modules/graphics.nix
+    ../../modules/desktop.nix
+    ../../modules/gaming.nix
     ../../modules/secrets.nix
   ];
 

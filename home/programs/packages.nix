@@ -22,9 +22,12 @@
     grimblast
     bluetui
 
-    # Wine with 32/64-bit support and Wayland
-    wineWowPackages.waylandFull
-    winetricks
+    # No Protondrive? No Problem!
+    celeste
+    rclone
+
+    # Gaming
+    lutris
     protonup-ng
     heroic
   ];

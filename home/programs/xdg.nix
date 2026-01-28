@@ -1,4 +1,4 @@
-{ config, ... }:
+{ ... }:
 {
   # GTK, Qt, and dconf theming now managed by stylix
 

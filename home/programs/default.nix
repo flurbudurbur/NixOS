@@ -2,7 +2,7 @@
 {
   imports = [
     ./git.nix
-    ./common.nix
+    ./packages.nix
     ./xdg.nix
     ./nvim.nix
     ./nixcord.nix

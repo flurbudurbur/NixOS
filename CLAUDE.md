@@ -38,7 +38,10 @@ nixos-system/
 ├── modules/               # System-level shared configuration
 │   ├── colors.nix         # Rose Pine Moon color definitions
 │   ├── system.nix         # Core system config (users, nix, fonts, services)
-│   └── hyprland.nix       # Hyprland WM system setup
+│   ├── graphics.nix       # Graphics hardware (NVIDIA drivers, OpenGL)
+│   ├── desktop.nix        # Desktop environment (Hyprland, regreet, XDG portals)
+│   ├── gaming.nix         # Gaming (Steam, Lutris, Wine, gamemode)
+│   └── secrets.nix        # System-level secrets management
 ├── hosts/                 # Per-machine configurations
 │   └── flurPC/
 │       ├── default.nix    # Host-specific config (boot, networking)
@@ -52,7 +55,7 @@ nixos-system/
     ├── programs/          # User programs and applications
     │   ├── default.nix    # Aggregates all program modules
     │   ├── git.nix        # Git and SSH configuration
-    │   ├── common.nix     # User packages and utilities
+    │   ├── packages.nix   # User packages and utilities
     │   ├── xdg.nix        # GTK, Qt, XDG theming
     │   ├── nvim.nix       # Neovim configuration
     │   └── nixcord.nix    # Discord (currently disabled)
@@ -100,7 +103,9 @@ This configuration uses several external flake inputs beyond standard nixpkgs:
 
 ### System-Level (modules/)
 - `system.nix`: Core system configuration (Nix settings, users, fonts, services)
-- `hyprland.nix`: Hyprland window manager and related packages
+- `graphics.nix`: Graphics hardware configuration (NVIDIA drivers, OpenGL/Vulkan)
+- `desktop.nix`: Desktop environment (Hyprland WM, regreet DM, XDG portals, desktop apps)
+- `gaming.nix`: Gaming configuration (Steam, Lutris, Wine, gamemode)
 - `colors.nix`: Centralized Rose Pine Moon color definitions
 - `secrets.nix`: System-level secrets management with sops-nix (age encryption)
 
@@ -122,7 +127,7 @@ This configuration uses several external flake inputs beyond standard nixpkgs:
 ## Workflow
 
 1. **System Changes**: Edit files in `modules/` or `hosts/flurPC/`
-2. **User Packages**: Add to `home/programs/common.nix`
+2. **User Packages**: Add to `home/programs/packages.nix`
 3. **Program Configuration**: Create/edit files in appropriate `home/` subdirectory
 4. **Apply Changes**: Run `sudo nixos-rebuild switch --flake .#flurPC`
 5. **Test Before Applying**: Use `nixos-rebuild build --flake .#flurPC` first
@@ -135,7 +140,11 @@ This configuration uses several external flake inputs beyond standard nixpkgs:
 3. Configure the program using home-manager options
 
 ### New System Service
-1. Add configuration to `modules/system.nix` or `modules/hyprland.nix`
+1. Add configuration to appropriate module:
+   - Core services → `modules/system.nix`
+   - Graphics/GPU → `modules/graphics.nix`
+   - Desktop/WM → `modules/desktop.nix`
+   - Gaming → `modules/gaming.nix`
 2. Rebuild to apply changes
 
 ### New Host
