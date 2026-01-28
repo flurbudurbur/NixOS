@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 {
   # Nix settings
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -7,6 +7,10 @@
   # Auto-optimize store (deduplicate files)
   nix.optimise.automatic = true;
   nix.optimise.dates = [ "weekly" ];
+
+  # Automatic updating
+  system.autoUpgrade.enable = true;
+  system.autoUpgrade.dates = "weekly";
 
   # User accounts
   users.users.flur = {
