@@ -137,6 +137,8 @@ in
 				"ALT, SPACE, exec, $menu"
 				# Maximize window
 				"ALT, up, fullscreen, 1"
+				# True fullscreen
+				"ALT, F, fullscreen, 0"
 				# Move focus
 				"$mainMod, left, movefocus, l"
 				"$mainMod, right, movefocus, r"
