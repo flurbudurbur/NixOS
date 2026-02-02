@@ -133,7 +133,7 @@ in
 				"$mainMod, R, exec, $menu"
 				"$mainMod, P, pseudo,"
 				"$mainMod, J, togglesplit,"
-				"$mainMod, L, exec, hyprlock"
+				"$mainMod, L, exec, loginctl lock-session"
 				"ALT, SPACE, exec, $menu"
 				# Maximize window
 				"ALT, up, fullscreen, 1"
