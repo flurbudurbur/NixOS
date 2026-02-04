@@ -22,6 +22,9 @@
     grimblast
     bluetui
 
+    # Productivity
+    libreoffice-fresh
+
     # No Protondrive? No Problem!
     celeste
     rclone
