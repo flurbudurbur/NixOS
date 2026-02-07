@@ -198,13 +198,19 @@ in
 			enable = true;
 		};
 
+		# Add none-ls-extras for eslint support
+		# Note: none-ls-extras might not be in nixpkgs yet
+		# The plugin would be: nvimtools/none-ls-extras.nvim
+		# For now, just use the basic none-ls without extras
+
 		extraConfigLua = ''
+			-- none-ls is still required as "null-ls" (API compatibility)
 			local null_ls = require("null-ls")
+
+			-- Setup none-ls without sources for now
+			-- eslint_d requires none-ls-extras which isn't in nixpkgs yet
 			null_ls.setup({
-				sources = {
-					null_ls.builtins.diagnostics.eslint_d,
-					null_ls.builtins.code_actions.eslint_d,
-				},
+				sources = {},
 			})
 		'';
 
