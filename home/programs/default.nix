@@ -3,6 +3,7 @@
   imports = [
     ./git.nix
     ./packages.nix
+    ./dev.nix
     ./xdg.nix
     ./nvim.nix
     ./nixcord.nix

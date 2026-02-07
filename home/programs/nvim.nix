@@ -81,14 +81,65 @@ in
 					"gr" = "references";
 					"<leader>rn" = "rename";
 					"<leader>ca" = "code_action";
-					"<leader>f" = "format";
 				};
 			};
 			servers = {
 				nixd = { enable = true; };
-				ts_ls = { enable = true; };
+				ts_ls = {
+					enable = true;
+					settings = {
+						typescript = {
+							inlayHints = {
+								includeInlayParameterNameHints = "all";
+								includeInlayParameterNameHintsWhenArgumentMatchesName = true;
+								includeInlayFunctionParameterTypeHints = true;
+								includeInlayVariableTypeHints = true;
+								includeInlayPropertyDeclarationTypeHints = true;
+								includeInlayFunctionLikeReturnTypeHints = true;
+								includeInlayEnumMemberValueHints = true;
+							};
+						};
+						javascript = {
+							inlayHints = {
+								includeInlayParameterNameHints = "all";
+								includeInlayParameterNameHintsWhenArgumentMatchesName = true;
+								includeInlayFunctionParameterTypeHints = true;
+								includeInlayVariableTypeHints = true;
+								includeInlayPropertyDeclarationTypeHints = true;
+								includeInlayFunctionLikeReturnTypeHints = true;
+								includeInlayEnumMemberValueHints = true;
+							};
+						};
+					};
+				};
 				html = { enable = true; };
 				cssls = { enable = true; };
+				tailwindcss = {
+					enable = true;
+					filetypes = [
+						"html"
+						"css"
+						"javascript"
+						"javascriptreact"
+						"typescript"
+						"typescriptreact"
+						"php"
+						"blade"
+					];
+				};
+				emmet_ls = {
+					enable = true;
+					filetypes = [
+						"html"
+						"css"
+						"javascript"
+						"javascriptreact"
+						"typescript"
+						"typescriptreact"
+						"php"
+						"blade"
+					];
+				};
 				rust_analyzer = {
 					enable = true;
 					installCargo = false;
@@ -101,10 +152,60 @@ in
 			};
 		};
 
-		plugins.lsp-format = {
+		plugins.conform-nvim = {
 			enable = true;
-			lspServersToEnable = "all";
+			settings = {
+				formatters_by_ft = {
+					javascript = [ "prettierd" "prettier" ];
+					javascriptreact = [ "prettierd" "prettier" ];
+					typescript = [ "prettierd" "prettier" ];
+					typescriptreact = [ "prettierd" "prettier" ];
+					css = [ "prettierd" "prettier" ];
+					html = [ "prettierd" "prettier" ];
+					json = [ "prettierd" "prettier" ];
+					yaml = [ "prettierd" "prettier" ];
+					markdown = [ "prettierd" "prettier" ];
+					blade = [ "blade-formatter" ];
+					php = [ { __unkeyed = "phpactor"; lsp_format = "fallback"; } ];
+					nix = [ { __unkeyed = "nixd"; lsp_format = "fallback"; } ];
+					rust = [ { __unkeyed = "rust_analyzer"; lsp_format = "fallback"; } ];
+					go = [ { __unkeyed = "gopls"; lsp_format = "fallback"; } ];
+					c = [ { __unkeyed = "clangd"; lsp_format = "fallback"; } ];
+					cpp = [ { __unkeyed = "clangd"; lsp_format = "fallback"; } ];
+					java = [ { __unkeyed = "jdtls"; lsp_format = "fallback"; } ];
+				};
+				format_on_save = {
+					timeout_ms = 500;
+					lsp_format = "fallback";
+				};
+				formatters = {
+					prettierd = {
+						command = "prettierd";
+					};
+					prettier = {
+						command = "prettier";
+					};
+					blade-formatter = {
+						command = "blade-formatter";
+						args = [ "--stdin" ];
+					};
+				};
+			};
 		};
+
+		plugins.none-ls = {
+			enable = true;
+		};
+
+		extraConfigLua = ''
+			local null_ls = require("null-ls")
+			null_ls.setup({
+				sources = {
+					null_ls.builtins.diagnostics.eslint_d,
+					null_ls.builtins.code_actions.eslint_d,
+				},
+			})
+		'';
 
 		# Treesitter (Syntax Highlighting)
 		plugins.treesitter = {
@@ -128,6 +229,7 @@ in
 				g.cpp
 				g.java
 				g.php
+				g.blade
 				g.json
 				g.yaml
 				g.toml
@@ -294,6 +396,9 @@ in
 			{ mode = "n"; key = "<leader>dc"; action = "<cmd>DapContinue<cr>"; options.desc = "Debug continue"; }
 			{ mode = "n"; key = "<leader>dt"; action = "<cmd>DapTerminate<cr>"; options.desc = "Debug terminate"; }
 			{ mode = "n"; key = "<leader>du"; action = "<cmd>lua require('dapui').toggle()<cr>"; options.desc = "Toggle debug UI"; }
+
+			# Format with conform.nvim
+			{ mode = "n"; key = "<leader>f"; action = "<cmd>lua require('conform').format({ async = true, lsp_fallback = true })<cr>"; options.desc = "Format buffer"; }
 		];
 	};
 }

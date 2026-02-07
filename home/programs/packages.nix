@@ -15,7 +15,6 @@
     zip
     p7zip
     unrar
-    nur.repos.foolnotion.qobuz-linux
     flatpak
     popcorntime
     proton-pass
