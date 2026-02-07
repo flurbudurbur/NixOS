@@ -156,15 +156,15 @@ in
 			enable = true;
 			settings = {
 				formatters_by_ft = {
-					javascript = [ "prettierd" "prettier" ];
-					javascriptreact = [ "prettierd" "prettier" ];
-					typescript = [ "prettierd" "prettier" ];
-					typescriptreact = [ "prettierd" "prettier" ];
-					css = [ "prettierd" "prettier" ];
-					html = [ "prettierd" "prettier" ];
-					json = [ "prettierd" "prettier" ];
-					yaml = [ "prettierd" "prettier" ];
-					markdown = [ "prettierd" "prettier" ];
+					javascript = [ [ "prettierd" "prettier" ] ];
+					javascriptreact = [ [ "prettierd" "prettier" ] ];
+					typescript = [ [ "prettierd" "prettier" ] ];
+					typescriptreact = [ [ "prettierd" "prettier" ] ];
+					css = [ [ "prettierd" "prettier" ] ];
+					html = [ [ "prettierd" "prettier" ] ];
+					json = [ [ "prettierd" "prettier" ] ];
+					yaml = [ [ "prettierd" "prettier" ] ];
+					markdown = [ [ "prettierd" "prettier" ] ];
 					blade = [ "blade-formatter" ];
 					php = [ { __unkeyed = "phpactor"; lsp_format = "fallback"; } ];
 					nix = [ { __unkeyed = "nixd"; lsp_format = "fallback"; } ];
@@ -177,6 +177,7 @@ in
 				format_on_save = {
 					timeout_ms = 500;
 					lsp_format = "fallback";
+					stop_after_first = true;
 				};
 				formatters = {
 					prettierd = {

@@ -26,18 +26,13 @@
       btw = "echo I use Nixos, btw";
       nrt = "nixos-rebuild test --sudo --flake /home/flur/nixos-system";
       nrs = "nixos-rebuild switch --sudo --flake /home/flur/nixos-system";
+      tmnix = "cd ~/nixos-system && tmuxinator start dev";
+      tmstart = "tmuxinator start dev";
+      tmstop = "tmuxinator stop dev";
     };
     oh-my-zsh = {
       enable = true;
       plugins = [ "git" "sudo" "tmux" "podman" ];
     };
-    initContent = ''
-      # Auto-attach to tmuxinator "dev" session (created at login by systemd)
-      if [[ -z "$TMUX" ]] && [[ $- == *i* ]]; then
-        if tmux has-session -t dev 2>/dev/null; then
-          tmux attach-session -t dev
-        fi
-      fi
-    '';
   };
 }

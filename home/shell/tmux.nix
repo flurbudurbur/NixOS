@@ -72,29 +72,10 @@
     tmuxinator
   ];
 
-  # Systemd user service to create tmuxinator session at login
-  systemd.user.services.tmuxinator-dev = {
-    Unit = {
-      Description = "Tmuxinator dev session initialization";
-      After = [ "graphical-session.target" ];
-    };
-
-    Service = {
-      Type = "forking";
-      ExecStart = "${nixpkgs-unstable.tmuxinator}/bin/tmuxinator start dev";
-      RemainAfterExit = true;
-      Restart = "no";
-    };
-
-    Install = {
-      WantedBy = [ "graphical-session.target" ];
-    };
-  };
-
   # Tmuxinator project configs managed by Nix
   xdg.configFile."tmuxinator/dev.yml".text = ''
     name: dev
-    root: ~/nixos-system
+    root: .
 
     windows:
       - code:
