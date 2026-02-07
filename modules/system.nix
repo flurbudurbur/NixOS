@@ -48,6 +48,12 @@
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
+      extraConfig.pipewire."92-high-res-audio" = {
+        "context.properties" = {
+          "default.clock.rate" = 96000;
+          "default.clock.allowed-rates" = [ 44100 48000 88200 96000 176400 192000 352800 384000 ];
+        };
+      };
     };
     # PC/SC Smart Card Daemon for Yubikey
     pcscd = {
