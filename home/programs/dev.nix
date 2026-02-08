@@ -6,8 +6,6 @@
     nodePackages.prettier
     prettierd
     eslint_d
-    php83
-    php83Packages.composer
     blade-formatter
   ];
 }
