@@ -1,8 +1,5 @@
-{ lib, ... }:
+{ lib, colors, ... }:
 
-let
-  c = import ../../../modules/colors.nix;
-in
 {
   programs.hyprlock = {
     enable = true;
@@ -29,11 +26,11 @@ in
           monitor = "";
           dots_center = true;
           fade_on_empty = false;
-          font_color = c.rgb c.text;
-          inner_color = c.rgb c.overlay;
-          outer_color = c.rgb c.base;
+          font_color = colors.rgb colors.text;
+          inner_color = colors.rgb colors.overlay;
+          outer_color = colors.rgb colors.base;
           outline_thickness = 5;
-          placeholder_text = "<span foreground=\"##${c.strip c.text}\">Password...</span>";
+          placeholder_text = "<span foreground=\"##${colors.strip colors.text}\">Password...</span>";
           shadow_passes = 2;
         }
       ];
@@ -43,7 +40,7 @@ in
         {
           monitor = "";
           text = ''cmd[update:1000] echo "<span>$(date +"%H:%M")</span>"'';
-          color = c.rgb c.text;
+          color = colors.rgb colors.text;
           font_size = 120;
           font_family = "JetBrains Mono";
           position = "0, 200";
@@ -54,7 +51,7 @@ in
         {
           monitor = "";
           text = ''cmd[update:1000] echo "<span>$(date +"%A, %B %d")</span>"'';
-          color = c.rgb c.text;
+          color = colors.rgb colors.text;
           font_size = 20;
           font_family = "JetBrains Mono";
           position = "0, 100";

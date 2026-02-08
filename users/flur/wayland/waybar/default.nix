@@ -1,6 +1,5 @@
-let
-	c = import ../../../../modules/colors.nix;
-in
+{ colors, ... }:
+
 {
 	programs.waybar = {
 		enable = true;
@@ -49,13 +48,13 @@ in
 					tooltip = false;
 					format = "{icon} {}";
 					format-icons = {
-						notification = "<span foreground='${c.love}'><sup></sup></span>";
+						notification = "<span foreground='${colors.love}'><sup></sup></span>";
 						none = "";
-						dnd-notification = "<span foreground='${c.love}'><sup></sup></span>";
+						dnd-notification = "<span foreground='${colors.love}'><sup></sup></span>";
 						dnd-none = "";
-						inhibited-notification = "<span foreground='${c.love}'><sup></sup></span>";
+						inhibited-notification = "<span foreground='${colors.love}'><sup></sup></span>";
 						inhibited-none = "";
-						dnd-inhibited-notification = "<span foreground='${c.love}'><sup></sup></span>";
+						dnd-inhibited-notification = "<span foreground='${colors.love}'><sup></sup></span>";
 						dnd-inhibited-none = "";
 					};
 					return-type = "json";
@@ -129,7 +128,7 @@ in
 			}
 
 			.modules-left, .modules-center, .modules-right {
-				background-color: ${c.rgba c.base "0.9"};
+				background-color: ${colors.rgba colors.base "0.9"};
 				border-radius: 10px;
 				margin-top: 10px;
 				margin-left: 10px;
@@ -141,69 +140,69 @@ in
 
 			#workspaces button {
 				padding: 0 5px;
-				color: ${c.text};
+				color: ${colors.text};
 				background: transparent;
 				border: none;
 				min-width: 20px;
 			}
 
 			#workspaces button.active {
-				color: ${c.rose};
-				background: ${c.rgba c.rose "0.2"};
+				color: ${colors.rose};
+				background: ${colors.rgba colors.rose "0.2"};
 				border: none;
 			}
 
 			#workspaces button:hover {
-				background: ${c.rgba c.rose "0.1"};
+				background: ${colors.rgba colors.rose "0.1"};
 			}
 
 			#window {
-				color: ${c.text};
+				color: ${colors.text};
 			}
 
 			#mpris {
-				color: ${c.rose};
+				color: ${colors.rose};
 			}
 
 			#mpris.paused {
-				color: ${c.muted};
+				color: ${colors.muted};
 			}
 
 			#custom-notification {
-				color: ${c.text};
+				color: ${colors.text};
 			}
 
 			#clock {
-				color: ${c.iris};
+				color: ${colors.iris};
 			}
 
 			#cpu {
-				color: ${c.love};
+				color: ${colors.love};
 			}
 
 			#memory {
-				color: ${c.gold};
+				color: ${colors.gold};
 			}
 
 			#network {
-				color: ${c.foam};
+				color: ${colors.foam};
 			}
 
 			#wireplumber {
-				color: ${c.pine};
+				color: ${colors.pine};
 			}
 
 			#bluetooth {
-				color: ${c.iris};
+				color: ${colors.iris};
 			}
 
 			#bluetooth.disabled,
 			#bluetooth.off {
-				color: ${c.muted};
+				color: ${colors.muted};
 			}
 
 			#tray {
-				color: ${c.text};
+				color: ${colors.text};
 			}
 
 			#clock, #cpu, #memory, #network, #wireplumber, #bluetooth, #tray, #window, #mpris, #custom-notification {

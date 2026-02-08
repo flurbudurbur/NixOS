@@ -1,8 +1,5 @@
-{ config, pkgs, ... }:
+{ config, pkgs, colors, ... }:
 
-let
-  c = import ../../../../modules/colors.nix;
-in
 {
   services.walker = {
     enable = true;
@@ -77,7 +74,7 @@ in
       style = ''
         /* Main window */
         * {
-          color: ${c.text};
+          color: ${colors.text};
           font-family: "JetBrainsMono Nerd Font", monospace;
           font-size: 14px;
         }
@@ -88,25 +85,25 @@ in
         }
 
         .box-wrapper {
-          background: ${c.rgba c.base "0.95"};
+          background: ${colors.rgba colors.base "0.95"};
           border-radius: 10px;
-          border: 2px solid ${c.rgba c.pine "0.3"};
+          border: 2px solid ${colors.rgba colors.pine "0.3"};
           padding: 10px;
         }
 
         /* Search input */
         .input {
-          background: ${c.rgba c.surface "0.8"};
-          color: ${c.text};
-          border: 1px solid ${c.rgba c.overlay "0.5"};
+          background: ${colors.rgba colors.surface "0.8"};
+          color: ${colors.text};
+          border: 1px solid ${colors.rgba colors.overlay "0.5"};
           border-radius: 8px;
           padding: 8px 12px;
           margin-bottom: 10px;
         }
 
         .input:focus {
-          border-color: ${c.pine};
-          box-shadow: 0 0 0 2px ${c.rgba c.pine "0.3"};
+          border-color: ${colors.pine};
+          box-shadow: 0 0 0 2px ${colors.rgba colors.pine "0.3"};
         }
 
         /* List items */
@@ -118,21 +115,21 @@ in
         }
 
         .item:hover {
-          background: ${c.rgba c.overlay "0.5"};
+          background: ${colors.rgba colors.overlay "0.5"};
         }
 
         .item:selected {
-          background: ${c.rgba c.pine "0.3"};
-          border: 1px solid ${c.pine};
+          background: ${colors.rgba colors.pine "0.3"};
+          border: 1px solid ${colors.pine};
         }
 
         /* Item text */
         .item-text {
-          color: ${c.text};
+          color: ${colors.text};
         }
 
         .item-sub {
-          color: ${c.subtle};
+          color: ${colors.subtle};
           font-size: 12px;
         }
 
@@ -143,17 +140,17 @@ in
 
         /* Scrollbar */
         scrollbar {
-          background: ${c.rgba c.surface "0.3"};
+          background: ${colors.rgba colors.surface "0.3"};
           border-radius: 10px;
         }
 
         scrollbar slider {
-          background: ${c.rgba c.muted "0.5"};
+          background: ${colors.rgba colors.muted "0.5"};
           border-radius: 10px;
         }
 
         scrollbar slider:hover {
-          background: ${c.rgba c.pine "0.6"};
+          background: ${colors.rgba colors.pine "0.6"};
         }
       '';
     };

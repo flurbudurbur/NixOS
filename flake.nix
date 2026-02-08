@@ -51,7 +51,9 @@
     sops-nix,
     nixos-secrets,
     ...
-    }: {
+    }: let
+      colors = import ./modules/colors.nix;
+    in {
 		nixosConfigurations = {
       flurPC = let
           username = "flur";
@@ -91,6 +93,7 @@
 					            system = "x86_64-linux";
 					            config.allowUnfree = true;
 					          };
+					          colors = colors;
 				    	  	};
 					      	backupFileExtension = "backup";
 					  	    sharedModules = [
@@ -106,6 +109,7 @@
             ];
             specialArgs = {
               secretsPath = nixos-secrets.secretsPath;
+              colors = colors;
             };
       };
     };

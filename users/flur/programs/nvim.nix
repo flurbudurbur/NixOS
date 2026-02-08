@@ -1,8 +1,5 @@
-{ pkgs, ... }:
+{ pkgs, colors, ... }:
 
-let
-	c = import ../../../modules/colors.nix;
-in
 {
 	programs.nixvim = {
 		enable = true;
@@ -48,18 +45,18 @@ in
 					transparency = false;
 				};
 				highlight_groups = {
-					Normal = { bg = c.base; fg = c.text; };
-					NormalFloat = { bg = c.surface; fg = c.text; };
-					Cursor = { bg = c.highlightHigh; fg = c.text; };
-					CursorLine = { bg = c.highlightLow; };
-					CursorLineNr = { fg = c.rose; bold = true; };
-					StatusLine = { bg = c.surface; fg = c.text; };
-					StatusLineNC = { bg = c.base; fg = c.muted; };
-					VertSplit = { fg = c.overlay; };
-					DiagnosticError = { fg = c.love; };
-					DiagnosticWarn = { fg = c.gold; };
-					DiagnosticInfo = { fg = c.foam; };
-					DiagnosticHint = { fg = c.iris; };
+					Normal = { bg = colors.base; fg = colors.text; };
+					NormalFloat = { bg = colors.surface; fg = colors.text; };
+					Cursor = { bg = colors.highlightHigh; fg = colors.text; };
+					CursorLine = { bg = colors.highlightLow; };
+					CursorLineNr = { fg = colors.rose; bold = true; };
+					StatusLine = { bg = colors.surface; fg = colors.text; };
+					StatusLineNC = { bg = colors.base; fg = colors.muted; };
+					VertSplit = { fg = colors.overlay; };
+					DiagnosticError = { fg = colors.love; };
+					DiagnosticWarn = { fg = colors.gold; };
+					DiagnosticInfo = { fg = colors.foam; };
+					DiagnosticHint = { fg = colors.iris; };
 				};
 			};
 		};
