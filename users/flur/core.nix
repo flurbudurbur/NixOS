@@ -29,11 +29,11 @@
         name = "FiraCode Nerd Font";
       };
       sansSerif = {
-        package = pkgs.callPackage ../modules/custom/fonts/bricolage.nix {};
+        package = pkgs.callPackage ../../modules/custom/fonts/bricolage.nix {};
         name = "Bricolage Grotesque";
       };
       serif = {
-        package = pkgs.callPackage ../modules/custom/fonts/bricolage.nix {};
+        package = pkgs.callPackage ../../modules/custom/fonts/bricolage.nix {};
         name = "Bricolage Grotesque";
       };
       sizes = {

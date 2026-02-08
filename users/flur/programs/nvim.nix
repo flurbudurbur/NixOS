@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 let
-	c = import ../../modules/colors.nix;
+	c = import ../../../modules/colors.nix;
 in
 {
 	programs.nixvim = {

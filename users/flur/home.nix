@@ -1,10 +1,10 @@
 { ... }:
 {
   imports = [
-    ../../home/core.nix
-    ../../home/programs
-    ../../home/shell
-    ../../home/wayland
-    ../../home/secrets.nix
+    ./core.nix
+    ./programs
+    ./shell
+    ./wayland
+    ./secrets.nix
   ];
 }

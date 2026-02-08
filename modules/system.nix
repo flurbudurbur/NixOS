@@ -91,4 +91,7 @@
   ];
 
   programs.zsh.enable = true;
+
+  # Enable nix-ld for dynamically linked binaries (fnm/node, etc.)
+  programs.nix-ld.enable = true;
 }

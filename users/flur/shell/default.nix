@@ -29,6 +29,9 @@
       tmnix = "_tmux_in_dir ~/nixos-system start";
     };
     initContent = ''
+      # FNM (Fast Node Manager) initialization
+      eval "$(fnm env --use-on-cd)"
+
       # Helper function to run tmuxinator commands in a specific directory
       _tmux_in_dir() {
         local target_dir="$1"

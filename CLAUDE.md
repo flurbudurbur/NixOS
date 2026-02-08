@@ -46,35 +46,43 @@ nixos-system/
 │   └── flurPC/
 │       ├── default.nix    # Host-specific config (boot, networking)
 │       └── hardware-configuration.nix  # Auto-generated hardware config
-├── users/                 # Per-user configurations
-│   └── flur/
-│       ├── nixos.nix      # User-specific system settings
-│       └── home.nix       # Imports home-manager modules
-└── home/                  # Shared home-manager modules
-    ├── core.nix           # Home basics (username, stateVersion, cursor)
-    ├── programs/          # User programs and applications
-    │   ├── default.nix    # Aggregates all program modules
-    │   ├── git.nix        # Git and SSH configuration
-    │   ├── packages.nix   # User packages and utilities
-    │   ├── xdg.nix        # GTK, Qt, XDG theming
-    │   ├── nvim.nix       # Neovim configuration
-    │   └── nixcord.nix    # Discord (currently disabled)
-    ├── shell/             # Shell environment
-    │   ├── default.nix    # Zsh configuration
-    │   ├── terminals.nix  # Alacritty terminal
-    │   ├── starship.nix   # Starship prompt
-    │   ├── tmux.nix       # Tmux terminal multiplexer
-    │   └── fastfetch.nix  # System info display
-    └── wayland/           # Wayland/Hyprland specific
-        ├── default.nix    # Aggregates wayland modules
-        ├── hyprland/
-        │   └── default.nix  # Hyprland settings
-        ├── hyprlock.nix   # Lock screen
-        ├── hypridle.nix   # Idle management
-        ├── waybar/
-        │   └── default.nix  # Status bar
-        └── walker/
-            └── default.nix  # App launcher
+└── users/                 # Per-user configurations
+    └── flur/
+        ├── nixos.nix      # User-specific system settings
+        ├── home.nix       # Imports home-manager modules
+        ├── core.nix       # Home basics (username, stateVersion, cursor)
+        ├── secrets.nix    # User-level secrets management with sops-nix
+        ├── programs/      # User programs and applications
+        │   ├── default.nix    # Aggregates all program modules
+        │   ├── git.nix        # Git and SSH configuration
+        │   ├── packages.nix   # User packages and utilities
+        │   ├── xdg.nix        # GTK, Qt, XDG theming
+        │   ├── nvim.nix       # Neovim configuration
+        │   ├── composer.nix   # PHP/Composer with hard-linked config
+        │   ├── dev.nix        # Web development tools (fnm, pnpm, Node.js)
+        │   ├── gpg.nix        # GPG configuration for Yubikey
+        │   ├── zen-browser.nix  # Zen Browser with NextDNS integration
+        │   ├── flatpak.nix    # Flatpak package declarations
+        │   ├── mullvad-vpn.nix  # Mullvad VPN client
+        │   ├── heroic.nix     # Heroic Games Launcher
+        │   ├── persepolis.nix # Persepolis download manager
+        │   └── nixcord.nix    # Discord (currently disabled)
+        ├── shell/         # Shell environment
+        │   ├── default.nix    # Zsh configuration
+        │   ├── terminals.nix  # Alacritty terminal
+        │   ├── starship.nix   # Starship prompt
+        │   ├── tmux.nix       # Tmux terminal multiplexer
+        │   └── fastfetch.nix  # System info display
+        └── wayland/       # Wayland/Hyprland specific
+            ├── default.nix    # Aggregates wayland modules
+            ├── hyprland/
+            │   └── default.nix  # Hyprland settings
+            ├── hyprlock.nix   # Lock screen
+            ├── hypridle.nix   # Idle management
+            ├── waybar/
+            │   └── default.nix  # Status bar
+            └── walker/
+                └── default.nix  # App launcher
 ```
 
 ## Key Configuration Details
@@ -114,10 +122,9 @@ This configuration uses several external flake inputs beyond standard nixpkgs:
 - `hardware-configuration.nix`: Auto-generated, do not edit manually
 
 ### User-Specific (users/flur/)
+All user-specific configuration lives under `users/flur/`:
 - `nixos.nix`: User-specific system settings (currently empty)
-- `home.nix`: Imports all home-manager modules
-
-### Home-Manager (home/)
+- `home.nix`: Home-manager entry point (imports all modules below)
 - `core.nix`: Basic home configuration (username, directory, cursor theme)
 - `secrets.nix`: User-level secrets management with sops-nix
 - `programs/`: Application configurations and user packages
@@ -127,16 +134,16 @@ This configuration uses several external flake inputs beyond standard nixpkgs:
 ## Workflow
 
 1. **System Changes**: Edit files in `modules/` or `hosts/flurPC/`
-2. **User Packages**: Add to `home/programs/packages.nix`
-3. **Program Configuration**: Create/edit files in appropriate `home/` subdirectory
+2. **User Packages**: Add to `users/flur/programs/packages.nix`
+3. **Program Configuration**: Create/edit files in appropriate `users/flur/` subdirectory
 4. **Apply Changes**: Run `sudo nixos-rebuild switch --flake .#flurPC`
 5. **Test Before Applying**: Use `nixos-rebuild build --flake .#flurPC` first
 
 ## Adding New Modules
 
 ### New Program Configuration
-1. Create file in `home/programs/yourprogram.nix`
-2. Add import to `home/programs/default.nix`
+1. Create file in `users/flur/programs/yourprogram.nix`
+2. Add import to `users/flur/programs/default.nix`
 3. Configure the program using home-manager options
 
 ### New System Service
@@ -158,7 +165,7 @@ All colors are centralized in `modules/colors.nix` (Rose Pine Moon). To use colo
 
 ```nix
 let
-  c = import ../../modules/colors.nix;  # Adjust path as needed
+  c = import ../../../modules/colors.nix;  # Adjust path based on file location
 in
 {
   # Direct hex colors: c.base, c.text, c.rose, c.pine, c.foam, c.iris, etc.
@@ -172,6 +179,11 @@ in
 }
 ```
 
+**Common path examples**:
+- From `users/flur/programs/nvim.nix`: `../../../modules/colors.nix`
+- From `users/flur/wayland/waybar/default.nix`: `../../../../modules/colors.nix`
+- From `users/flur/core.nix`: `../../modules/colors.nix`
+
 ## Secrets Management with sops-nix
 
 This configuration uses **sops-nix** for managing secrets with **age encryption**.
@@ -180,7 +192,7 @@ This configuration uses **sops-nix** for managing secrets with **age encryption*
 - **Secrets repository**: `git@github.com:flurbudurbur/nix-secrets.git` (separate from main config)
 - **Encryption**: age key at `/root/.config/sops/age/keys.txt` (user copy at `/home/flur/.config/sops/age/keys.txt`)
 - **System secrets**: Defined in `modules/secrets.nix` (Mullvad VPN configuration)
-- **User secrets**: Defined in `home/secrets.nix` (NextDNS URL, SSH hostname, Git signing key)
+- **User secrets**: Defined in `users/flur/secrets.nix` (NextDNS URL, SSH hostname, Git signing key)
 
 ### Key Locations
 - **System age key**: `/root/.config/sops/age/keys.txt` (private key for system secrets)
@@ -211,8 +223,8 @@ sudo nixos-rebuild switch --flake .#flurPC  # No PIN required!
 
 **Add new secrets**:
 1. Create/encrypt file in nixos-secrets repo using age key
-2. Add secret declaration to `modules/secrets.nix` (system) or `home/secrets.nix` (user)
-3. Reference secret in program config (see `git.nix` or `zen-browser.nix` for patterns)
+2. Add secret declaration to `modules/secrets.nix` (system) or `users/flur/secrets.nix` (user)
+3. Reference secret in program config (see `users/flur/programs/git.nix` or `zen-browser.nix` for patterns)
 
 ### Program Integration Patterns
 
@@ -238,6 +250,17 @@ home.activation.substituteSecrets = lib.hm.dag.entryAfter ["writeBoundary"] ''
 '';
 ```
 
+**Pattern 3: Hard-linked configuration** (composer.nix):
+```nix
+# composer.json is hard-linked between ~/.config/composer/ and repo root
+# Activation script ensures both locations point to same inode
+# Allows both NixOS tracking and standard composer workflow
+home.activation.initComposer = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  # Creates hard link between repo and XDG config location
+  ln "$REPO_COMPOSER" "$COMPOSER_JSON"
+'';
+```
+
 ### Deployment Notes
 - **No interactive prompts**: age decryption works non-interactively during nixos-rebuild
 - **Secrets location**:
@@ -258,7 +281,7 @@ See `SOPS-NIX-SETUP.md` for detailed setup documentation and troubleshooting.
 - **Hostname parameter**: Keep `hostname = "flurPC"` in extraSpecialArgs for Hyprland monitor configs
 - **State version**: "25.11" for both system and home-manager (do not change)
 - **Hardware config**: Do not edit `hardware-configuration.nix` manually - regenerate if needed
-- **nixcord status**: Currently disabled due to upstream issue #166 (see `home/programs/nixcord.nix`)
+- **nixcord status**: Currently disabled due to upstream issue #166 (see `users/flur/programs/nixcord.nix`)
 - **Home-manager backups**: Backup files use `.backup` extension (configured in flake.nix)
 - **Flake structure**: Uses home-manager as a NixOS module, not standalone
 - **Secrets repo**: Never commit unencrypted secrets; see `.gitignore` in nixos-secrets repo

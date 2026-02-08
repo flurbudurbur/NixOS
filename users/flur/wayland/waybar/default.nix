@@ -1,5 +1,5 @@
 let
-	c = import ../../../modules/colors.nix;
+	c = import ../../../../modules/colors.nix;
 in
 {
 	programs.waybar = {
@@ -59,7 +59,7 @@ in
 						dnd-inhibited-none = "";
 					};
 					return-type = "json";
-					exec = "${../../../modules/custom/scripts/dunst-status.sh}";
+					exec = "${../../../../modules/custom/scripts/dunst-status.sh}";
 					on-click = "dunstctl history-pop";
 					on-click-right = "dunstctl close-all";
 					on-click-middle = "dunstctl set-paused toggle";
