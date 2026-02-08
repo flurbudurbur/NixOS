@@ -156,15 +156,15 @@ in
 			enable = true;
 			settings = {
 				formatters_by_ft = {
-					javascript = [ [ "prettierd" "prettier" ] ];
-					javascriptreact = [ [ "prettierd" "prettier" ] ];
-					typescript = [ [ "prettierd" "prettier" ] ];
-					typescriptreact = [ [ "prettierd" "prettier" ] ];
-					css = [ [ "prettierd" "prettier" ] ];
-					html = [ [ "prettierd" "prettier" ] ];
-					json = [ [ "prettierd" "prettier" ] ];
-					yaml = [ [ "prettierd" "prettier" ] ];
-					markdown = [ [ "prettierd" "prettier" ] ];
+					javascript = [ "prettierd" "prettier" { stop_after_first = true; } ];
+					javascriptreact = [ "prettierd" "prettier" { stop_after_first = true; } ];
+					typescript = [ "prettierd" "prettier" { stop_after_first = true; } ];
+					typescriptreact = [ "prettierd" "prettier" { stop_after_first = true; } ];
+					css = [ "prettierd" "prettier" { stop_after_first = true; } ];
+					html = [ "prettierd" "prettier" { stop_after_first = true; } ];
+					json = [ "prettierd" "prettier" { stop_after_first = true; } ];
+					yaml = [ "prettierd" "prettier" { stop_after_first = true; } ];
+					markdown = [ "prettierd" "prettier" { stop_after_first = true; } ];
 					blade = [ "blade-formatter" ];
 					php = [ { __unkeyed = "phpactor"; lsp_format = "fallback"; } ];
 					nix = [ { __unkeyed = "nixd"; lsp_format = "fallback"; } ];
@@ -177,7 +177,6 @@ in
 				format_on_save = {
 					timeout_ms = 500;
 					lsp_format = "fallback";
-					stop_after_first = true;
 				};
 				formatters = {
 					prettierd = {

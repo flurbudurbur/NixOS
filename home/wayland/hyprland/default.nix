@@ -23,6 +23,7 @@ in
 			"$terminal" = "alacritty";
 			"$fileManager" = "nautilus";
 			"$menu" = "walker";
+      "$browser" = "zen";
 			"$mainMod" = "SUPER";
 
 			# Environment variables
@@ -108,10 +109,6 @@ in
 				no_hardware_cursors = true;
 			};
 
-			exec-once = [
-				# hyprpaper is managed by systemd via home-manager
-			];
-
 			input = {
 				kb_layout = "us";
 				follow_mouse = 1;
@@ -130,10 +127,10 @@ in
 				"$mainMod, M, exit,"
 				"$mainMod, E, exec, $fileManager"
 				"$mainMod, V, togglefloating,"
-				"$mainMod, R, exec, $menu"
 				"$mainMod, P, pseudo,"
 				"$mainMod, J, togglesplit,"
 				"$mainMod, L, exec, loginctl lock-session"
+        "$mainMod, Z, exec, $browser"
 				"ALT, SPACE, exec, $menu"
 				# Maximize window
 				"ALT, up, fullscreen, 1"
