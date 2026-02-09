@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, colors, ... }:
 {
   # Hyprland
   programs.hyprland = {
@@ -7,17 +7,12 @@
     xwayland.enable = true;
   };
 
-  programs.regreet = {
+  # TUI greeter for greetd with Rose Pine Moon colors
+  services.greetd = {
     enable = true;
     settings = {
-      background.fit = "Cover";
-      GTK = {
-        application_prefer_dark_theme = true;
-        theme_name = lib.mkForce "rose-pine-moon-gtk";
-      };
-      commands = {
-        reboot = [ "systemctl" "reboot" ];
-        poweroff = [ "systemctl" "poweroff" ];
+      default_session = {
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --asterisks --cmd 'uwsm start hyprland-uwsm.desktop' --greeting 'Welcome to NixOS' --container-padding 2 --width 80 --theme border=${colors.pine};text=${colors.text};prompt=${colors.foam};time=${colors.subtle};action=${colors.rose};button=${colors.iris};container=${colors.base};input=${colors.surface}";
       };
     };
   };
@@ -38,6 +33,6 @@
     mako
     waybar
     rose-pine-gtk-theme
-    vlc
+    rose-pine-icon-theme
   ];
 }

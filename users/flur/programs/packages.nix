@@ -1,11 +1,10 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
-    rose-pine-gtk-theme
-    rose-pine-icon-theme
     lazygit
     gnupg
     claude-code
+    vlc
     hyprpaper
     teams-for-linux
     pwvucontrol
