@@ -32,7 +32,18 @@ in
     enableDefaultConfig = false;
     matchBlocks = {
       "*".addKeysToAgent = "yes";
-      "github.com".identityFile = "~/.ssh/github";
+
+      # GitHub authentication using FIDO2 resident keys on Yubikeys
+      # Falls back to regular key if Yubikeys aren't available
+      "github.com" = {
+        identitiesOnly = true;
+        identityFile = [
+          "~/.ssh/id_ed25519_sk_rk_pink"   # Primary Yubikey (Pink)
+          "~/.ssh/id_ed25519_sk_rk_aloha"  # Backup Yubikey (Aloha)
+          "~/.ssh/github"                  # Fallback non-hardware key
+        ];
+      };
+
       "shiori" = {
         identityFile = "~/.ssh/shiori";
         user = "flur";
