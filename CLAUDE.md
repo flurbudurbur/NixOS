@@ -88,23 +88,41 @@ nixos-system/
 ## Key Configuration Details
 
 - **Window Manager**: Hyprland with UWSM integration
-- **Display Manager**: regreet
+- **Display Manager**: tuigreet
 - **GPU**: NVIDIA with open drivers
 - **Theme**: Rose Pine Moon (system-wide)
 - **Experimental Features**: Flakes and nix-command enabled
 - **Unfree Packages**: Allowed (nixpkgs.config.allowUnfree = true)
+
+## Using Unstable Packages
+
+While the system uses nixpkgs 25.11, unstable packages are available via `nixpkgs-unstable` parameter in home-manager:
+
+```nix
+{ pkgs, nixpkgs-unstable, ... }:
+{
+  home.packages = [
+    nixpkgs-unstable.somePackage  # Use unstable version
+    pkgs.normalPackage             # Use stable 25.11 version
+  ];
+}
+```
+
+This is configured in `flake.nix` extraSpecialArgs and allows mixing stable/unstable packages.
 
 ## Special Flake Inputs
 
 This configuration uses several external flake inputs beyond standard nixpkgs:
 
 - **zen-browser**: Custom Firefox-based browser with zen modifications
+- **stylix**: System-wide theming framework (release-25.11 branch)
 - **nixcord**: Discord client configurator (currently disabled - see `home/programs/nixcord.nix`)
 - **nixvim**: Neovim configuration framework used in `home/programs/nvim.nix`
+- **firefox-addons**: Firefox extensions from NUR (rycee's expressions)
+- **nur**: Nix User Repository for additional packages
 - **nix-flatpak**: Declarative Flatpak package management
-- **hypridle**: Pinned to main branch (fixes D-Bus crash after suspend)
 - **nixpkgs-unstable**: Available for packages requiring newer versions
-- **sops-nix**: Secret management with GPG/Yubikey encryption
+- **sops-nix**: Secret management with age encryption
 - **nixos-secrets**: Private repository (`git@github.com:flurbudurbur/nix-secrets.git`) containing encrypted secrets
 
 ## Module Organization
@@ -161,28 +179,33 @@ All user-specific configuration lives under `users/flur/`:
 
 ## Color Theming
 
-All colors are centralized in `modules/colors.nix` (Rose Pine Moon). To use colors in a module:
+All colors are centralized in `modules/colors.nix` (Rose Pine Moon) and passed globally via `specialArgs`/`extraSpecialArgs`.
 
+**In home-manager modules** (programs/, shell/, wayland/):
 ```nix
-let
-  c = import ../../../modules/colors.nix;  # Adjust path based on file location
-in
+{ config, colors, ... }:
 {
-  # Direct hex colors: c.base, c.text, c.rose, c.pine, c.foam, c.iris, etc.
-  # ANSI terminal colors: c.ansi.black, c.ansi.red, etc.
+  # Access colors directly from the colors parameter
+  # Direct hex colors: colors.base, colors.text, colors.rose, colors.pine, colors.foam, colors.iris, etc.
+  # ANSI terminal colors: colors.ansi.black, colors.ansi.red, etc.
 
   # Helper functions available:
-  # - c.strip hex       -> removes '#' prefix
-  # - c.hypr hex alpha  -> "rgba(232136ee)" format for Hyprland
-  # - c.rgba hex alpha  -> "rgba(35, 33, 54, 0.9)" CSS format
-  # - c.rgb hex         -> "rgb(35, 33, 54)" format for hyprlock
+  # - colors.strip hex       -> removes '#' prefix
+  # - colors.hypr hex alpha  -> "rgba(232136ee)" format for Hyprland
+  # - colors.rgba hex alpha  -> "rgba(35, 33, 54, 0.9)" CSS format
+  # - colors.rgb hex         -> "rgb(35, 33, 54)" format for hyprlock
 }
 ```
 
-**Common path examples**:
-- From `users/flur/programs/nvim.nix`: `../../../modules/colors.nix`
-- From `users/flur/wayland/waybar/default.nix`: `../../../../modules/colors.nix`
-- From `users/flur/core.nix`: `../../modules/colors.nix`
+**In system modules** (modules/, hosts/):
+```nix
+{ config, colors, ... }:
+{
+  # Same access pattern - colors are passed via specialArgs
+}
+```
+
+**Note**: The colors module was made global in commit 80fe6d1. Legacy relative imports (`import ../../../modules/colors.nix`) still work but are no longer necessary.
 
 ## Secrets Management with sops-nix
 
@@ -277,7 +300,7 @@ See `SOPS-NIX-SETUP.md` for detailed setup documentation and troubleshooting.
 
 ## Important Notes
 
-- **Color imports**: Always use relative imports for colors.nix based on file location
+- **Color access**: Colors are passed globally via specialArgs - use `colors` parameter instead of relative imports
 - **Hostname parameter**: Keep `hostname = "flurPC"` in extraSpecialArgs for Hyprland monitor configs
 - **State version**: "25.11" for both system and home-manager (do not change)
 - **Hardware config**: Do not edit `hardware-configuration.nix` manually - regenerate if needed
