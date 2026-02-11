@@ -17,11 +17,14 @@
     flatpak
     popcorntime
     proton-pass
+    kew
 
     # System utils
     grimblast
     bluetui
     bandwhich
+    nethogs
+    iftop
 
     # Productivity
     libreoffice-fresh

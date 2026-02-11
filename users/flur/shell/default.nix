@@ -36,6 +36,7 @@
       _tmux_in_dir() {
         local target_dir="$1"
         local action="$2"
+        local session="''${3:-dev}"
 
         if [ -z "$target_dir" ]; then
           echo "Error: No directory specified" >&2
@@ -47,25 +48,17 @@
           return 1
         fi
 
-        (cd "$target_dir" && tmuxinator "$action" dev)
+        (cd "$target_dir" && tmuxinator "$action" "$session")
       }
 
-      # Start tmuxinator session, optionally in a specific directory
+      # Start tmuxinator session: tmstart [dir] [session]  (defaults: . dev)
       tmstart() {
-        if [ -n "$1" ]; then
-          _tmux_in_dir "$1" start
-        else
-          tmuxinator start dev
-        fi
+        _tmux_in_dir "''${1:-.}" start "''${2:-dev}"
       }
 
-      # Stop tmuxinator session, optionally in a specific directory
+      # Stop tmuxinator session: tmstop [dir] [session]  (defaults: . dev)
       tmstop() {
-        if [ -n "$1" ]; then
-          _tmux_in_dir "$1" stop
-        else
-          tmuxinator stop dev
-        fi
+        _tmux_in_dir "''${1:-.}" stop "''${2:-dev}"
       }
     '';
     oh-my-zsh = {

@@ -94,4 +94,26 @@
 
   # Enable nix-ld for dynamically linked binaries (fnm/node, etc.)
   programs.nix-ld.enable = true;
+
+  # Grant network capture capabilities to monitoring tools (avoids sudo)
+  security.wrappers = {
+    bandwhich = {
+      owner = "root";
+      group = "root";
+      capabilities = "cap_net_raw,cap_net_admin+eip";
+      source = "${pkgs.bandwhich}/bin/bandwhich";
+    };
+    nethogs = {
+      owner = "root";
+      group = "root";
+      capabilities = "cap_net_raw,cap_net_admin+eip";
+      source = "${pkgs.nethogs}/bin/nethogs";
+    };
+    iftop = {
+      owner = "root";
+      group = "root";
+      capabilities = "cap_net_raw+eip";
+      source = "${pkgs.iftop}/bin/iftop";
+    };
+  };
 }

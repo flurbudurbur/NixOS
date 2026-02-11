@@ -73,6 +73,19 @@
   ];
 
   # Tmuxinator project configs managed by Nix
+  xdg.configFile."tmuxinator/netmon.yml".text = ''
+    name: netmon
+    root: ~
+
+    windows:
+      - overview:
+          layout: even-horizontal
+          panes:
+            - bandwhich
+            - iftop
+      - processes: nethogs
+  '';
+
   xdg.configFile."tmuxinator/dev.yml".text = ''
     name: dev
     root: .
