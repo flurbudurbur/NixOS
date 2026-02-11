@@ -2,15 +2,12 @@
 
 let
   signingKeyFile = "${config.xdg.configHome}/sops-secrets/git-signing-key";
-  sshHostnameFile = "${config.xdg.configHome}/sops-secrets/ssh-shiori-hostname";
 
   signingKey = if builtins.pathExists signingKeyFile
     then lib.removeSuffix "\n" (lib.fileContents signingKeyFile)
     else "59327CBED7938BDBE74B167D57CF006A8AD85F44";
 
-  sshHostname = if builtins.pathExists sshHostnameFile
-    then lib.removeSuffix "\n" (lib.fileContents sshHostnameFile)
-    else "console.flur.dev";
+  sshHostnameFile = "${config.xdg.configHome}/sops-secrets/ssh-shiori-hostname";
 in
 {
   programs.git = {
@@ -30,6 +27,9 @@ in
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
+    # shiori host is written at activation time (see home.activation below)
+    # so that the hostname secret is read after sops-nix decrypts it
+    extraConfig = "Include ~/.ssh/shiori_config";
     matchBlocks = {
       "*".addKeysToAgent = "yes";
 
@@ -43,12 +43,15 @@ in
           "~/.ssh/github"                  # Fallback non-hardware key
         ];
       };
-
-      "shiori" = {
-        identityFile = "~/.ssh/shiori";
-        user = "flur";
-        hostname = sshHostname;
-      };
     };
   };
+
+  # Write shiori SSH config at activation time so the secret hostname is
+  # read after sops-nix has decrypted it, not at Nix evaluation time.
+  home.activation.generateSshShioriConfig = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    HOSTNAME=$(cat "${sshHostnameFile}" 2>/dev/null | tr -d '\n')
+    HOSTNAME=''${HOSTNAME:-console.flur.dev}
+    printf 'Host shiori\n  IdentityFile ~/.ssh/shiori\n  User flur\n  Hostname %s\n' "$HOSTNAME" > ~/.ssh/shiori_config
+    chmod 600 ~/.ssh/shiori_config
+  '';
 }

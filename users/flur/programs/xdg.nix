@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, pkgs, ... }:
 {
   # GTK, Qt, and dconf theming now managed by stylix
 
@@ -22,4 +22,10 @@
   home.sessionVariables = {
     XDG_DATA_DIRS = "$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:$XDG_DATA_DIRS";
   };
+
+  # Propagate Flatpak paths to systemd user environment (for Walker and other services)
+  home.activation.flatpakXdgDirs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    ${pkgs.systemd}/bin/systemctl --user set-environment \
+      XDG_DATA_DIRS="$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:$XDG_DATA_DIRS"
+  '';
 }
