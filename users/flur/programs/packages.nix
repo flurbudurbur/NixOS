@@ -46,6 +46,9 @@
     lutris
     protonup-ng
     heroic
+
+    # Music
+    (pkgs.callPackage ../../../modules/custom/qobuz-player.nix {})
   ];
 
   home.sessionVariables = {
