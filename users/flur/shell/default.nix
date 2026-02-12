@@ -26,11 +26,13 @@
       btw = "echo I use Nixos, btw";
       nrt = "nixos-rebuild test --sudo --flake /home/flur/nixos-system";
       nrs = "nixos-rebuild switch --sudo --flake /home/flur/nixos-system";
-      tmnix = "_tmux_in_dir ~/nixos-system start";
     };
     initContent = ''
       # FNM (Fast Node Manager) initialization
       eval "$(fnm env --use-on-cd)"
+
+      # Zoxide initialization
+      eval "$(zoxide init zsh)"
 
       # Helper function to run tmuxinator commands in a specific directory
       _tmux_in_dir() {
@@ -48,7 +50,7 @@
           return 1
         fi
 
-        (cd "$target_dir" && tmuxinator "$action" "$session")
+        (cd "$(zoxide query "$target_dir")" && tmuxinator "$action" "$session")
       }
 
       # Start tmuxinator session: tmstart [dir] [session]  (defaults: . dev)

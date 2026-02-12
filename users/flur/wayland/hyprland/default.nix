@@ -20,7 +20,7 @@ in
 			monitor = monitors;
 
 			# Programs
-			"$terminal" = "alacritty";
+			"$terminal" = "foot";
 			"$fileManager" = "nautilus";
 			"$menu" = "walker";
       "$browser" = "zen";

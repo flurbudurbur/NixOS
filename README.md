@@ -5,9 +5,9 @@ Personal NixOS configuration with Hyprland, Rose Pine Moon theming, and comprehe
 ## Stack
 
 - **WM**: Hyprland (Wayland) with UWSM integration
-- **DM**: regreet (Wayland greeter)
-- **Shell**: Zsh + Starship prompt
-- **Terminal**: Alacritty + Tmux
+- **DM**: tuigreet (Wayland greeter)
+- **Shell**: Zsh + Starship prompt + Zoxide
+- **Terminal**: Foot + Tmux
 - **Editor**: Neovim (nixvim configuration)
 - **Browser**: Zen Browser (Firefox-based) + NextDNS integration
 - **GPU**: NVIDIA open drivers
@@ -127,15 +127,13 @@ nixos-system/
 
 ## Theming
 
-All colors centralized in `modules/colors.nix` (Rose Pine Moon palette). Import with:
+All colors centralized in `modules/colors.nix` (Rose Pine Moon palette), passed globally via `specialArgs`/`extraSpecialArgs`. Access via the `colors` parameter:
 
 ```nix
-let
-  c = import ../../modules/colors.nix;  # Adjust path as needed
-in
+{ colors, ... }:
 {
-  # Use: c.base, c.text, c.rose, c.pine, c.foam, c.iris, etc.
-  # Helper functions: c.strip, c.hypr, c.rgba, c.rgb
+  # colors.base, colors.text, colors.rose, colors.pine, colors.foam, colors.iris, etc.
+  # Helper functions: colors.strip, colors.hypr, colors.rgba, colors.rgb
 }
 ```
 
@@ -150,6 +148,7 @@ in
 - **nix-flatpak**: Declarative Flatpak management
 - **sops-nix**: Secret management with age encryption
 - **nixos-secrets**: Private secrets repository
+- **oxicord**: TUI Discord client
 
 ## Network Configuration
 

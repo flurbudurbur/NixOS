@@ -1,6 +1,9 @@
-{ pkgs, ... }:
+{ pkgs, oxicord, ... }:
 {
+  programs.foot.enable = true;
+
   home.packages = with pkgs; [
+    oxicord.packages.x86_64-linux.default
     lazygit
     gnupg
     claude-code
@@ -25,6 +28,12 @@
     bandwhich
     nethogs
     iftop
+
+    # Tmux utils
+    sesh
+    fzf
+    fd
+    zoxide
 
     # Productivity
     libreoffice-fresh

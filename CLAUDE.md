@@ -41,7 +41,10 @@ nixos-system/
 │   ├── graphics.nix       # Graphics hardware (NVIDIA drivers, OpenGL)
 │   ├── desktop.nix        # Desktop environment (Hyprland, regreet, XDG portals)
 │   ├── gaming.nix         # Gaming (Steam, Lutris, Wine, gamemode)
-│   └── secrets.nix        # System-level secrets management
+│   ├── secrets.nix        # System-level secrets management
+│   └── custom/
+│       ├── fonts/bricolage.nix  # Custom Bricolage font package
+│       └── scripts/             # Shell scripts
 ├── hosts/                 # Per-machine configurations
 │   └── flurPC/
 │       ├── default.nix    # Host-specific config (boot, networking)
@@ -69,7 +72,7 @@ nixos-system/
         │   └── nixcord.nix    # Discord (currently disabled)
         ├── shell/         # Shell environment
         │   ├── default.nix    # Zsh configuration
-        │   ├── terminals.nix  # Alacritty terminal
+        │   ├── terminals.nix  # Foot terminal
         │   ├── starship.nix   # Starship prompt
         │   ├── tmux.nix       # Tmux terminal multiplexer
         │   └── fastfetch.nix  # System info display
@@ -124,6 +127,7 @@ This configuration uses several external flake inputs beyond standard nixpkgs:
 - **nixpkgs-unstable**: Available for packages requiring newer versions
 - **sops-nix**: Secret management with age encryption
 - **nixos-secrets**: Private repository (`git@github.com:flurbudurbur/nix-secrets.git`) containing encrypted secrets
+- **oxicord**: TUI Discord client (used in `disco` tmuxinator session)
 
 ## Module Organization
 
@@ -298,12 +302,50 @@ home.activation.initComposer = lib.hm.dag.entryAfter ["writeBoundary"] ''
 
 See `SOPS-NIX-SETUP.md` for detailed setup documentation and troubleshooting.
 
+## Shell Aliases & Functions
+
+Defined in `users/flur/shell/default.nix`:
+
+- `nrs` — `nixos-rebuild switch --sudo --flake` (apply config)
+- `nrt` — `nixos-rebuild test --sudo --flake` (test without boot entry)
+- `tmnix` — Start tmuxinator `dev` session in `~/nixos-system`
+- `tmstart [dir] [session]` / `tmstop [dir] [session]` — Launch/stop named tmuxinator sessions
+
+**Zoxide** is initialized in zsh (`eval "$(zoxide init zsh)"`), providing smart `z` directory jumping.
+
+## Tmuxinator Sessions
+
+Declarative tmuxinator YAML configs are managed as `xdg.configFile` entries in `users/flur/shell/tmux.nix`:
+
+| Session | Purpose | Windows |
+|---------|---------|---------|
+| `dev`   | Development workflow | nvim, claude, lazygit, fastfetch |
+| `netmon` | Network monitoring | bandwhich, iftop, nethogs |
+| `disco` | Media/comms | oxicord (TUI Discord), kew (music) |
+
+**Sesh** (`<prefix>t`) provides interactive tmux session switching with fzf, showing all sessions, tmuxinator configs, and zoxide directories.
+
+## Security Wrappers for Network Tools
+
+Network monitoring tools are given elevated capabilities in `modules/system.nix` via `security.wrappers` rather than sudoers entries:
+
+```nix
+security.wrappers = {
+  bandwhich = { capabilities = "cap_net_raw,cap_net_admin+eip"; ... };
+  nethogs   = { capabilities = "cap_net_raw,cap_net_admin+eip"; ... };
+  iftop     = { capabilities = "cap_net_raw+eip"; ... };
+};
+```
+
+This allows running these tools without a password prompt.
+
 ## Important Notes
 
 - **Color access**: Colors are passed globally via specialArgs - use `colors` parameter instead of relative imports
 - **Hostname parameter**: Keep `hostname = "flurPC"` in extraSpecialArgs for Hyprland monitor configs
 - **State version**: "25.11" for both system and home-manager (do not change)
 - **Hardware config**: Do not edit `hardware-configuration.nix` manually - regenerate if needed
+- **Terminal**: Foot (replaced Alacritty) — configured in `users/flur/shell/terminals.nix`
 - **nixcord status**: Currently disabled due to upstream issue #166 (see `users/flur/programs/nixcord.nix`)
 - **Home-manager backups**: Backup files use `.backup` extension (configured in flake.nix)
 - **Flake structure**: Uses home-manager as a NixOS module, not standalone

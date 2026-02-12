@@ -153,23 +153,23 @@
 			enable = true;
 			settings = {
 				formatters_by_ft = {
-					javascript = [ "prettierd" "prettier" { stop_after_first = true; } ];
-					javascriptreact = [ "prettierd" "prettier" { stop_after_first = true; } ];
-					typescript = [ "prettierd" "prettier" { stop_after_first = true; } ];
-					typescriptreact = [ "prettierd" "prettier" { stop_after_first = true; } ];
-					css = [ "prettierd" "prettier" { stop_after_first = true; } ];
-					html = [ "prettierd" "prettier" { stop_after_first = true; } ];
-					json = [ "prettierd" "prettier" { stop_after_first = true; } ];
-					yaml = [ "prettierd" "prettier" { stop_after_first = true; } ];
-					markdown = [ "prettierd" "prettier" { stop_after_first = true; } ];
+					javascript.__raw = ''{ "prettierd", "prettier", stop_after_first = true }'';
+					javascriptreact.__raw = ''{ "prettierd", "prettier", stop_after_first = true }'';
+					typescript.__raw = ''{ "prettierd", "prettier", stop_after_first = true }'';
+					typescriptreact.__raw = ''{ "prettierd", "prettier", stop_after_first = true }'';
+					css.__raw = ''{ "prettierd", "prettier", stop_after_first = true }'';
+					html.__raw = ''{ "prettierd", "prettier", stop_after_first = true }'';
+					json.__raw = ''{ "prettierd", "prettier", stop_after_first = true }'';
+					yaml.__raw = ''{ "prettierd", "prettier", stop_after_first = true }'';
+					markdown.__raw = ''{ "prettierd", "prettier", stop_after_first = true }'';
 					blade = [ "blade-formatter" ];
-					php = [ { __unkeyed = "phpactor"; lsp_format = "fallback"; } ];
-					nix = [ { __unkeyed = "nixd"; lsp_format = "fallback"; } ];
-					rust = [ { __unkeyed = "rust_analyzer"; lsp_format = "fallback"; } ];
-					go = [ { __unkeyed = "gopls"; lsp_format = "fallback"; } ];
-					c = [ { __unkeyed = "clangd"; lsp_format = "fallback"; } ];
-					cpp = [ { __unkeyed = "clangd"; lsp_format = "fallback"; } ];
-					java = [ { __unkeyed = "jdtls"; lsp_format = "fallback"; } ];
+					php.__raw = ''{ "phpactor", lsp_format = "fallback" }'';
+					nix.__raw = ''{ "nixd", lsp_format = "fallback" }'';
+					rust.__raw = ''{ "rust_analyzer", lsp_format = "fallback" }'';
+					go.__raw = ''{ "gopls", lsp_format = "fallback" }'';
+					c.__raw = ''{ "clangd", lsp_format = "fallback" }'';
+					cpp.__raw = ''{ "clangd", lsp_format = "fallback" }'';
+					java.__raw = ''{ "jdtls", lsp_format = "fallback" }'';
 				};
 				format_on_save = {
 					timeout_ms = 500;

@@ -1,14 +1,11 @@
 { pkgs, ... }:
 {
-  programs.alacritty = {
+  programs.foot = {
     enable = true;
     settings = {
-      terminal.shell = "${pkgs.zsh}/bin/zsh";
-      window = {
-        padding = {
-          x = 10;
-          y = 10;
-        };
+      main = {
+        shell = "${pkgs.zsh}/bin/zsh";
+        pad = "10x10";
       };
     };
   };
