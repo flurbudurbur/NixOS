@@ -1,7 +1,7 @@
 { pkgs, lib ? pkgs.lib }:
 
 pkgs.rustPlatform.buildRustPackage {
-  pname = "qobuz-player-tui";
+  pname = "qobuz-player";
   version = "0.7.1";
 
   src = pkgs.fetchFromGitHub {
@@ -13,11 +13,18 @@ pkgs.rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-6fUwZkXurjV9yM2Mur0lAkgFxTAEmt92DFKzbPj3Vo4=";
 
-  cargoBuildFlags = [ "--package" "qobuz-player-tui" ];
-  cargoTestFlags = [ "--package" "qobuz-player-tui" ];
+  cargoBuildFlags = [ "--package" "qobuz-player" ];
+  cargoTestFlags = [ "--package" "qobuz-player" ];
+
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 target/x86_64-unknown-linux-gnu/release/qobuz-player $out/bin/qobuz-player
+    runHook postInstall
+  '';
 
   nativeBuildInputs = [
     pkgs.pkg-config
+    pkgs.protobuf
   ];
 
   buildInputs = [
