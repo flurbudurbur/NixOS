@@ -118,8 +118,8 @@
   '';
 
   # Discord and Music player
-  xdg.configFile."tmuxinator/disco.yml".text = ''
-    name: disco
+  xdg.configFile."tmuxinator/disqo.yml".text = ''
+    name: disqo
     root: ~
 
     windows:
@@ -127,6 +127,8 @@
           layout: main-vertical
           panes:
             - oxicord
-            - kew all
+            - kew all --nocover
+            - qobuz-player
+          post: tmux resize-pane -t 2 -y 30%
   '';
 }
