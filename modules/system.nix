@@ -8,10 +8,6 @@
   nix.optimise.automatic = true;
   nix.optimise.dates = [ "weekly" ];
 
-  # Automatic updating
-  system.autoUpgrade.enable = true;
-  system.autoUpgrade.dates = "weekly";
-
   # User accounts
   users.users.flur = {
     isNormalUser = true;
