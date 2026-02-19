@@ -31,8 +31,8 @@
       # FNM (Fast Node Manager) initialization
       eval "$(fnm env --use-on-cd)"
 
-      # Zoxide initialization
-      eval "$(zoxide init zsh)"
+      # Zoxide initialization (replaces cd with smart directory jumping)
+      eval "$(zoxide init zsh --cmd cd)"
 
       # Helper function to run tmuxinator commands in a specific directory
       _tmux_in_dir() {

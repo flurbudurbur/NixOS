@@ -57,6 +57,7 @@
 
       # My own additions
       set-option -g status-position top
+      set -g status-justify absolute-centre
       set -g detach-on-destroy off
 
       # Sesh session manager
