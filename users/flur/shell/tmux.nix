@@ -115,7 +115,7 @@
             - nvim .
             - claude
       - git: lazygit
-      - scratch: fastfetch
+      - scratch:
   '';
 
   # Discord and Music player

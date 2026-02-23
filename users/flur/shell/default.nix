@@ -4,7 +4,7 @@
     ./terminals.nix
     ./starship.nix
     ./tmux.nix
-    ./fastfetch.nix
+    ./nerdfetch.nix
   ];
 
   # GPG environment variable for terminal pinentry
@@ -28,6 +28,9 @@
       nrs = "nixos-rebuild switch --sudo --flake /home/flur/nixos-system";
     };
     initContent = ''
+      # Display system info on shell start
+      nerdfetch
+
       # FNM (Fast Node Manager) initialization
       eval "$(fnm env --use-on-cd)"
 
