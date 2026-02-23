@@ -5,12 +5,6 @@
 
   # Declarative Flatpak package management
   services.flatpak = {
-    # Auto-update packages
-    update.auto = {
-      enable = true;
-      onCalendar = "weekly"; # Run updates weekly
-    };
-
     # Uninstall packages not managed by nix-flatpak
     uninstallUnmanaged = false; # Set to false to allow manual .flatpak installs
 
