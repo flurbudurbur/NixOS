@@ -18,13 +18,14 @@
 
   # Fonts
   fonts.packages = with pkgs; [
-    nerd-fonts.jetbrains-mono
-    nerd-fonts.fira-code
+    maple-mono.truetype
     (pkgs.callPackage ./custom/fonts/bricolage.nix {})
   ];
+  fonts.fontconfig.defaultFonts.monospace = [ "Maple Mono" ];
 
   # Services
   services = {
+    flatpak.enable = true;
     pulseaudio.enable = false;
     keyd = {
       enable = true;
