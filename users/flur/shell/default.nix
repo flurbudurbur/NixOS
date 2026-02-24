@@ -27,7 +27,7 @@
       nrt = "nixos-rebuild test --sudo --flake /home/flur/nixos-system";
       nrs = "nixos-rebuild switch --sudo --flake /home/flur/nixos-system";
       mvs = "mullvad status";
-      mvr = "mullvad reconnect"
+      mvr = "mullvad reconnect";
     };
     initContent = ''
       # Display system info on shell start
