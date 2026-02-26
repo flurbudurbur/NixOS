@@ -39,6 +39,23 @@
       # Zoxide initialization (replaces cd with smart directory jumping)
       eval "$(zoxide init zsh --cmd cd)"
 
+      # Sesh session picker widget (Ctrl+t)
+      function sesh-sessions() {
+        local session
+        session=$(sesh list -i | fzf --height 40% --reverse --border-label ' sesh ' --prompt '⚡  ' \
+          --header ' ^a all ^t tmux ^g configs ^x zoxide ^d kill' \
+          --bind 'tab:down,btab:up' \
+          --bind 'ctrl-a:change-prompt(⚡  )+reload(sesh list -i)' \
+          --bind 'ctrl-t:change-prompt(🪟  )+reload(sesh list -it)' \
+          --bind 'ctrl-g:change-prompt(⚙️   )+reload(sesh list -ic)' \
+          --bind 'ctrl-x:change-prompt(📁  )+reload(sesh list -iz)' \
+          --bind 'ctrl-d:execute(tmux kill-session -t {2..})+change-prompt(⚡  )+reload(sesh list -i)')
+        [[ -z "$session" ]] && return
+        sesh connect "$session"
+      }
+      zle -N sesh-sessions
+      bindkey '^k' sesh-sessions
+
       # Helper function to run tmuxinator commands in a specific directory
       _tmux_in_dir() {
         local target_dir="$1"
