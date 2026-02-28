@@ -21,6 +21,7 @@
     popcorntime
     proton-pass
     kew
+    prismlauncher
 
     # System utils
     grimblast

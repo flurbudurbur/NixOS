@@ -103,7 +103,6 @@
 					  		    inputs.nixvim.homeModules.nixvim
 					  		    inputs.nixcord.homeModules.nixcord
 					  		    inputs.stylix.homeModules.stylix
-					  		    inputs.nix-flatpak.homeManagerModules.nix-flatpak
 					  		    sops-nix.homeManagerModules.sops
 					  	    ];
 					      };
