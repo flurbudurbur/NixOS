@@ -23,7 +23,7 @@ in
 			"$terminal" = "foot";
 			"$fileManager" = "nautilus";
 			"$menu" = "walker";
-      "$browser" = "zen";
+      "$browser" = "zen-beta";
 			"$mainMod" = "SUPER";
 
 			# Environment variables
