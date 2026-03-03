@@ -87,7 +87,12 @@
     '';
     oh-my-zsh = {
       enable = true;
-      plugins = [ "git" "sudo" "tmux" "podman" ];
+      plugins = [
+        "git"
+        "sudo"
+        "tmux"
+        "podman"
+      ];
     };
   };
 }

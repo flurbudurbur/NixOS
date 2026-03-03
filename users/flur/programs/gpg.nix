@@ -2,10 +2,10 @@
 {
   # Install packages for Yubikey and GPG
   home.packages = with pkgs; [
-    pinentry-curses           # Terminal fallback
-    yubikey-manager           # YubiKey management CLI (ykman)
-    yubikey-personalization   # YubiKey personalization tools
-    pcsc-tools                # PC/SC tools for smart card debugging
+    pinentry-curses # Terminal fallback
+    yubikey-manager # YubiKey management CLI (ykman)
+    yubikey-personalization # YubiKey personalization tools
+    pcsc-tools # PC/SC tools for smart card debugging
   ];
 
   # GPG program configuration
@@ -48,13 +48,13 @@
   # GPG agent service configuration with smartcard support
   services.gpg-agent = {
     enable = true;
-    enableSshSupport = false;  # GNOME Keyring already handles SSH
-    enableScDaemon = true;     # Enable smartcard daemon for Yubikey
+    enableSshSupport = false; # GNOME Keyring already handles SSH
+    enableScDaemon = true; # Enable smartcard daemon for Yubikey
 
     # Cache configuration
     # Note: With Yubikey, caching is less important since you need physical touch anyway
-    defaultCacheTtl = 3600;    # 1 hour
-    maxCacheTtl = 86400;       # 24 hours
+    defaultCacheTtl = 3600; # 1 hour
+    maxCacheTtl = 86400; # 24 hours
 
     # Pinentry configuration (GUI for Wayland/Hyprland)
     pinentry.package = pkgs.pinentry-gnome3;

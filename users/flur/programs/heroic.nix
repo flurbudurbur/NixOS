@@ -1,4 +1,9 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 let
   themesPath = "${config.xdg.configHome}/heroic/themes";
 
@@ -33,7 +38,7 @@ in
   xdg.configFile."heroic/themes/rose-pine.css".source = rosePineTheme;
 
   # Update Heroic config with customThemesPath using Nix builtins
-  home.activation.setupHeroicThemes = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  home.activation.setupHeroicThemes = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     HEROIC_CONFIG_FILE="${config.xdg.configHome}/heroic/config.json"
     THEMES_PATH="${themesPath}"
 

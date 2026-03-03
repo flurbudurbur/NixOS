@@ -1,4 +1,9 @@
-{ config, pkgs, secretsPath, ... }:
+{
+  config,
+  pkgs,
+  secretsPath,
+  ...
+}:
 
 {
   sops = {
@@ -8,7 +13,7 @@
     age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
 
     # Remove GPG configuration
-    gnupg.sshKeyPaths = [];
+    gnupg.sshKeyPaths = [ ];
 
     secrets = {
       "nextdns-url" = {
@@ -32,5 +37,8 @@
   };
 
   # Add age package to user environment
-  home.packages = with pkgs; [ age sops ];
+  home.packages = with pkgs; [
+    age
+    sops
+  ];
 }

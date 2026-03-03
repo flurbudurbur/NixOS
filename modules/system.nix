@@ -1,9 +1,12 @@
 { pkgs, ... }:
 {
   # Nix settings
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
   nixpkgs.config.allowUnfree = true;
-  
+
   # Auto-optimize store (deduplicate files)
   nix.optimise.automatic = true;
   nix.optimise.dates = [ "weekly" ];
@@ -11,7 +14,10 @@
   # User accounts
   users.users.flur = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "input" ];
+    extraGroups = [
+      "wheel"
+      "input"
+    ];
     shell = pkgs.zsh;
   };
   environment.shells = with pkgs; [ zsh ];
@@ -19,7 +25,7 @@
   # Fonts
   fonts.packages = with pkgs; [
     maple-mono.truetype
-    (pkgs.callPackage ./custom/fonts/bricolage.nix {})
+    (pkgs.callPackage ./custom/fonts/bricolage.nix { })
   ];
   fonts.fontconfig.defaultFonts.monospace = [ "Maple Mono" ];
 
@@ -30,7 +36,7 @@
     keyd = {
       enable = true;
       keyboards.default = {
-        ids = ["*"];
+        ids = [ "*" ];
         settings.main = {
           capslock = "layer(control)";
           control = "capslock";
@@ -48,7 +54,16 @@
       extraConfig.pipewire."92-high-res-audio" = {
         "context.properties" = {
           "default.clock.rate" = 96000;
-          "default.clock.allowed-rates" = [ 44100 48000 88200 96000 176400 192000 352800 384000 ];
+          "default.clock.allowed-rates" = [
+            44100
+            48000
+            88200
+            96000
+            176400
+            192000
+            352800
+            384000
+          ];
         };
       };
     };
@@ -69,7 +84,7 @@
 
   # Security
   security.rtkit.enable = true;
-  security.pam.services.hyprlock = {};
+  security.pam.services.hyprlock = { };
 
   # Hardware support for GPG smartcards (Yubikey)
   hardware.gpgSmartcards.enable = true;

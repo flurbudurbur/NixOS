@@ -49,7 +49,7 @@
     heroic
 
     # Music
-    (pkgs.callPackage ../../../modules/custom/qobuz-player.nix {})
+    (pkgs.callPackage ../../../modules/custom/qobuz-player.nix { })
   ];
 
   home.sessionVariables = {
@@ -64,7 +64,11 @@
 
   services.gnome-keyring = {
     enable = true;
-    components = [ "pkcs11" "secrets" "ssh" ];
+    components = [
+      "pkcs11"
+      "secrets"
+      "ssh"
+    ];
   };
 
   services.hyprpaper = {

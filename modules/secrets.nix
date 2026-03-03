@@ -8,7 +8,7 @@
     age.keyFile = "/root/.config/sops/age/keys.txt";
 
     # Remove GPG configuration
-    gnupg.sshKeyPaths = [];
+    gnupg.sshKeyPaths = [ ];
 
     validateSopsFiles = true;
 
@@ -47,5 +47,8 @@
   };
 
   # Add age package for sops-nix
-  environment.systemPackages = with pkgs; [ age sops ];
+  environment.systemPackages = with pkgs; [
+    age
+    sops
+  ];
 }

@@ -1,4 +1,7 @@
-{ pkgs, lib ? pkgs.lib }:
+{
+  pkgs,
+  lib ? pkgs.lib,
+}:
 
 pkgs.rustPlatform.buildRustPackage {
   pname = "qobuz-player";
@@ -13,8 +16,14 @@ pkgs.rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-6fUwZkXurjV9yM2Mur0lAkgFxTAEmt92DFKzbPj3Vo4=";
 
-  cargoBuildFlags = [ "--package" "qobuz-player" ];
-  cargoTestFlags = [ "--package" "qobuz-player" ];
+  cargoBuildFlags = [
+    "--package"
+    "qobuz-player"
+  ];
+  cargoTestFlags = [
+    "--package"
+    "qobuz-player"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -28,10 +37,10 @@ pkgs.rustPlatform.buildRustPackage {
   ];
 
   buildInputs = [
-    pkgs.alsa-lib  # audio via rodio → cpal → alsa
-    pkgs.sqlite    # sqlx sqlite backend
-    pkgs.dbus      # MPRIS integration
-    pkgs.openssl   # reqwest HTTP client
+    pkgs.alsa-lib # audio via rodio → cpal → alsa
+    pkgs.sqlite # sqlx sqlite backend
+    pkgs.dbus # MPRIS integration
+    pkgs.openssl # reqwest HTTP client
   ];
 
   meta = with lib; {

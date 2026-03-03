@@ -45,28 +45,72 @@ rec {
   hypr = hex: alpha: "rgba(${strip hex}${alpha})";
 
   # CSS rgba with decimal alpha: rgba(35, 33, 54, 0.9)
-  rgba = hex: alpha: let
-    hexToInt = h: let
-      chars = { "0"=0; "1"=1; "2"=2; "3"=3; "4"=4; "5"=5; "6"=6; "7"=7;
-                "8"=8; "9"=9; "a"=10; "b"=11; "c"=12; "d"=13; "e"=14; "f"=15; };
-      c1 = builtins.substring 0 1 h;
-      c2 = builtins.substring 1 1 h;
-    in chars.${c1} * 16 + chars.${c2};
-    r = hexToInt (builtins.substring 1 2 hex);
-    g = hexToInt (builtins.substring 3 2 hex);
-    b = hexToInt (builtins.substring 5 2 hex);
-  in "rgba(${toString r}, ${toString g}, ${toString b}, ${alpha})";
+  rgba =
+    hex: alpha:
+    let
+      hexToInt =
+        h:
+        let
+          chars = {
+            "0" = 0;
+            "1" = 1;
+            "2" = 2;
+            "3" = 3;
+            "4" = 4;
+            "5" = 5;
+            "6" = 6;
+            "7" = 7;
+            "8" = 8;
+            "9" = 9;
+            "a" = 10;
+            "b" = 11;
+            "c" = 12;
+            "d" = 13;
+            "e" = 14;
+            "f" = 15;
+          };
+          c1 = builtins.substring 0 1 h;
+          c2 = builtins.substring 1 1 h;
+        in
+        chars.${c1} * 16 + chars.${c2};
+      r = hexToInt (builtins.substring 1 2 hex);
+      g = hexToInt (builtins.substring 3 2 hex);
+      b = hexToInt (builtins.substring 5 2 hex);
+    in
+    "rgba(${toString r}, ${toString g}, ${toString b}, ${alpha})";
 
   # RGB format for hyprlock: rgb(35, 33, 54)
-  rgb = hex: let
-    hexToInt = h: let
-      chars = { "0"=0; "1"=1; "2"=2; "3"=3; "4"=4; "5"=5; "6"=6; "7"=7;
-                "8"=8; "9"=9; "a"=10; "b"=11; "c"=12; "d"=13; "e"=14; "f"=15; };
-      c1 = builtins.substring 0 1 h;
-      c2 = builtins.substring 1 1 h;
-    in chars.${c1} * 16 + chars.${c2};
-    r = hexToInt (builtins.substring 1 2 hex);
-    g = hexToInt (builtins.substring 3 2 hex);
-    b = hexToInt (builtins.substring 5 2 hex);
-  in "rgb(${toString r}, ${toString g}, ${toString b})";
+  rgb =
+    hex:
+    let
+      hexToInt =
+        h:
+        let
+          chars = {
+            "0" = 0;
+            "1" = 1;
+            "2" = 2;
+            "3" = 3;
+            "4" = 4;
+            "5" = 5;
+            "6" = 6;
+            "7" = 7;
+            "8" = 8;
+            "9" = 9;
+            "a" = 10;
+            "b" = 11;
+            "c" = 12;
+            "d" = 13;
+            "e" = 14;
+            "f" = 15;
+          };
+          c1 = builtins.substring 0 1 h;
+          c2 = builtins.substring 1 1 h;
+        in
+        chars.${c1} * 16 + chars.${c2};
+      r = hexToInt (builtins.substring 1 2 hex);
+      g = hexToInt (builtins.substring 3 2 hex);
+      b = hexToInt (builtins.substring 5 2 hex);
+    in
+    "rgb(${toString r}, ${toString g}, ${toString b})";
 }
