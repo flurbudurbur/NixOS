@@ -56,6 +56,35 @@
     }:
     let
       colors = import ./modules/colors.nix;
+      # Override xone to use dlundqvist fork v0.5.7 for extra button support
+      xoneOverlay = final: prev: {
+        linuxPackages = prev.linuxPackages.extend (
+          lpFinal: lpPrev: {
+            xone = lpPrev.xone.overrideAttrs (old: {
+              version = "0.5.7";
+              src = prev.fetchFromGitHub {
+                owner = "dlundqvist";
+                repo = "xone";
+                rev = "v0.5.7";
+                hash = "sha256-9bflLH4lPGM7Ziv6w0+HC56jMU0IchL/9udbIqTIMd8=";
+              };
+            });
+          }
+        );
+        linuxPackages_latest = prev.linuxPackages_latest.extend (
+          lpFinal: lpPrev: {
+            xone = lpPrev.xone.overrideAttrs (old: {
+              version = "0.5.7";
+              src = prev.fetchFromGitHub {
+                owner = "dlundqvist";
+                repo = "xone";
+                rev = "v0.5.7";
+                hash = "sha256-9bflLH4lPGM7Ziv6w0+HC56jMU0IchL/9udbIqTIMd8=";
+              };
+            });
+          }
+        );
+      };
     in
     {
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;
@@ -79,6 +108,7 @@
                 nixpkgs.config.allowUnfree = true;
                 nixpkgs.overlays = [
                   inputs.nur.overlays.default
+                  xoneOverlay
                 ];
               }
               home-manager.nixosModules.home-manager
