@@ -48,8 +48,7 @@ nixos-system/
 │   ├── graphics.nix       # Graphics hardware (NVIDIA drivers, OpenGL)
 │   ├── desktop.nix        # Desktop environment (Hyprland, regreet, XDG portals)
 │   ├── gaming.nix         # Gaming (Steam, Lutris, Wine, gamemode)
-│   ├── secrets.nix        # System-level secrets management
-│   └── custom/scripts/    # Shell scripts (used by waybar)
+│   └── secrets.nix        # System-level secrets management
 ├── hosts/                 # Per-machine configurations
 │   └── flurPC/
 │       ├── default.nix    # Host-specific config (boot, networking)

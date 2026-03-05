@@ -18,7 +18,6 @@
         ];
         modules-center = [ "clock" ];
         modules-right = [
-          "custom/notification"
           "wireplumber"
           "bluetooth"
           "network"
@@ -54,27 +53,6 @@
           on-click-right = "playerctl next";
           on-scroll-up = "playerctl previous";
           on-scroll-down = "playerctl next";
-        };
-
-        "custom/notification" = {
-          tooltip = false;
-          format = "{icon} {}";
-          format-icons = {
-            notification = "<span foreground='${colors.love}'><sup></sup></span>";
-            none = "";
-            dnd-notification = "<span foreground='${colors.love}'><sup></sup></span>";
-            dnd-none = "";
-            inhibited-notification = "<span foreground='${colors.love}'><sup></sup></span>";
-            inhibited-none = "";
-            dnd-inhibited-notification = "<span foreground='${colors.love}'><sup></sup></span>";
-            dnd-inhibited-none = "";
-          };
-          return-type = "json";
-          exec = "${../../../../modules/custom/scripts/dunst-status.sh}";
-          on-click = "dunstctl history-pop";
-          on-click-right = "dunstctl close-all";
-          on-click-middle = "dunstctl set-paused toggle";
-          restart-interval = 1;
         };
 
         clock = {
@@ -184,10 +162,6 @@
       				color: ${colors.muted};
       			}
 
-      			#custom-notification {
-      				color: ${colors.text};
-      			}
-
       			#clock {
       				color: ${colors.iris};
       			}
@@ -221,7 +195,7 @@
       				color: ${colors.text};
       			}
 
-      			#clock, #cpu, #memory, #network, #wireplumber, #bluetooth, #tray, #window, #mpris, #custom-notification {
+      			#clock, #cpu, #memory, #network, #wireplumber, #bluetooth, #tray, #window, #mpris {
       				padding: 0 10px;
       			}
 
