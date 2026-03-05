@@ -1,4 +1,4 @@
-{ pkgs, oxicord, ... }:
+{ pkgs, oxicord, wallpaperPath, ... }:
 {
   programs.foot.enable = true;
 
@@ -74,8 +74,8 @@
   services.hyprpaper = {
     enable = true;
     settings = {
-      preload = [ "${../../../wallpaper.jpg}" ];
-      wallpaper = [ ",${../../../wallpaper.jpg}" ];
+      preload = [ "${wallpaperPath}" ];
+      wallpaper = [ ",${wallpaperPath}" ];
     };
   };
 }

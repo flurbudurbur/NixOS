@@ -61,8 +61,6 @@
 
     extraConfig = ''
       allow-loopback-pinentry
-      # Enable smartcard
-      enable-ssh-support
     '';
   };
 }

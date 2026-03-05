@@ -29,7 +29,6 @@
 
   # Desktop packages
   environment.systemPackages = with pkgs; [
-    alacritty
     mako
     waybar
     rose-pine-gtk-theme

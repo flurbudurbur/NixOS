@@ -100,6 +100,7 @@
                     };
                     colors = colors;
                     oxicord = inputs.oxicord;
+                    wallpaperPath = ./wallpaper.jpg;
                   };
                   backupFileExtension = "backup";
                   sharedModules = [

@@ -345,12 +345,37 @@ home.activation.initComposer = lib.hm.dag.entryAfter ["writeBoundary"] ''
 
 See `SOPS-NIX-SETUP.md` for detailed setup documentation and troubleshooting.
 
+### Secrets Fallback Behavior
+
+Modules that depend on secrets use graceful fallbacks for initial builds or when secrets are unavailable:
+
+**Pattern: Check file existence before reading**
+```nix
+let
+  secretFile = "${config.xdg.configHome}/sops-secrets/secret-name";
+  secretValue = if builtins.pathExists secretFile
+    then lib.removeSuffix "\n" (lib.fileContents secretFile)
+    else "PLACEHOLDER";  # Fallback for initial build
+in
+```
+
+This pattern allows:
+1. Initial `nixos-rebuild` to succeed without decrypted secrets
+2. Secrets to be deployed on first successful build
+3. Subsequent rebuilds to use actual secret values
+
+Modules using this pattern:
+- `users/flur/programs/git.nix` - Git signing key ID
+- `users/flur/programs/zen-browser.nix` - NextDNS URL (uses activation-time substitution)
+
 ## Shell Aliases & Functions
 
 Defined in `users/flur/shell/default.nix`:
 
 - `nrs` — `nixos-rebuild switch --sudo --flake` (apply config)
 - `nrt` — `nixos-rebuild test --sudo --flake` (test without boot entry)
+- `ncheck` — `nix flake check --no-build` (validate flake without building)
+- `nfmt` — `nix fmt` (format Nix files using nixfmt-tree)
 - `tmnix` — Start tmuxinator `dev` session in `~/nixos-system`
 - `tmstart [dir] [session]` / `tmstop [dir] [session]` — Launch/stop named tmuxinator sessions
 

@@ -26,6 +26,8 @@
       btw = "echo I use Nixos, btw";
       nrt = "nixos-rebuild test --sudo --flake /home/flur/nixos-system";
       nrs = "nixos-rebuild switch --sudo --flake /home/flur/nixos-system";
+      ncheck = "nix flake check --no-build /home/flur/nixos-system";
+      nfmt = "nix fmt /home/flur/nixos-system";
       mvr = "mullvad reconnect";
     };
     initContent = ''
