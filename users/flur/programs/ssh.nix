@@ -8,6 +8,9 @@ let
   sshHostnameFile = "${config.xdg.configHome}/sops-secrets/ssh-shiori-hostname";
 in
 {
+  # Force overwrite to prevent backup file conflicts
+  home.file.".ssh/config".force = true;
+
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
