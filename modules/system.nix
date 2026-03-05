@@ -25,7 +25,7 @@
   # Fonts
   fonts.packages = with pkgs; [
     maple-mono.truetype
-    (pkgs.callPackage ./custom/fonts/bricolage.nix { })
+    bricolage-grotesque
   ];
   fonts.fontconfig.defaultFonts.monospace = [ "Maple Mono" ];
 

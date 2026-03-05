@@ -26,7 +26,6 @@
       btw = "echo I use Nixos, btw";
       nrt = "nixos-rebuild test --sudo --flake /home/flur/nixos-system";
       nrs = "nixos-rebuild switch --sudo --flake /home/flur/nixos-system";
-      mvs = "mullvad status";
       mvr = "mullvad reconnect";
     };
     initContent = ''
@@ -83,6 +82,19 @@
       # Stop tmuxinator session: tmstop [dir] [session]  (defaults: . dev)
       tmstop() {
         _tmux_in_dir "''${1:-.}" stop "''${2:-dev}"
+      }
+
+      # Mullvad VPN status with polling until connected
+      mvs() {
+        while true; do
+          local status
+          status=$(mullvad status)
+          echo "$status"
+          if echo "$status" | grep -q "^Connected"; then
+            break
+          fi
+          sleep 1
+        done
       }
     '';
     oh-my-zsh = {

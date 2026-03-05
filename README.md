@@ -70,6 +70,13 @@ sudo nixos-rebuild switch --flake .#flurPC
 ```
 nixos-system/
 ├── flake.nix              # Entry point - inputs and outputs
+├── overlays/              # Nixpkgs overlays
+│   ├── default.nix        # Aggregator (exports: all, minimal, gaming)
+│   ├── xone.nix           # Xbox controller kernel module override
+│   └── custom-packages.nix # Adds custom packages to pkgs namespace
+├── packages/              # Custom package definitions
+│   ├── bricolage-grotesque.nix  # Custom font (pkgs.bricolage-grotesque)
+│   └── qobuz-player.nix         # TUI music player (pkgs.qobuz-player)
 ├── modules/               # System-level configuration
 │   ├── system.nix         # Core system (users, nix, fonts, services)
 │   ├── graphics.nix       # NVIDIA drivers, OpenGL/Vulkan
@@ -161,6 +168,11 @@ All colors centralized in `modules/colors.nix` (Rose Pine Moon palette), passed 
 1. Add to `users/flur/programs/packages.nix`
 2. Rebuild: `sudo nixos-rebuild switch --flake .#flurPC`
 
+### Custom Package
+1. Create `packages/yourpackage.nix` using standard nixpkgs pattern
+2. Add to `overlays/custom-packages.nix`: `yourpackage = final.callPackage ../packages/yourpackage.nix { };`
+3. Use as `pkgs.yourpackage` in any module
+
 ### Program Configuration
 1. Create `users/flur/programs/yourprogram.nix`
 2. Import in `users/flur/programs/default.nix`
@@ -179,6 +191,7 @@ All colors centralized in `modules/colors.nix` (Rose Pine Moon palette), passed 
 - **nixcord**: Currently disabled (upstream issue #166)
 - **GPG Key**: Used only for Git signing, not secret decryption
 - **Age Migration**: Switched from GPG to age on 2026-01-19 for automation-friendly secrets
+- **Custom Packages**: Available via `pkgs.bricolage-grotesque`, `pkgs.qobuz-player`
 
 ## Documentation
 

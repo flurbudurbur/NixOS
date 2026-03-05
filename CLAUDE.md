@@ -35,6 +35,13 @@ This configuration follows a clean, modular structure with clear separation of c
 ```
 nixos-system/
 ├── flake.nix              # Entry point - inputs and outputs
+├── overlays/              # Nixpkgs overlays
+│   ├── default.nix        # Aggregator - exports overlay sets (all, minimal, gaming)
+│   ├── xone.nix           # Xbox controller kernel module override
+│   └── custom-packages.nix # Adds custom packages to pkgs namespace
+├── packages/              # Custom package definitions
+│   ├── bricolage-grotesque.nix  # Custom font package
+│   └── qobuz-player.nix         # TUI music player for Qobuz
 ├── modules/               # System-level shared configuration
 │   ├── colors.nix         # Rose Pine Moon color definitions
 │   ├── system.nix         # Core system config (users, nix, fonts, services)
@@ -42,9 +49,7 @@ nixos-system/
 │   ├── desktop.nix        # Desktop environment (Hyprland, regreet, XDG portals)
 │   ├── gaming.nix         # Gaming (Steam, Lutris, Wine, gamemode)
 │   ├── secrets.nix        # System-level secrets management
-│   └── custom/
-│       ├── fonts/bricolage.nix  # Custom Bricolage font package
-│       └── scripts/             # Shell scripts
+│   └── custom/scripts/    # Shell scripts (used by waybar)
 ├── hosts/                 # Per-machine configurations
 │   └── flurPC/
 │       ├── default.nix    # Host-specific config (boot, networking)
@@ -168,6 +173,18 @@ All user-specific configuration lives under `users/flur/`:
 2. Add import to `users/flur/programs/default.nix`
 3. Configure the program using home-manager options
 
+### New Custom Package
+1. Create package in `packages/yourpackage.nix` using standard nixpkgs pattern:
+   ```nix
+   { lib, stdenv, fetchFromGitHub, ... }:
+   stdenv.mkDerivation { ... }
+   ```
+2. Add to `overlays/custom-packages.nix`:
+   ```nix
+   yourpackage = final.callPackage ../packages/yourpackage.nix { };
+   ```
+3. Use in modules as `pkgs.yourpackage`
+
 ### New System Service
 1. Add configuration to appropriate module:
    - Core services → `modules/system.nix`
@@ -210,6 +227,33 @@ All colors are centralized in `modules/colors.nix` (Rose Pine Moon) and passed g
 ```
 
 **Note**: The colors module was made global in commit 80fe6d1. Legacy relative imports (`import ../../../modules/colors.nix`) still work but are no longer necessary.
+
+## Overlays and Custom Packages
+
+Custom packages and nixpkgs modifications are organized in `/overlays/` and `/packages/`:
+
+### Overlay Sets
+The `overlays/default.nix` exports named sets for per-host selection:
+- `overlays.all` — All overlays (NUR + xone + custom packages)
+- `overlays.minimal` — Without gaming overlays (NUR + custom packages)
+- `overlays.gaming` — Gaming-only (xone)
+
+### Current Overlays
+- **xone** (`overlays/xone.nix`): Overrides xone kernel module to use dlundqvist fork v0.5.7 for extra button support
+- **custom-packages** (`overlays/custom-packages.nix`): Adds custom packages to pkgs namespace
+- **nur**: NUR overlay (imported from flake input)
+
+### Custom Packages (via `pkgs.*`)
+- `pkgs.bricolage-grotesque` — Custom variable font
+- `pkgs.qobuz-player` — TUI music player for Qobuz
+
+### Per-Host Overlay Selection
+```nix
+# In flake.nix or host configuration
+nixpkgs.overlays = overlays.all;      # Full overlays
+nixpkgs.overlays = overlays.minimal;  # No gaming
+nixpkgs.overlays = [ overlays.nur overlays.customPackages ];  # Manual selection
+```
 
 ## Secrets Management with sops-nix
 
@@ -350,3 +394,4 @@ This allows running these tools without a password prompt.
 - **Home-manager backups**: Backup files use `.backup` extension (configured in flake.nix)
 - **Flake structure**: Uses home-manager as a NixOS module, not standalone
 - **Secrets repo**: Never commit unencrypted secrets; see `.gitignore` in nixos-secrets repo
+- **Custom packages**: Use `pkgs.bricolage-grotesque` and `pkgs.qobuz-player` instead of callPackage

@@ -49,7 +49,7 @@
     heroic
 
     # Music
-    (pkgs.callPackage ../../../modules/custom/qobuz-player.nix { })
+    qobuz-player
   ];
 
   home.sessionVariables = {

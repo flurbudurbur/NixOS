@@ -1,13 +1,20 @@
 {
-  pkgs,
-  lib ? pkgs.lib,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  protobuf,
+  alsa-lib,
+  sqlite,
+  dbus,
+  openssl,
 }:
 
-pkgs.rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage {
   pname = "qobuz-player";
   version = "0.7.1";
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "SofusA";
     repo = "qobuz-player";
     rev = "v0.7.1";
@@ -32,15 +39,15 @@ pkgs.rustPlatform.buildRustPackage {
   '';
 
   nativeBuildInputs = [
-    pkgs.pkg-config
-    pkgs.protobuf
+    pkg-config
+    protobuf
   ];
 
   buildInputs = [
-    pkgs.alsa-lib # audio via rodio → cpal → alsa
-    pkgs.sqlite # sqlx sqlite backend
-    pkgs.dbus # MPRIS integration
-    pkgs.openssl # reqwest HTTP client
+    alsa-lib # audio via rodio → cpal → alsa
+    sqlite # sqlx sqlite backend
+    dbus # MPRIS integration
+    openssl # reqwest HTTP client
   ];
 
   meta = with lib; {

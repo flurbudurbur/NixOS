@@ -1,10 +1,14 @@
-{ pkgs }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 
-pkgs.stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "bricolage-grotesque";
   version = "2024-12-19";
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "flurbudurbur";
     repo = "bricolage";
     rev = "main";
@@ -19,7 +23,7 @@ pkgs.stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with pkgs.lib; {
+  meta = with lib; {
     description = "An expressive variable font with weight, width and optical size axis";
     homepage = "https://github.com/flurbudurbur/bricolage";
     license = licenses.ofl;
