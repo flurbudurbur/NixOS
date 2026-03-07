@@ -89,10 +89,10 @@
       # Mullvad VPN status with polling until connected
       mvs() {
         while true; do
-          local status
-          status=$(mullvad status)
-          echo "$status"
-          if echo "$status" | grep -q "^Connected"; then
+          local vpn_status
+          vpn_status=$(mullvad status)
+          echo "$vpn_status"
+          if echo "$vpn_status" | grep -q "^Connected"; then
             break
           fi
           sleep 1
