@@ -37,7 +37,7 @@ in
   };
 
   # Substitute secret hostname into SSH config after sops-nix decrypts it
-  home.activation.substituteShioriHostname = lib.hm.dag.entryAfter [ "setupSecrets" ] ''
+  home.activation.substituteShioriHostname = lib.hm.dag.entryAfter [ "sops-nix" ] ''
     HOSTNAME=$(tr -d '\n' < "${sshHostnameFile}")
     sed -i "s|@SHIORI_HOSTNAME@|$HOSTNAME|g" ~/.ssh/config
   '';
