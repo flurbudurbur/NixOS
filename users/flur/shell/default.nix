@@ -5,6 +5,7 @@
     ./starship.nix
     ./tmux.nix
     ./nerdfetch.nix
+    ./sesh.nix
   ];
 
   # GPG environment variable for terminal pinentry
@@ -40,7 +41,7 @@
       # Zoxide initialization (replaces cd with smart directory jumping)
       eval "$(zoxide init zsh --cmd cd)"
 
-      # Sesh session picker widget (Ctrl+t)
+      # Sesh session picker widget (Ctrl+k)
       function sesh-sessions() {
         local session
         session=$(sesh list -i | fzf --height 40% --reverse --border-label ' sesh ' --prompt '⚡  ' \
@@ -50,41 +51,13 @@
           --bind 'ctrl-t:change-prompt(🪟  )+reload(sesh list -it)' \
           --bind 'ctrl-g:change-prompt(⚙️   )+reload(sesh list -ic)' \
           --bind 'ctrl-x:change-prompt(📁  )+reload(sesh list -iz)' \
-          --bind 'ctrl-d:execute(tmux kill-session -t {2..})+change-prompt(⚡  )+reload(sesh list -i)')
+          --bind 'ctrl-d:execute(tmux kill-session -t {2..})+change-prompt(⚡  )+reload(sesh list -i)' \
+          | awk '{print $2}')
         [[ -z "$session" ]] && return
         sesh connect "$session"
       }
       zle -N sesh-sessions
       bindkey '^k' sesh-sessions
-
-      # Helper function to run tmuxinator commands in a specific directory
-      _tmux_in_dir() {
-        local target_dir="$1"
-        local action="$2"
-        local session="''${3:-dev}"
-
-        if [ -z "$target_dir" ]; then
-          echo "Error: No directory specified" >&2
-          return 1
-        fi
-
-        if [ ! -d "$target_dir" ]; then
-          echo "Error: Directory '$target_dir' does not exist" >&2
-          return 1
-        fi
-
-        (cd "$(zoxide query "$target_dir")" && tmuxinator "$action" "$session")
-      }
-
-      # Start tmuxinator session: tmstart [dir] [session]  (defaults: . dev)
-      tmstart() {
-        _tmux_in_dir "''${1:-.}" start "''${2:-dev}"
-      }
-
-      # Stop tmuxinator session: tmstop [dir] [session]  (defaults: . dev)
-      tmstop() {
-        _tmux_in_dir "''${1:-.}" stop "''${2:-dev}"
-      }
 
       # Mullvad VPN status with polling until connected
       mvs() {

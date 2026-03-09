@@ -104,20 +104,6 @@
       - processes: nethogs
   '';
 
-  xdg.configFile."tmuxinator/dev.yml".text = ''
-    name: dev
-    root: .
-
-    windows:
-      - code:
-          layout: main-vertical
-          panes:
-            - nvim .
-            - claude
-      - git: lazygit
-      - scratch:
-  '';
-
   # Discord and Music player
   xdg.configFile."tmuxinator/disqo.yml".text = ''
     name: disqo
@@ -131,5 +117,20 @@
             - kew all --nocover
             - qobuz-player
           post: tmux resize-pane -t 2 -y 30%
+  '';
+
+  # NixOS development session (discovered by sesh)
+  xdg.configFile."tmuxinator/nixos.yml".text = ''
+    name: nixos
+    root: ~/nixos-system
+
+    windows:
+      - code:
+          layout: main-vertical
+          panes:
+            - nvim .
+            - claude
+      - git: lazygit
+      - scratch:
   '';
 }

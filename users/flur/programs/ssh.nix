@@ -38,7 +38,11 @@ in
 
   # Substitute secret hostname into SSH config after sops-nix decrypts it
   home.activation.substituteShioriHostname = lib.hm.dag.entryAfter [ "sops-nix" ] ''
-    HOSTNAME=$(tr -d '\n' < "${sshHostnameFile}")
-    sed -i "s|@SHIORI_HOSTNAME@|$HOSTNAME|g" ~/.ssh/config
+    if [ -f "${sshHostnameFile}" ]; then
+      HOSTNAME=$(tr -d '\n' < "${sshHostnameFile}")
+      sed -i "s|@SHIORI_HOSTNAME@|$HOSTNAME|g" ~/.ssh/config
+    else
+      echo "Warning: ${sshHostnameFile} not found, skipping hostname substitution"
+    fi
   '';
 }
