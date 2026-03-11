@@ -8,6 +8,9 @@
     ./sesh.nix
   ];
 
+  # Add ~/.local/bin to PATH
+  home.sessionPath = [ "$HOME/.local/bin" ];
+
   # GPG environment variable for terminal pinentry
   home.sessionVariables = {
     GPG_TTY = "$(tty)";

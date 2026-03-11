@@ -1,4 +1,4 @@
-{ pkgs, oxicord, wallpaperPath, ... }:
+{ pkgs, nixpkgs-unstable, oxicord, wallpaperPath, ... }:
 {
   programs.foot.enable = true;
 
@@ -6,7 +6,7 @@
     oxicord.packages.x86_64-linux.default
     lazygit
     gnupg
-    claude-code
+    nixpkgs-unstable.claude-code
     vlc
     hyprpaper
     teams-for-linux
@@ -22,6 +22,7 @@
     proton-pass
     kew
     prismlauncher
+    opentrack
 
     # System utils
     grimblast
