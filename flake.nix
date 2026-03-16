@@ -43,6 +43,14 @@
       url = "git+ssh://git@github.com/flurbudurbur/nix-secrets?shallow=1&ref=main";
       flake = true;
     };
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    devenv = {
+      url = "github:cachix/devenv";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -78,8 +86,10 @@
               # - https://github.com/nix-community/stylix/issues/865
               {
                 nixpkgs.config.allowUnfree = true;
+                nixpkgs.config.android_sdk.accept_license = true;
                 nixpkgs.overlays = overlays.all;
               }
+              inputs.devenv.nixosModules.devenv
               home-manager.nixosModules.home-manager
               {
                 home-manager = {

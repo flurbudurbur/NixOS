@@ -119,52 +119,51 @@ in
       };
 
       # Keybindings
-      bind =
-        [
-          "$mainMod, Q, exec, $terminal"
-          "$mainMod SHIFT, Q, exec, $terminal -e tmux new-session"
-          "$mainMod SHIFT, S, exec, grimblast copy area"
-          "$mainMod, C, killactive,"
-          "$mainMod, M, exit,"
-          "$mainMod, E, exec, $fileManager"
-          "$mainMod, V, togglefloating,"
-          "$mainMod, P, pseudo,"
-          "$mainMod, J, togglesplit,"
-          "$mainMod, L, exec, loginctl lock-session"
-          "$mainMod, Z, exec, $browser"
-          "ALT, SPACE, exec, $menu"
-          # Maximize window
-          "ALT, up, fullscreen, 1"
-          # True fullscreen
-          "ALT, F, fullscreen, 0"
-          # Move focus
-          "$mainMod, left, movefocus, l"
-          "$mainMod, right, movefocus, r"
-          "$mainMod, up, movefocus, u"
-          "$mainMod, down, movefocus, d"
-        ]
-        # Workspace bindings (1-9 and 0->10)
-        ++ (builtins.concatLists (
-          builtins.genList (
-            i:
-            let
-              ws = toString (if i == 9 then 10 else i + 1);
-              key = toString (if i == 9 then 0 else i + 1);
-            in
-            [
-              "$mainMod, ${key}, workspace, ${ws}"
-              "$mainMod SHIFT, ${key}, movetoworkspace, ${ws}"
-            ]
-          ) 10
-        ))
-        ++ [
-          # Special workspace
-          "$mainMod, S, togglespecialworkspace, magic"
-          "$mainMod ALT, S, movetoworkspace, special:magic"
-          # Scroll workspaces
-          "$mainMod, mouse_down, workspace, e+1"
-          "$mainMod, mouse_up, workspace, e-1"
-        ];
+      bind = [
+        "$mainMod, Q, exec, $terminal"
+        "$mainMod SHIFT, Q, exec, $terminal -e tmux new-session"
+        "$mainMod SHIFT, S, exec, grimblast copy area"
+        "$mainMod, C, killactive,"
+        "$mainMod, M, exit,"
+        "$mainMod, E, exec, $fileManager"
+        "$mainMod, V, togglefloating,"
+        "$mainMod, P, pseudo,"
+        "$mainMod, J, togglesplit,"
+        "$mainMod, L, exec, loginctl lock-session"
+        "$mainMod, Z, exec, $browser"
+        "ALT, SPACE, exec, $menu"
+        # Maximize window
+        "ALT, up, fullscreen, 1"
+        # True fullscreen
+        "ALT, F, fullscreen, 0"
+        # Move focus
+        "$mainMod, left, movefocus, l"
+        "$mainMod, right, movefocus, r"
+        "$mainMod, up, movefocus, u"
+        "$mainMod, down, movefocus, d"
+      ]
+      # Workspace bindings (1-9 and 0->10)
+      ++ (builtins.concatLists (
+        builtins.genList (
+          i:
+          let
+            ws = toString (if i == 9 then 10 else i + 1);
+            key = toString (if i == 9 then 0 else i + 1);
+          in
+          [
+            "$mainMod, ${key}, workspace, ${ws}"
+            "$mainMod SHIFT, ${key}, movetoworkspace, ${ws}"
+          ]
+        ) 10
+      ))
+      ++ [
+        # Special workspace
+        "$mainMod, S, togglespecialworkspace, magic"
+        "$mainMod ALT, S, movetoworkspace, special:magic"
+        # Scroll workspaces
+        "$mainMod, mouse_down, workspace, e+1"
+        "$mainMod, mouse_up, workspace, e-1"
+      ];
 
       # Mouse bindings
       bindm = [

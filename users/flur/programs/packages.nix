@@ -1,4 +1,10 @@
-{ pkgs, nixpkgs-unstable, oxicord, wallpaperPath, ... }:
+{
+  pkgs,
+  nixpkgs-unstable,
+  oxicord,
+  wallpaperPath,
+  ...
+}:
 {
   programs.foot.enable = true;
 

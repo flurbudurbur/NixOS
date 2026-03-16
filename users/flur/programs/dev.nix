@@ -8,5 +8,11 @@
     prettierd
     eslint_d
     blade-formatter
+    devenv
   ];
+
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
 }

@@ -15,5 +15,7 @@
     ./mullvad-vpn.nix
     ./heroic.nix
     ./composer.nix
+    ./rust.nix
+    ./android.nix
   ];
 }
