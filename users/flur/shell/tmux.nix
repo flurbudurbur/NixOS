@@ -119,6 +119,22 @@
           post: tmux resize-pane -t 2 -y 30%
   '';
 
+  # Dioxus development session
+  xdg.configFile."tmuxinator/flur34.yml".text = ''
+    name: flur34
+    root: ~/Dev/flur34
+
+    windows:
+      - code:
+          layout: main-vertical
+          panes:
+            - nvim .
+            - claude
+      - serve: devenv up web
+      - git: lazygit
+      - scratch:
+  '';
+
   # NixOS development session (discovered by sesh)
   xdg.configFile."tmuxinator/nixos.yml".text = ''
     name: nixos

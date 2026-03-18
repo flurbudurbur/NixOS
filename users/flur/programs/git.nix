@@ -17,11 +17,17 @@ in
 {
   programs.git = {
     enable = true;
+    ignores = [ 
+      "AGENTS.md"
+      ".claude/*"
+      "CLAUDE.md"
+    ];
     settings = {
       user.name = "flurbudurbur";
       user.email = "69259138+flurbudurbur@users.noreply.github.com";
       user.signingkey = signingKey;
       init.defaultBranch = "main";
+      pull.rebase = true;
 
       # GPG signing configuration
       commit.gpgsign = true;

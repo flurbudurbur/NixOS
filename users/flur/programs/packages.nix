@@ -3,6 +3,7 @@
   nixpkgs-unstable,
   oxicord,
   wallpaperPath,
+  inputs,
   ...
 }:
 {
@@ -42,6 +43,7 @@
     fzf
     fd
     zoxide
+    ripgrep
 
     # Productivity
     libreoffice-fresh
@@ -57,6 +59,10 @@
 
     # Music
     qobuz-player
+
+    # Testing
+        inputs.fluxer.packages.x86_64-linux.fluxer
+
   ];
 
   home.sessionVariables = {

@@ -1,10 +1,14 @@
 { pkgs, ... }:
 {
   # Nix settings
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  nix.settings = {
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+    extra-substituters = [ "https://devenv.cachix.org" ];
+    extra-trusted-public-keys = [ "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=" ];
+  };
   nixpkgs.config.allowUnfree = true;
 
   # Auto-optimize store (deduplicate files)
@@ -85,6 +89,7 @@
   # Security
   security.rtkit.enable = true;
   security.pam.services.hyprlock = { };
+  security.pam.services.greetd.enableGnomeKeyring = true;
 
   # Hardware support for GPG smartcards (Yubikey)
   hardware.gpgSmartcards.enable = true;

@@ -3,6 +3,7 @@
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
+    fluxer.url = "github:flurbudurbur/fluxer-releases";
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
       inputs = {
@@ -43,14 +44,6 @@
       url = "git+ssh://git@github.com/flurbudurbur/nix-secrets?shallow=1&ref=main";
       flake = true;
     };
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    devenv = {
-      url = "github:cachix/devenv";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
@@ -86,10 +79,8 @@
               # - https://github.com/nix-community/stylix/issues/865
               {
                 nixpkgs.config.allowUnfree = true;
-                nixpkgs.config.android_sdk.accept_license = true;
                 nixpkgs.overlays = overlays.all;
               }
-              inputs.devenv.nixosModules.devenv
               home-manager.nixosModules.home-manager
               {
                 home-manager = {
@@ -111,6 +102,7 @@
                     colors = colors;
                     oxicord = inputs.oxicord;
                     wallpaperPath = ./wallpaper.jpg;
+                    inherit inputs;
                   };
                   backupFileExtension = "backup";
                   sharedModules = [

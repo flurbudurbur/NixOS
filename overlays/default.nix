@@ -21,28 +21,24 @@ let
   xone = import ./xone.nix;
   customPackages = import ./custom-packages.nix;
   nur = inputs.nur.overlays.default;
-  rustOverlay = inputs.rust-overlay.overlays.default;
 in
 {
   inherit
     xone
     customPackages
     nur
-    rustOverlay
     ;
 
   # Preset combinations for common use cases
   all = [
     nur
     xone
-    rustOverlay
     customPackages
   ];
 
   # Without gaming overlays
   minimal = [
     nur
-    rustOverlay
     customPackages
   ];
 

@@ -1,4 +1,8 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  nixpkgs-unstable,
+  ... 
+}:
 {
   home.packages = with pkgs; [
     fnm
@@ -8,7 +12,7 @@
     prettierd
     eslint_d
     blade-formatter
-    devenv
+    nixpkgs-unstable.devenv
   ];
 
   programs.direnv = {
