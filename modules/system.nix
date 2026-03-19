@@ -43,7 +43,7 @@
         ids = [ "*" ];
         settings.main = {
           capslock = "layer(control)";
-          control = "capslock";
+          leftcontrol = "capslock";
         };
       };
     };
