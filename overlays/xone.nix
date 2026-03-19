@@ -1,20 +1,20 @@
-# Override xone to use dlundqvist fork v0.5.7 for extra button support
+# Use nixpkgs-unstable's xone (v0.5.7) built against the current system kernel
 # Uses linuxKernel.packagesFor override to apply to ALL kernel package sets
-final: prev: {
+{ inputs }:
+final: prev:
+let
+  unstablePkgs = import inputs.nixpkgs-unstable {
+    system = prev.stdenv.hostPlatform.system;
+    config.allowUnfree = true;
+  };
+in
+{
   linuxKernel = prev.linuxKernel // {
     packagesFor =
       kernel:
       (prev.linuxKernel.packagesFor kernel).extend (
         lpFinal: lpPrev: {
-          xone = lpPrev.xone.overrideAttrs (old: {
-            version = "0.5.7";
-            src = prev.fetchFromGitHub {
-              owner = "dlundqvist";
-              repo = "xone";
-              rev = "v0.5.7";
-              hash = "sha256-9bflLH4lPGM7Ziv6w0+HC56jMU0IchL/9udbIqTIMd8=";
-            };
-          });
+          xone = (unstablePkgs.linuxKernel.packagesFor kernel).xone;
         }
       );
   };

@@ -13,12 +13,12 @@
 #
 # Current overlays:
 #   - nur: Nix User Repository packages
-#   - xone: Xbox controller kernel module (dlundqvist fork v0.5.7)
+#   - xone: Xbox controller kernel module (nixpkgs-unstable v0.5.7)
 #   - rustOverlay: Rust toolchain overlay (rust-bin.stable, nightly, etc.)
 #   - customPackages: Custom packages (bricolage-grotesque, qobuz-player)
 { inputs }:
 let
-  xone = import ./xone.nix;
+  xone = import ./xone.nix { inherit inputs; };
   customPackages = import ./custom-packages.nix;
   nur = inputs.nur.overlays.default;
 in
