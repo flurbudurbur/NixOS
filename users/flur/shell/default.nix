@@ -5,7 +5,6 @@
     ./starship.nix
     ./tmux.nix
     ./nerdfetch.nix
-    ./sesh.nix
   ];
 
   # Add ~/.local/bin to PATH

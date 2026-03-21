@@ -4,6 +4,8 @@
   programs.nixvim = {
     enable = true;
 
+    extraPackages = [ pkgs.gcc ];
+
     # Basic settings
     opts = {
       number = true;
@@ -207,13 +209,13 @@
           yaml.__raw = ''{ "prettierd", "prettier", stop_after_first = true }'';
           markdown.__raw = ''{ "prettierd", "prettier", stop_after_first = true }'';
           blade = [ "blade-formatter" ];
-          php.__raw = ''{ "phpactor", lsp_format = "fallback" }'';
-          nix.__raw = ''{ "nixd", lsp_format = "fallback" }'';
-          rust.__raw = ''{ "rust_analyzer", lsp_format = "fallback" }'';
-          go.__raw = ''{ "gopls", lsp_format = "fallback" }'';
-          c.__raw = ''{ "clangd", lsp_format = "fallback" }'';
-          cpp.__raw = ''{ "clangd", lsp_format = "fallback" }'';
-          java.__raw = ''{ "jdtls", lsp_format = "fallback" }'';
+          php.__raw = ''{ lsp_format = "prefer" }'';
+          nix.__raw = ''{ lsp_format = "prefer" }'';
+          rust.__raw = ''{ lsp_format = "prefer" }'';
+          go.__raw = ''{ lsp_format = "prefer" }'';
+          c.__raw = ''{ lsp_format = "prefer" }'';
+          cpp.__raw = ''{ lsp_format = "prefer" }'';
+          java.__raw = ''{ lsp_format = "prefer" }'';
         };
         format_on_save = {
           timeout_ms = 500;
@@ -251,6 +253,13 @@
       			-- eslint_d requires none-ls-extras which isn't in nixpkgs yet
       			null_ls.setup({
       				sources = {},
+      			})
+
+      			-- Blade filetype detection (Laravel templates)
+      			vim.filetype.add({
+      				pattern = {
+      					[".*%.blade%.php"] = "blade",
+      				},
       			})
       		'';
 
