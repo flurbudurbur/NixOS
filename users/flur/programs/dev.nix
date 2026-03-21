@@ -1,7 +1,7 @@
 {
   pkgs,
   nixpkgs-unstable,
-  ... 
+  ...
 }:
 {
   home.packages = with pkgs; [
@@ -18,5 +18,8 @@
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
+    stdlib = ''
+      eval "$(devenv direnvrc)"
+    '';
   };
 }

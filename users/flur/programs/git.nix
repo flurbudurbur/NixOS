@@ -17,7 +17,7 @@ in
 {
   programs.git = {
     enable = true;
-    ignores = [ 
+    ignores = [
       "AGENTS.md"
       ".claude/*"
       "CLAUDE.md"

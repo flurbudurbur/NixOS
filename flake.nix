@@ -111,6 +111,7 @@
                     inputs.nixcord.homeModules.nixcord
                     inputs.stylix.homeModules.stylix
                     sops-nix.homeManagerModules.sops
+                    inputs.nix-flatpak.homeManagerModules.nix-flatpak
                   ];
                 };
               }

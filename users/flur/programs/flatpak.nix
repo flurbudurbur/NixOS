@@ -1,5 +1,12 @@
 { pkgs, ... }:
 {
+  services.flatpak.packages = [
+    {
+      appId = "app.fluxer.Fluxer";
+      origin = "flathub";
+    }
+  ];
+
   # Service to install/update Hytale launcher from remote .flatpak file
   systemd.user.services.install-hytale-launcher = {
     Unit = {

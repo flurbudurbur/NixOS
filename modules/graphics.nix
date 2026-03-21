@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 {
   # Hardware
   hardware.graphics = {

@@ -3,7 +3,6 @@
   nixpkgs-unstable,
   oxicord,
   wallpaperPath,
-  inputs,
   ...
 }:
 {
@@ -59,10 +58,6 @@
 
     # Music
     qobuz-player
-
-    # Testing
-        inputs.fluxer.packages.x86_64-linux.fluxer
-
   ];
 
   home.sessionVariables = {

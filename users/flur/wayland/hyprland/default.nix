@@ -107,6 +107,7 @@ in
 
       cursor = {
         no_hardware_cursors = true;
+        use_cpu_buffer = true;
       };
 
       input = {
