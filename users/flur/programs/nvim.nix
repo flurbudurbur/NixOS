@@ -380,6 +380,11 @@
           untracked.text = "┆";
         };
         current_line_blame = true;
+        watch_gitdir = {
+          interval = 200;
+          follow_files = true;
+        };
+        attach_to_untracked = true;
       };
     };
 
