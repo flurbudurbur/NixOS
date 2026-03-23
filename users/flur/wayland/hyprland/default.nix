@@ -105,9 +105,14 @@ in
         disable_hyprland_logo = true;
       };
 
+      exec-once = [
+        "hyprctl setcursor BreezeX-RosePine-Linux 24"
+      ];
+
       cursor = {
         no_hardware_cursors = true;
         use_cpu_buffer = true;
+        default_monitor = "DP-1";
       };
 
       input = {

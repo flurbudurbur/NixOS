@@ -70,15 +70,6 @@
     rounded_corners = false;
   };
 
-  services.gnome-keyring = {
-    enable = true;
-    components = [
-      "pkcs11"
-      "secrets"
-      "ssh"
-    ];
-  };
-
   services.hyprpaper = {
     enable = true;
     settings = {
