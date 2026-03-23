@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -21,6 +21,7 @@
   # Networking
   networking.hostName = "flurPC";
   networking.networkmanager.enable = true;
+  networking.interfaces.enp4s0.wakeOnLan.enable = true;
 
   system.stateVersion = "25.11";
 }
