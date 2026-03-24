@@ -25,8 +25,8 @@
     opacity.terminal = 0.95;
     fonts = {
       monospace = {
-        package = pkgs.nerd-fonts.fira-code;
-        name = "FiraCode Nerd Font";
+        package = pkgs.maple-mono.NF;
+        name = "MapleMono NF";
       };
       sansSerif = {
         package = pkgs.bricolage-grotesque;

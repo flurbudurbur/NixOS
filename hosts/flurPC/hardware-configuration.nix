@@ -40,6 +40,16 @@
     ];
   };
 
+  fileSystems."/mnt/hdd" = {
+    device = "/dev/disk/by-uuid/f2e70bee-4511-4c74-9f41-05796c1ce2f3";
+    fsType = "btrfs";
+  };
+
+  fileSystems."/mnt/nvme" = {
+    device = "/dev/disk/by-uuid/4e39485d-b702-4a45-9e21-48401f640816";
+    fsType = "btrfs";
+  };
+
   swapDevices = [
     { device = "/dev/disk/by-uuid/7575db8e-871a-4911-94f3-829e64324d09"; }
   ];
