@@ -6,23 +6,23 @@
     stateVersion = "25.11";
   };
 
-  home.pointerCursor = {
-    name = "BreezeX-RosePine-Linux";
-    package = pkgs.rose-pine-cursor;
-    size = 24;
-    gtk.enable = true;
-    x11.enable = true;
-  };
-
   programs.home-manager.enable = true;
   programs.zen-browser.enable = true;
 
   stylix = {
     targets.zen-browser.profileNames = [ "default" ];
-    targets.starship.enable = false; # Use custom starship config instead
+    targets.starship.enable = false; # Custom starship config
+    targets.waybar.enable = false;   # Custom CSS with colors module
+    targets.hyprlock.enable = false; # Custom colors with colors module
+    targets.nixvim.enable = false;   # Explicit rose-pine colorscheme in nixvim
     enable = true;
     base16Scheme = "${pkgs.base16-schemes}/share/themes/rose-pine-moon.yaml";
     opacity.terminal = 0.95;
+    cursor = {
+      name = "BreezeX-RosePine-Linux";
+      package = pkgs.rose-pine-cursor;
+      size = 24;
+    };
     fonts = {
       monospace = {
         package = pkgs.maple-mono.NF;
