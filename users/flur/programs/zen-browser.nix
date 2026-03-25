@@ -100,28 +100,28 @@
           "Qobuz" = {
             id = "1aa50237-dccb-4840-b576-486d0e66278f";
             url = "https://play.qobuz.com/discover";
-            workspace = spaces.Personal.id;
+            container = containers.Personal.id;
             isEssential = true;
             position = 100;
           };
           "Proton Mail" = {
             id = "d4ea7b42-9e79-4466-a5ed-ebb8ca0fca48";
             url = "https://mail.proton.me/";
-            workspace = spaces.Personal.id;
+            container = containers.Personal.id;
             isEssential = true;
             position = 101;
           };
           "GitHub" = {
             id = "69e2a131-7dea-44fd-8246-a0fbc40fa125";
             url = "https://github.com/flurbudurbur";
-            workspace = spaces.Personal.id;
+            container = containers.Personal.id;
             isEssential = true;
             position = 102;
           };
           "Claude" = {
             id = "1f9afd1f-8e19-4597-a07d-aba7f5312f34";
             url = "https://claude.ai/";
-            workspace = spaces.Personal.id;
+            container = containers.Personal.id;
             isEssential = true;
             position = 103;
           };
