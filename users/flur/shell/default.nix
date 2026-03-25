@@ -4,7 +4,7 @@
     ./terminals.nix
     ./starship.nix
     ./tmux.nix
-    ./nerdfetch.nix
+    ./fastfetch.nix
   ];
 
   # Add ~/.local/bin to PATH
@@ -35,7 +35,7 @@
     };
     initContent = ''
       # Display system info on shell start
-      nerdfetch
+      fastfetch
 
       # FNM (Fast Node Manager) initialization
       eval "$(fnm env --use-on-cd)"
