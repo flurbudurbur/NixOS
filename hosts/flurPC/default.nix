@@ -7,6 +7,7 @@
     ../../modules/desktop.nix
     ../../modules/gaming.nix
     ../../modules/secrets.nix
+    ../../modules/keyd.nix
   ];
 
   # Boot
