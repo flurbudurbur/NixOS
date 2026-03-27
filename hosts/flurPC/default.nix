@@ -14,7 +14,10 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Load USB HID and hub drivers early so keyboard works during initrd
-  boot.initrd.kernelModules = [ "usbhid" "xhci_hcd" ];
+  boot.initrd.kernelModules = [
+    "usbhid"
+    "xhci_hcd"
+  ];
 
   # NVIDIA suspend/resume kernel parameters
   boot.kernelParams = [

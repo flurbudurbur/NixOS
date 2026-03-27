@@ -12,9 +12,9 @@
   stylix = {
     targets.zen-browser.profileNames = [ "default" ];
     targets.starship.enable = false; # Custom starship config
-    targets.waybar.enable = false;   # Custom CSS with colors module
+    targets.waybar.enable = false; # Custom CSS with colors module
     targets.hyprlock.enable = false; # Custom colors with colors module
-    targets.nixvim.enable = false;   # Explicit rose-pine colorscheme in nixvim
+    targets.nixvim.enable = false; # Explicit rose-pine colorscheme in nixvim
     enable = true;
     base16Scheme = "${pkgs.base16-schemes}/share/themes/rose-pine-moon.yaml";
     opacity.terminal = 0.95;
