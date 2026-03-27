@@ -39,7 +39,7 @@
     keyd = {
       enable = true;
       keyboards.default = {
-        ids = [ "*" ];
+        ids = [ "3233:5311" ];
         settings.main = {
           capslock = "layer(control)";
           leftcontrol = "capslock";
@@ -100,6 +100,7 @@
   environment.systemPackages = with pkgs; [
     git
     pciutils
+    usbutils
     tree
     wget
     btop
