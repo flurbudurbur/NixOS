@@ -13,6 +13,7 @@
     eslint_d
     blade-formatter
     nixpkgs-unstable.devenv
+    gradle
   ];
 
   programs.direnv = {

@@ -1,10 +1,30 @@
 { pkgs, colors, ... }:
 
+let
+  debugExtPath = "${pkgs.vscode-extensions.vscjava.vscode-java-debug}/share/vscode/extensions/vscjava.vscode-java-debug/server";
+  testExtPath = "${pkgs.vscode-extensions.vscjava.vscode-java-test}/share/vscode/extensions/vscjava.vscode-java-test/server";
+in
 {
   programs.nixvim = {
     enable = true;
 
-    extraPackages = [ pkgs.gcc ];
+    extraPackages = [
+      pkgs.gcc
+      pkgs.jdk21
+      pkgs.jdt-language-server
+      pkgs.vscode-extensions.vscjava.vscode-java-debug
+      pkgs.vscode-extensions.vscjava.vscode-java-test
+    ];
+
+    extraPlugins = with pkgs.vimPlugins; [
+      lua-async
+      nvim-java-core
+      nvim-java-test
+      nvim-java-dap
+      nvim-java-refactor
+      nvim-java
+      vim-tmux-navigator
+    ];
 
     # Basic settings
     opts = {
@@ -188,6 +208,16 @@
         };
         jdtls = {
           enable = true;
+          extraOptions = {
+            init_options = {
+              bundles.__raw = ''
+                vim.tbl_flatten({
+                  vim.split(vim.fn.glob("${debugExtPath}/*.jar"), "\n", { trimempty = true }),
+                  vim.split(vim.fn.glob("${testExtPath}/*.jar"), "\n", { trimempty = true }),
+                })
+              '';
+            };
+          };
         };
         phpactor = {
           enable = true;
@@ -244,6 +274,58 @@
     # Note: none-ls-extras might not be in nixpkgs yet
     # The plugin would be: nvimtools/none-ls-extras.nvim
     # For now, just use the basic none-ls without extras
+
+    extraConfigLuaPre = ''
+      -- Bypass nvim-java's lspconfig wrap (jdtls is managed by nixvim's LSP module)
+      local setup_wrap = require('java.startup.lspconfig-setup-wrap')
+      setup_wrap.setup = function(_) end
+
+      -- Bypass mason: redirect debug/test JAR paths to Nix store
+      local mason_dep = require('java.startup.mason-dep')
+      mason_dep.install = function(_) return false end
+
+      local java_core_mason = require('java-core.utils.mason')
+      java_core_mason.get_shared_path = function(pkg_name)
+        if pkg_name == 'java-debug-adapter' then
+          return '${debugExtPath}'
+        elseif pkg_name == 'java-test' then
+          return '${testExtPath}'
+        else
+          return ""
+        end
+      end
+
+      -- Override jdtls config builder to use Nix-installed binary (skip mason jdtls)
+      local jdtls_server = require('java-core.ls.servers.jdtls')
+      jdtls_server.get_config = function(opts)
+        local plugins_mod = require('java-core.ls.servers.jdtls.plugins')
+        local utils = require('java-core.ls.servers.jdtls.utils')
+        local base = require('java-core.ls.servers.jdtls.config').get_config()
+        local plugin_paths = plugins_mod.get_plugin_paths(opts.jdtls_plugins or {})
+        base.cmd = { 'jdtls' }
+        base.root_dir = jdtls_server.get_root_finder(
+          opts.root_markers or { 'pom.xml', 'build.gradle', '.git' }
+        )
+        base.init_options.bundles = plugin_paths
+        base.init_options.workspace = utils.get_workspace_path()
+        return base
+      end
+
+      require('java').setup({
+        jdk = {
+          auto_install = false,
+        },
+        java_test = {
+          enable = true,
+        },
+        java_debug_adapter = {
+          enable = true,
+        },
+        verification = {
+          invalid_mason_registry = false,
+        },
+      })
+    '';
 
     extraConfigLua = ''
       			-- none-ls is still required as "null-ls" (API compatibility)
@@ -462,32 +544,6 @@
         options.desc = "Open LazyGit";
       }
 
-      # Window navigation
-      {
-        mode = "n";
-        key = "<C-h>";
-        action = "<C-w>h";
-        options.desc = "Move to left window";
-      }
-      {
-        mode = "n";
-        key = "<C-j>";
-        action = "<C-w>j";
-        options.desc = "Move to bottom window";
-      }
-      {
-        mode = "n";
-        key = "<C-k>";
-        action = "<C-w>k";
-        options.desc = "Move to top window";
-      }
-      {
-        mode = "n";
-        key = "<C-l>";
-        action = "<C-w>l";
-        options.desc = "Move to right window";
-      }
-
       # Buffer navigation
       {
         mode = "n";
@@ -586,6 +642,38 @@
         key = "<leader>f";
         action = "<cmd>lua require('conform').format({ async = true, lsp_fallback = true })<cr>";
         options.desc = "Format buffer";
+      }
+
+      # Java (nvim-java)
+      {
+        mode = "n";
+        key = "<leader>jr";
+        action = "<cmd>JavaRunnerRunMain<cr>";
+        options.desc = "Java: Run main";
+      }
+      {
+        mode = "n";
+        key = "<leader>jt";
+        action = "<cmd>JavaTestRunCurrentClass<cr>";
+        options.desc = "Java: Run test class";
+      }
+      {
+        mode = "n";
+        key = "<leader>jT";
+        action = "<cmd>JavaTestRunCurrentMethod<cr>";
+        options.desc = "Java: Run test method";
+      }
+      {
+        mode = "n";
+        key = "<leader>jd";
+        action = "<cmd>JavaTestDebugCurrentClass<cr>";
+        options.desc = "Java: Debug test class";
+      }
+      {
+        mode = "n";
+        key = "<leader>jD";
+        action = "<cmd>JavaTestDebugCurrentMethod<cr>";
+        options.desc = "Java: Debug test method";
       }
     ];
   };

@@ -30,6 +30,7 @@
     kew
     prismlauncher
     opentrack
+    obs-studio
 
     # System utils
     grimblast
@@ -63,6 +64,11 @@
 
   home.sessionVariables = {
     STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
+  };
+
+  programs.java = {
+    enable = true;
+    package = pkgs.jdk21;
   };
 
   programs.btop.settings = {

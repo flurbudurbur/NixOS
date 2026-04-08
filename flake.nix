@@ -17,7 +17,6 @@
       url = "github:nix-community/stylix/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixcord.url = "github:FlameFlag/nixcord";
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -108,7 +107,6 @@
                   sharedModules = [
                     inputs.zen-browser.homeModules.default
                     inputs.nixvim.homeModules.nixvim
-                    inputs.nixcord.homeModules.nixcord
                     inputs.stylix.homeModules.stylix
                     sops-nix.homeManagerModules.sops
                     inputs.nix-flatpak.homeManagerModules.nix-flatpak
