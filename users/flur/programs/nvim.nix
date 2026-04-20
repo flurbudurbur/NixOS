@@ -10,7 +10,7 @@ in
 
     extraPackages = [
       pkgs.gcc
-      pkgs.jdk21
+      pkgs.jdk25
       pkgs.jdt-language-server
       pkgs.vscode-extensions.vscjava.vscode-java-debug
       pkgs.vscode-extensions.vscjava.vscode-java-test
@@ -341,6 +341,7 @@ in
       			vim.filetype.add({
       				pattern = {
       					[".*%.blade%.php"] = "blade",
+      					["todo%.txt"] = "todotxt",
       				},
       			})
       		'';
@@ -377,6 +378,7 @@ in
           g.bash
           g.lua
           g.vim
+          g.todotxt
         ];
     };
 

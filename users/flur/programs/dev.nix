@@ -13,8 +13,13 @@
     eslint_d
     blade-formatter
     nixpkgs-unstable.devenv
-    gradle
+    gradle_9
   ];
+
+  programs.java = {
+    enable = true;
+    package = pkgs.jdk25;
+  };
 
   programs.direnv = {
     enable = true;

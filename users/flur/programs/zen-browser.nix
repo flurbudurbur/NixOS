@@ -125,17 +125,23 @@
             isEssential = true;
             position = 103;
           };
+          "Fluxer" = {
+            id = "e7a1f674-8f7d-40f4-93da-e46ffe86bd33";
+            url = "https://web.fluxer.app/channels/@me/";
+            container = containers.Personal.id;
+            position = 104;
+          };
           "LinkedIn" = {
             id = "59a8d539-d5c4-4b18-959a-f031c0fbbabe";
             url = "https://www.linkedin.com/jobs/";
             workspace = spaces.Personal.id;
-            position = 104;
+            position = 114;
           };
           "iTheorie" = {
             id = "64fd5477-01e6-45e3-a761-4119bc8b7e2d";
             url = "https://itheorie.nl/";
             workspace = spaces.Personal.id;
-            position = 105;
+            position = 115;
           };
 
           # Horny

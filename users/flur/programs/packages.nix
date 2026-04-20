@@ -66,11 +66,6 @@
     STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
   };
 
-  programs.java = {
-    enable = true;
-    package = pkgs.jdk21;
-  };
-
   programs.btop.settings = {
     theme_background = false;
     vim_keys = true;
