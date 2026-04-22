@@ -50,6 +50,11 @@
             icon = "fingerprint";
             id = 1;
           };
+          School = {
+            color = "red";
+            icon = "briefcase";
+            id = 2;
+          };
           #Horny = {
           #  color = "pink";
           #  icon = "heart";
@@ -77,6 +82,12 @@
               opacity = 0.35;
               texture = 0.5;
             };
+          };
+          "School" = {
+            id = "84a04875-594d-4c9f-b011-a6ac1bbd3147";
+            position = 1001;
+            icon = "🎓";
+            container = containers.School.id;
           };
           #"Horny" = {
           #  id = "2ece0c15-fb7d-4871-a56e-35fbf9b74f58";
@@ -142,6 +153,15 @@
             url = "https://itheorie.nl/";
             workspace = spaces.Personal.id;
             position = 115;
+          };
+
+          # School
+          "Canvas" = {
+            id = "46a1c942-8f78-4471-b720-fcb1c99cc016";
+            url = "https://canvas.hu.nl/";
+            container = containers.School.id;
+            position = 100;
+            isEssential = true;
           };
 
           # Horny
