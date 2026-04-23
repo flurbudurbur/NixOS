@@ -14,6 +14,7 @@
     blade-formatter
     nixpkgs-unstable.devenv
     gradle_9
+    podman-compose
   ];
 
   programs.java = {

@@ -52,14 +52,9 @@
           };
           School = {
             color = "red";
-            icon = "briefcase";
+            icon = "dollar";
             id = 2;
           };
-          #Horny = {
-          #  color = "pink";
-          #  icon = "heart";
-          #  id = 2;
-          #};
         };
 
         # Spaces (workspaces)
@@ -70,18 +65,6 @@
             position = 1000;
             icon = "🦄";
             container = containers.Personal.id;
-            theme = {
-              type = "gradient";
-              colors = [
-                {
-                  red = 235;
-                  green = 111;
-                  blue = 146;
-                } # Rose Pine rose
-              ];
-              opacity = 0.35;
-              texture = 0.5;
-            };
           };
           "School" = {
             id = "84a04875-594d-4c9f-b011-a6ac1bbd3147";
@@ -89,89 +72,84 @@
             icon = "🎓";
             container = containers.School.id;
           };
-          #"Horny" = {
-          #  id = "2ece0c15-fb7d-4871-a56e-35fbf9b74f58";
-          #  position = 1001;
-          #  icon = "💕";
-          #  container = containers.Horny.id;
-          #  theme = {
-          #    type = "gradient";
-          #    colors = [
-          #      { red = 234; green = 110; blue = 145; }
-          #    ];
-          #    opacity = 0.35;
-          #    texture = 0.5;
-          #  };
-          #};
         };
+
+        inSpace = space: { workspace = space.id; container = space.container; };
+        pinsIn = space: ps: lib.mapAttrs (_: pin: pin // inSpace space) ps;
 
         # Pinned tabs
-        pins = {
-          # Personal
-          "Qobuz" = {
-            id = "1aa50237-dccb-4840-b576-486d0e66278f";
-            url = "https://play.qobuz.com/discover";
-            container = containers.Personal.id;
-            isEssential = true;
-            position = 100;
+        pins =
+          pinsIn spaces.Personal {
+            "Qobuz" = {
+              id = "1aa50237-dccb-4840-b576-486d0e66278f";
+              url = "https://play.qobuz.com/discover";
+              isEssential = true;
+              position = 100;
+            };
+            "Proton Mail" = {
+              id = "d4ea7b42-9e79-4466-a5ed-ebb8ca0fca48";
+              url = "https://mail.proton.me/";
+              isEssential = true;
+              position = 101;
+            };
+            "GitHub" = {
+              id = "69e2a131-7dea-44fd-8246-a0fbc40fa125";
+              url = "https://github.com/flurbudurbur";
+              isEssential = true;
+              position = 102;
+            };
+            "Claude" = {
+              id = "1f9afd1f-8e19-4597-a07d-aba7f5312f34";
+              url = "https://claude.ai/";
+              isEssential = true;
+              position = 103;
+            };
+            "Fluxer" = {
+              id = "e7a1f674-8f7d-40f4-93da-e46ffe86bd33";
+              url = "https://web.fluxer.app/channels/@me/";
+              position = 104;
+            };
+            "LinkedIn" = {
+              id = "59a8d539-d5c4-4b18-959a-f031c0fbbabe";
+              url = "https://www.linkedin.com/jobs/";
+              position = 114;
+            };
+            "iTheorie" = {
+              id = "64fd5477-01e6-45e3-a761-4119bc8b7e2d";
+              url = "https://itheorie.nl/";
+              position = 115;
+            };
+          } //
+          pinsIn spaces.School {
+            "Canvas" = {
+              id = "46a1c942-8f78-4471-b720-fcb1c99cc016";
+              url = "https://canvas.hu.nl/";
+              isEssential = true;
+              position = 100;
+            };
+            "Outlook" = {
+              id = "5fe18b16-ef8a-4a69-9ee8-350ef5714246";
+              url = "https://outlook.cloud.microsoft";
+              isEssential = true;
+              position = 101;
+            };
+            "Teams" = {
+              id = "ea614fe0-b8a4-46d9-a99d-60b227a59843";
+              url = "https://teams.microsoft.com/";
+              isEssential = true;
+              position = 102;
+            };
+            "Osiris" = {
+              id = "169ba356-1701-4ac3-9fd4-b1158b90dad0";
+              url = "https://hu.osiris-student.nl/home";
+              position = 110;
+            };
+            "Wegwijs" = {
+              id = "85dd872c-6f7c-4372-9aaa-a80f919b6919";
+              url = "https://huenik.hu.nl/";
+              position = 111;
+            };
           };
-          "Proton Mail" = {
-            id = "d4ea7b42-9e79-4466-a5ed-ebb8ca0fca48";
-            url = "https://mail.proton.me/";
-            container = containers.Personal.id;
-            isEssential = true;
-            position = 101;
-          };
-          "GitHub" = {
-            id = "69e2a131-7dea-44fd-8246-a0fbc40fa125";
-            url = "https://github.com/flurbudurbur";
-            container = containers.Personal.id;
-            isEssential = true;
-            position = 102;
-          };
-          "Claude" = {
-            id = "1f9afd1f-8e19-4597-a07d-aba7f5312f34";
-            url = "https://claude.ai/";
-            container = containers.Personal.id;
-            isEssential = true;
-            position = 103;
-          };
-          "Fluxer" = {
-            id = "e7a1f674-8f7d-40f4-93da-e46ffe86bd33";
-            url = "https://web.fluxer.app/channels/@me/";
-            container = containers.Personal.id;
-            position = 104;
-          };
-          "LinkedIn" = {
-            id = "59a8d539-d5c4-4b18-959a-f031c0fbbabe";
-            url = "https://www.linkedin.com/jobs/";
-            workspace = spaces.Personal.id;
-            position = 114;
-          };
-          "iTheorie" = {
-            id = "64fd5477-01e6-45e3-a761-4119bc8b7e2d";
-            url = "https://itheorie.nl/";
-            workspace = spaces.Personal.id;
-            position = 115;
-          };
-
-          # School
-          "Canvas" = {
-            id = "46a1c942-8f78-4471-b720-fcb1c99cc016";
-            url = "https://canvas.hu.nl/";
-            container = containers.School.id;
-            position = 100;
-            isEssential = true;
-          };
-
-          # Horny
-          #"F95zone" = {
-          #  id = "25c39932-151e-46ad-893d-bcd15fdf561f";
-          #  url = "https://f95zone.to/forums/games.2/";
-          #  workspace = spaces.Horny.id;
-          #  position = 100;
-          #};
-        };
       in
       {
         isDefault = true;

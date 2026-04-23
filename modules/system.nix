@@ -16,11 +16,18 @@
   nix.optimise.dates = [ "weekly" ];
 
   # User accounts
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+    defaultNetwork.settings.dns_enabled = true;
+  };
+
   users.users.flur = {
     isNormalUser = true;
     extraGroups = [
       "wheel"
       "input"
+      "podman"
     ];
     shell = pkgs.zsh;
   };
