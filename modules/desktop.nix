@@ -7,12 +7,14 @@
     xwayland.enable = true;
   };
 
+  systemd.services.greetd.environment.COLORTERM = "truecolor";
+
   # TUI greeter for greetd with Rose Pine Moon colors
   services.greetd = {
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --asterisks --cmd 'uwsm start hyprland-uwsm.desktop' --greeting 'Welcome to NixOS' --container-padding 2 --width 80 --theme border=${colors.pine};text=${colors.text};prompt=${colors.foam};time=${colors.subtle};action=${colors.rose};button=${colors.iris};container=${colors.base};input=${colors.surface}";
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --asterisks --cmd 'uwsm start hyprland-uwsm.desktop >/dev/null 2>&1' --greeting 'Welcome to NixOS' --container-padding 2 --width 80 --theme border=${colors.pine};text=${colors.text};prompt=${colors.foam};time=${colors.subtle};action=${colors.rose};button=${colors.iris};container=${colors.base};input=${colors.surface}";
       };
     };
   };

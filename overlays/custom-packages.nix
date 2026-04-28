@@ -2,4 +2,5 @@
 final: prev: {
   bricolage-grotesque = final.callPackage ../packages/bricolage-grotesque.nix { };
   qobuz-player = final.callPackage ../packages/qobuz-player.nix { };
+  rose-pine-plymouth = final.callPackage ../packages/rose-pine-plymouth.nix { };
 }

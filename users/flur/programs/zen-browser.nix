@@ -114,9 +114,9 @@
               url = "https://www.linkedin.com/jobs/";
               position = 114;
             };
-            "iTheorie" = {
-              id = "64fd5477-01e6-45e3-a761-4119bc8b7e2d";
-              url = "https://itheorie.nl/";
+            "NebulaTV" = {
+              id = "d981b401-17d7-479e-8910-cdadb9b8c8c8";
+              url = "https://nebula.tv/";
               position = 115;
             };
           } //
@@ -220,6 +220,11 @@
           darkreader
           proton-pass
           decentraleyes
+          sponsorblock
+          dearrow
+          privacy-badger
+          clearurls
+
         ];
 
         settings = {
