@@ -34,7 +34,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.7.0";
-    oxicord.url = "github:linuxmobile/oxicord";
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -99,7 +98,6 @@
                       config.allowUnfree = true;
                     };
                     colors = colors;
-                    oxicord = inputs.oxicord;
                     wallpaperPath = ./wallpaper.jpg;
                     inherit inputs;
                   };

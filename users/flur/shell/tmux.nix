@@ -104,21 +104,6 @@
       - processes: nethogs
   '';
 
-  # Discord and Music player
-  xdg.configFile."tmuxinator/disqo.yml".text = ''
-    name: disqo
-    root: ~
-
-    windows:
-      - media:
-          layout: main-vertical
-          panes:
-            - oxicord
-            - kew all --nocover
-            - qobuz-player
-          post: tmux resize-pane -t 2 -y 30%
-  '';
-
   # Dioxus development session
   xdg.configFile."tmuxinator/flur34.yml".text = ''
     name: flur34

@@ -1,7 +1,6 @@
 {
   pkgs,
   nixpkgs-unstable,
-  oxicord,
   wallpaperPath,
   ...
 }:
@@ -9,7 +8,6 @@
   programs.foot.enable = true;
 
   home.packages = with pkgs; [
-    oxicord.packages.x86_64-linux.default
     lazygit
     gnupg
     nixpkgs-unstable.claude-code
