@@ -9,6 +9,11 @@
   programs.home-manager.enable = true;
   programs.zen-browser.enable = true;
 
+  xdg.configFile."systemd/user.conf.d/no-status.conf".text = ''
+    [Manager]
+    ShowStatus=no
+  '';
+
   stylix = {
     targets.zen-browser.profileNames = [ "default" ];
     targets.starship.enable = false; # Custom starship config

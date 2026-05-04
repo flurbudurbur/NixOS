@@ -56,7 +56,7 @@
     # Gaming
     lutris
     protonup-ng
-    heroic
+    nixpkgs-unstable.heroic
 
     # Music
     qobuz-player

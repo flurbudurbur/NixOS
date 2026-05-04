@@ -33,11 +33,16 @@
     "loglevel=3"
     "rd.udev.log_level=3"
     "vt.global_cursor_default=0"
+    "systemd.show_status=0"
   ];
 
   boot.consoleLogLevel = 3;
   boot.initrd.verbose = false;
   boot.plymouth.enable = true;
+
+  services.journald.extraConfig = ''
+    ForwardToConsole=no
+  '';
 
   # Networking
   networking.hostName = "flurPC";
