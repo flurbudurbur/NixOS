@@ -1,7 +1,4 @@
-{
-  colors,
-  ...
-}:
+{ ... }:
 
 {
   services.walker = {
@@ -69,92 +66,11 @@
       };
     };
 
-    # Rose Pine Moon theme
+    # Theme loaded from runtime symlink
     theme = {
-      name = "rose-pine-moon";
-
-      # GTK4 CSS styling
+      name = "current";
       style = ''
-        /* Main window */
-        * {
-          color: ${colors.text};
-          font-family: "JetBrainsMono Nerd Font", monospace;
-          font-size: 14px;
-        }
-
-        /* Window background */
-        .window {
-          background: transparent;
-        }
-
-        .box-wrapper {
-          background: ${colors.rgba colors.base "0.95"};
-          border-radius: 10px;
-          border: 2px solid ${colors.rgba colors.pine "0.3"};
-          padding: 10px;
-        }
-
-        /* Search input */
-        .input {
-          background: ${colors.rgba colors.surface "0.8"};
-          color: ${colors.text};
-          border: 1px solid ${colors.rgba colors.overlay "0.5"};
-          border-radius: 8px;
-          padding: 8px 12px;
-          margin-bottom: 10px;
-        }
-
-        .input:focus {
-          border-color: ${colors.pine};
-          box-shadow: 0 0 0 2px ${colors.rgba colors.pine "0.3"};
-        }
-
-        /* List items */
-        .item {
-          background: transparent;
-          border-radius: 6px;
-          padding: 8px 12px;
-          margin: 2px 0;
-        }
-
-        .item:hover {
-          background: ${colors.rgba colors.overlay "0.5"};
-        }
-
-        .item:selected {
-          background: ${colors.rgba colors.pine "0.3"};
-          border: 1px solid ${colors.pine};
-        }
-
-        /* Item text */
-        .item-text {
-          color: ${colors.text};
-        }
-
-        .item-sub {
-          color: ${colors.subtle};
-          font-size: 12px;
-        }
-
-        /* Icons */
-        .item-icon {
-          margin-right: 10px;
-        }
-
-        /* Scrollbar */
-        scrollbar {
-          background: ${colors.rgba colors.surface "0.3"};
-          border-radius: 10px;
-        }
-
-        scrollbar slider {
-          background: ${colors.rgba colors.muted "0.5"};
-          border-radius: 10px;
-        }
-
-        scrollbar slider:hover {
-          background: ${colors.rgba colors.pine "0.6"};
-        }
+        @import url("/home/flur/.config/themes/current/walker-style.css");
       '';
     };
   };

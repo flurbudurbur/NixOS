@@ -1,4 +1,4 @@
-{ colors, ... }:
+{ ... }:
 
 {
   programs.waybar = {
@@ -110,98 +110,7 @@
       };
     };
     style = ''
-      			* {
-      				font-family: "Bricolage Grotesque", sans-serif;
-      				font-size: 13px;
-      				border: none;
-      				border-radius: 0;
-      			}
-
-      			window#waybar {
-      				background-color: transparent;
-      			}
-
-      			.modules-left, .modules-center, .modules-right {
-      				background-color: ${colors.rgba colors.base "0.9"};
-      				border-radius: 10px;
-      				margin-top: 10px;
-      				margin-left: 10px;
-      				margin-right: 10px;
-      				margin-bottom: 0;
-      				padding: 0 10px;
-      				transition: all 0.3s ease-in-out;
-      			}
-
-      			#workspaces button {
-      				padding: 0 5px;
-      				color: ${colors.text};
-      				background: transparent;
-      				border: none;
-      				min-width: 20px;
-      			}
-
-      			#workspaces button.active {
-      				color: ${colors.rose};
-      				background: ${colors.rgba colors.rose "0.2"};
-      				border: none;
-      			}
-
-      			#workspaces button:hover {
-      				background: ${colors.rgba colors.rose "0.1"};
-      			}
-
-      			#window {
-      				color: ${colors.text};
-      			}
-
-      			#mpris {
-      				color: ${colors.rose};
-      			}
-
-      			#mpris.paused {
-      				color: ${colors.muted};
-      			}
-
-      			#clock {
-      				color: ${colors.iris};
-      			}
-
-      			#cpu {
-      				color: ${colors.love};
-      			}
-
-      			#memory {
-      				color: ${colors.gold};
-      			}
-
-      			#network {
-      				color: ${colors.foam};
-      			}
-
-      			#wireplumber {
-      				color: ${colors.pine};
-      			}
-
-      			#bluetooth {
-      				color: ${colors.iris};
-      			}
-
-      			#bluetooth.disabled,
-      			#bluetooth.off {
-      				color: ${colors.muted};
-      			}
-
-      			#tray {
-      				color: ${colors.text};
-      			}
-
-      			#clock, #cpu, #memory, #network, #wireplumber, #bluetooth, #tray, #window, #mpris {
-      				padding: 0 10px;
-      			}
-
-      			#tray > .passive {
-      				-gtk-icon-effect: dim;
-      			}
-      		'';
+      @import url("/home/flur/.config/themes/current/waybar-style.css");
+    '';
   };
 }

@@ -12,6 +12,10 @@ let
   monitors = monitorConfigs.${hostname} or [ ",preferred,auto,1" ];
 in
 {
+  wayland.windowManager.hyprland.extraConfig = ''
+    source = /home/flur/.config/themes/current/hyprland.conf
+  '';
+
   wayland.windowManager.hyprland = {
     enable = true;
     systemd.enable = false; # UWSM handles systemd integration
@@ -106,6 +110,7 @@ in
       };
 
       exec-once = [
+        "awww-daemon"
         "hyprctl setcursor BreezeX-RosePine-Linux 24"
       ];
 
@@ -169,6 +174,22 @@ in
         # Scroll workspaces
         "$mainMod, mouse_down, workspace, e+1"
         "$mainMod, mouse_up, workspace, e-1"
+        # Swap windows within workspace
+        "$mainMod SHIFT, left, swapwindow, l"
+        "$mainMod SHIFT, right, swapwindow, r"
+        "$mainMod SHIFT, up, swapwindow, u"
+        "$mainMod SHIFT, down, swapwindow, d"
+        # Move window to other monitor
+        "$mainMod ALT, left, movewindow, mon:DP-1"
+        "$mainMod ALT, right, movewindow, mon:DP-2"
+      ];
+
+      # Repeating binds for resize
+      binde = [
+        "$mainMod CTRL, right, resizeactive, 50 0"
+        "$mainMod CTRL, left, resizeactive, -50 0"
+        "$mainMod CTRL, up, resizeactive, 0 -50"
+        "$mainMod CTRL, down, resizeactive, 0 50"
       ];
 
       # Mouse bindings

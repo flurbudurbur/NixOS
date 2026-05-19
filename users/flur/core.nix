@@ -19,9 +19,11 @@
     targets.starship.enable = false; # Custom starship config
     targets.waybar.enable = false; # Custom CSS with colors module
     targets.hyprlock.enable = false; # Custom colors with colors module
+    targets.hyprland.enable = false; # Theme switcher owns border/shadow colors
+    targets.foot.enable = false; # Theme switcher owns terminal colors
     targets.nixvim.enable = false; # Explicit rose-pine colorscheme in nixvim
     enable = true;
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/rose-pine-moon.yaml";
+    # base16Scheme is set in wayland/themes.nix from our theme definitions
     opacity.terminal = 0.95;
     cursor = {
       name = "BreezeX-RosePine-Linux";
