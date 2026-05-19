@@ -6,7 +6,8 @@
       "WebSearch",
       "Bash(cat:*)",
       "Bash(nix flake check:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "WebFetch(domain:nix-community.github.io)"
     ],
     "deny": [],
     "ask": []
