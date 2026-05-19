@@ -7,5 +7,6 @@
     ./mako.nix
     ./waybar
     ./walker
+    ./themes.nix
   ];
 }
