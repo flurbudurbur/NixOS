@@ -98,7 +98,6 @@
                       config.allowUnfree = true;
                     };
                     colors = colors;
-                    wallpaperPath = ./wallpaper.jpg;
                     inherit inputs;
                   };
                   backupFileExtension = "backup";

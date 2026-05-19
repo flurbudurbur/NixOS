@@ -1,7 +1,6 @@
 {
   pkgs,
   nixpkgs-unstable,
-  wallpaperPath,
   ...
 }:
 {
@@ -12,7 +11,6 @@
     gnupg
     nixpkgs-unstable.claude-code
     vlc
-    hyprpaper
     teams-for-linux
     pwvucontrol
     nautilus
@@ -70,11 +68,4 @@
     rounded_corners = false;
   };
 
-  services.hyprpaper = {
-    enable = true;
-    settings = {
-      preload = [ "${wallpaperPath}" ];
-      wallpaper = [ ",${wallpaperPath}" ];
-    };
-  };
 }
