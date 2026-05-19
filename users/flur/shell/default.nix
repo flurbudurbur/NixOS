@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 {
   imports = [
     ./terminals.nix
@@ -14,6 +14,7 @@
   home.sessionVariables = {
     GPG_TTY = "$(tty)";
     SOPS_EDITOR = "nvim";
+    STARSHIP_CONFIG = lib.mkForce "$HOME/.config/themes/current/starship.toml";
   };
 
   programs.zsh = {
