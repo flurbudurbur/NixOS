@@ -15,6 +15,7 @@
     nixpkgs-unstable.devenv
     gradle_9
     podman-compose
+    gh
   ];
 
   programs.java = {
