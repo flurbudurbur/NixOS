@@ -1,4 +1,4 @@
-{ pkgs, colors, ... }:
+{ pkgs, ... }:
 
 let
   debugExtPath = "${pkgs.vscode-extensions.vscjava.vscode-java-debug}/share/vscode/extensions/vscjava.vscode-java-debug/server";
@@ -17,6 +17,7 @@ in
     ];
 
     extraPlugins = with pkgs.vimPlugins; [
+      mini-nvim
       lua-async
       nvim-java-core
       nvim-java-test
@@ -55,63 +56,6 @@ in
       maplocalleader = " ";
     };
 
-    # Rose Pine Moon theme
-    colorschemes.rose-pine = {
-      enable = true;
-      settings = {
-        variant = "moon";
-        dark_variant = "moon";
-        styles = {
-          bold = true;
-          italic = true;
-          transparency = false;
-        };
-        highlight_groups = {
-          Normal = {
-            bg = colors.base;
-            fg = colors.text;
-          };
-          NormalFloat = {
-            bg = colors.surface;
-            fg = colors.text;
-          };
-          Cursor = {
-            bg = colors.highlightHigh;
-            fg = colors.text;
-          };
-          CursorLine = {
-            bg = colors.highlightLow;
-          };
-          CursorLineNr = {
-            fg = colors.rose;
-            bold = true;
-          };
-          StatusLine = {
-            bg = colors.surface;
-            fg = colors.text;
-          };
-          StatusLineNC = {
-            bg = colors.base;
-            fg = colors.muted;
-          };
-          VertSplit = {
-            fg = colors.overlay;
-          };
-          DiagnosticError = {
-            fg = colors.love;
-          };
-          DiagnosticWarn = {
-            fg = colors.gold;
-          };
-          DiagnosticInfo = {
-            fg = colors.foam;
-          };
-          DiagnosticHint = {
-            fg = colors.iris;
-          };
-        };
-      };
-    };
 
     # LSP Configuration
     plugins.lsp = {
@@ -328,6 +272,9 @@ in
     '';
 
     extraConfigLua = ''
+      			local _theme_file = vim.fn.expand("~/.config/themes/current/nvim-theme.lua")
+      			if vim.fn.filereadable(_theme_file) == 1 then dofile(_theme_file) end
+
       			-- none-ls is still required as "null-ls" (API compatibility)
       			local null_ls = require("null-ls")
 
@@ -479,7 +426,7 @@ in
       enable = true;
       settings = {
         options = {
-          theme = "rose-pine";
+          theme = "auto";
           globalstatus = true;
         };
         sections = {

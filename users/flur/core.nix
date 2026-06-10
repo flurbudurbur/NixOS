@@ -15,7 +15,7 @@
   '';
 
   stylix = {
-    targets.zen-browser.profileNames = [ "default" ];
+    targets.zen-browser.enable = false;
     targets.starship.enable = false; # Custom starship config
     targets.waybar.enable = false; # Custom CSS with colors module
     targets.hyprlock.enable = false; # Custom colors with colors module

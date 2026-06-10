@@ -179,9 +179,7 @@ let
     bright5=${strip t.accent}
     bright6=${strip t.accent2}
     bright7=${strip t.fg}
-
-    [cursor]
-    color=${strip t.bg} ${strip t.accent}
+    cursor=${strip t.bg} ${strip t.accent}
   '';
 
   mkWalkerTheme =
@@ -303,6 +301,224 @@ let
     }
   '';
 
+  mkZenTheme = t: ''
+    :root {
+      --zen-colors-primary: ${t.bg_select} !important;
+      --zen-primary-color: ${t.blue} !important;
+      --zen-colors-secondary: ${t.bg_select} !important;
+      --zen-colors-tertiary: ${t.bg_alt} !important;
+      --zen-colors-border: ${t.blue} !important;
+      --toolbarbutton-icon-fill: ${t.blue} !important;
+      --lwt-text-color: ${t.fg} !important;
+      --toolbar-field-color: ${t.fg} !important;
+      --tab-selected-textcolor: ${t.fg} !important;
+      --toolbar-field-focus-color: ${t.fg} !important;
+      --toolbar-color: ${t.fg} !important;
+      --newtab-text-primary-color: ${t.fg} !important;
+      --arrowpanel-color: ${t.fg} !important;
+      --arrowpanel-background: ${t.bg} !important;
+      --sidebar-text-color: ${t.fg} !important;
+      --lwt-sidebar-text-color: ${t.fg} !important;
+      --lwt-sidebar-background-color: ${t.bg} !important;
+      --toolbar-bgcolor: ${t.bg_select} !important;
+      --newtab-background-color: ${t.bg} !important;
+      --zen-themed-toolbar-bg: ${t.bg} !important;
+      --zen-main-browser-background: ${t.bg} !important;
+      --toolbox-bgcolor-inactive: ${t.bg_alt} !important;
+      --zen-themed-toolbar-bg-transparent: ${t.bg_alt} !important;
+    }
+
+    #permissions-granted-icon {
+      color: ${t.fg} !important;
+    }
+
+    #historySwipeAnimationPreviousArrow,#historySwipeAnimationNextArrow {
+      --swipe-nav-icon-primary-color: ${t.blue} !important;
+      --swipe-nav-icon-accent-color: ${t.bg} !important;
+    }
+
+    .sidebar-placesTree {
+      background-color: ${t.bg} !important;
+    }
+
+    #zen-workspaces-button {
+      background-color: ${t.bg} !important;
+    }
+
+    #TabsToolbar {
+      background-color: ${t.bg} !important;
+    }
+
+    .urlbar-background {
+      background-color: ${t.bg_select} !important;
+    }
+
+    .content-shortcuts {
+      background-color: ${t.bg} !important;
+      border-color: ${t.blue} !important;
+    }
+
+    .urlbarView-url {
+      color: ${t.blue} !important;
+    }
+
+    #urlbar-input::selection {
+      background-color: ${t.blue} !important;
+      color: ${t.bg} !important;
+    }
+
+    #zenEditBookmarkPanelFaviconContainer {
+      background: ${t.bg} !important;
+    }
+
+    #zen-media-controls-toolbar {
+      & #zen-media-progress-bar {
+        &::-moz-range-track {
+          background: ${t.bg_select} !important;
+        }
+      }
+    }
+
+    toolbar .toolbarbutton-1 {
+      &:not([disabled]) {
+        &:is([open], [checked])
+          > :is(
+            .toolbarbutton-icon,
+            .toolbarbutton-text,
+            .toolbarbutton-badge-stack
+          ) {
+          fill: ${t.bg};
+        }
+      }
+    }
+
+    .identity-color-blue {
+      --identity-tab-color: ${t.blue} !important;
+      --identity-icon-color: ${t.blue} !important;
+    }
+
+    .identity-color-turquoise {
+      --identity-tab-color: ${t.cyan} !important;
+      --identity-icon-color: ${t.cyan} !important;
+    }
+
+    .identity-color-green {
+      --identity-tab-color: ${t.cyan} !important;
+      --identity-icon-color: ${t.cyan} !important;
+    }
+
+    .identity-color-yellow {
+      --identity-tab-color: ${t.warning} !important;
+      --identity-icon-color: ${t.warning} !important;
+    }
+
+    .identity-color-orange {
+      --identity-tab-color: ${t.warning} !important;
+      --identity-icon-color: ${t.warning} !important;
+    }
+
+    .identity-color-red {
+      --identity-tab-color: ${t.error} !important;
+      --identity-icon-color: ${t.error} !important;
+    }
+
+    .identity-color-pink {
+      --identity-tab-color: ${t.accent} !important;
+      --identity-icon-color: ${t.accent} !important;
+    }
+
+    .identity-color-purple {
+      --identity-tab-color: ${t.accent2} !important;
+      --identity-icon-color: ${t.accent2} !important;
+    }
+
+    #zen-toolbar-background {
+      --zen-main-browser-background-toolbar: ${t.bg} !important;
+    }
+
+    #zen-appcontent-navbar-container {
+      background-color: ${t.bg} !important;
+    }
+
+    #commonDialog {
+      background-color: ${t.bg} !important;
+    }
+
+    #zen-browser-background {
+      --zen-main-browser-background: ${t.bg} !important;
+    }
+
+    #contentAreaContextMenu menu,
+    menuitem,
+    menupopup {
+      color: ${t.fg} !important;
+    }
+  '';
+
+  mkNvimTheme = t: ''
+    require('mini.base16').setup({
+      palette = {
+        base00 = '${t.bg}',
+        base01 = '${t.bg_alt}',
+        base02 = '${t.bg_select}',
+        base03 = '${t.fg_faint}',
+        base04 = '${t.fg_dim}',
+        base05 = '${t.fg}',
+        base06 = '${t.fg}',
+        base07 = '${t.fg}',
+        base08 = '${t.error}',
+        base09 = '${t.warning}',
+        base0A = '${t.warning}',
+        base0B = '${t.cyan}',
+        base0C = '${t.cyan}',
+        base0D = '${t.blue}',
+        base0E = '${t.accent}',
+        base0F = '${t.accent2}',
+      }
+    })
+  '';
+
+  mkGtkCss = t: ''
+    @define-color accent_color ${t.blue};
+    @define-color accent_bg_color ${t.blue};
+    @define-color accent_fg_color ${t.fg};
+    @define-color warning_color ${t.warning};
+    @define-color error_color ${t.error};
+    @define-color success_color ${t.cyan};
+    @define-color theme_bg_color ${t.bg};
+    @define-color theme_fg_color ${t.fg};
+    @define-color theme_base_color ${t.bg_alt};
+    @define-color theme_text_color ${t.fg};
+    @define-color theme_selected_bg_color ${t.blue};
+    @define-color theme_selected_fg_color ${t.fg};
+    @define-color insensitive_bg_color ${t.bg_select};
+    @define-color insensitive_fg_color ${t.fg_faint};
+    @define-color borders ${t.bg_select};
+    @define-color destructive_color ${t.error};
+    @define-color destructive_bg_color ${t.error};
+    @define-color destructive_fg_color ${t.fg};
+    @define-color success_bg_color ${t.cyan};
+    @define-color success_fg_color ${t.bg};
+    @define-color warning_bg_color ${t.warning};
+    @define-color warning_fg_color ${t.bg};
+    @define-color error_bg_color ${t.error};
+    @define-color error_fg_color ${t.fg};
+    @define-color window_bg_color ${t.bg};
+    @define-color window_fg_color ${t.fg};
+    @define-color view_bg_color ${t.bg_alt};
+    @define-color view_fg_color ${t.fg};
+    @define-color card_bg_color ${t.bg_alt};
+    @define-color card_fg_color ${t.fg};
+    @define-color popover_bg_color ${t.bg_alt};
+    @define-color popover_fg_color ${t.fg};
+    @define-color sidebar_bg_color ${t.bg};
+    @define-color sidebar_fg_color ${t.fg};
+    @define-color headerbar_bg_color ${t.bg};
+    @define-color headerbar_fg_color ${t.fg};
+    @define-color dialog_bg_color ${t.bg_alt};
+    @define-color dialog_fg_color ${t.fg};
+  '';
+
   mkBase16Yaml = name: t: ''
     scheme: "${name}"
     author: "flur"
@@ -369,6 +585,9 @@ let
       "themes/${name}/walker-style.css".text = mkWalkerTheme t;
       "themes/${name}/hyprlock.conf".text = mkHyprLockTheme t;
       "themes/${name}/scheme.yaml".source = schemes.${name};
+      "themes/${name}/zen-userchrome.css".text = mkZenTheme t;
+      "themes/${name}/nvim-theme.lua".text = mkNvimTheme t;
+      "themes/${name}/gtk.css".text = mkGtkCss t;
     } // wallpaperEntry;
 
   themeFiles = lib.foldlAttrs (acc: name: t: acc // mkThemeFiles name t) { } themes;
@@ -420,21 +639,26 @@ let
     pkill -SIGUSR2 waybar
     systemctl --user restart walker 2>/dev/null || true
 
-    _foot_update() {
-      local _pts="$1"
-      case "$THEME" in
-        ${oscCases}
-        *)
-          ;;
-      esac
-    }
-    for _foot_pid in $(pgrep -x foot 2>/dev/null); do
-      for _child_pid in $(pgrep -P "$_foot_pid" 2>/dev/null); do
-        _pts=$(readlink "/proc/$_child_pid/fd/1" 2>/dev/null) || continue
-        [[ "$_pts" == /dev/pts/* ]] || continue
-        _foot_update "$_pts"
-      done
+    ZEN_CHROME="$HOME/.config/zen/default/chrome"
+    if [ -d "$ZEN_CHROME" ]; then
+      ln -sf "$THEMES_DIR/$THEME/zen-userchrome.css" "$ZEN_CHROME/userChrome.css"
+      if pgrep -x zen-beta > /dev/null 2>&1; then
+        pkill -x zen-beta || true
+        sleep 0.3
+        zen-beta &
+        disown
+      fi
+    fi
+
+    pkill -SIGUSR1 foot 2>/dev/null || true
+
+    for _sock in $(find "''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}" -maxdepth 1 -name 'nvim*' -type s 2>/dev/null || true); do
+      nvim --server "$_sock" --remote-send ':source ~/.config/themes/current/nvim-theme.lua<CR>' 2>/dev/null || true
     done
+
+    gsettings set org.gnome.desktop.interface color-scheme 'default' 2>/dev/null || true
+    sleep 0.1
+    gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' 2>/dev/null || true
 
     tmux refresh-client 2>/dev/null || true
 
@@ -448,10 +672,34 @@ in
 
   home.packages = [ switchScript nixpkgs-unstable.awww ];
 
+  systemd.user.services.awww = {
+    Unit = {
+      Description = "An Answer to your Wayland Wallpaper Woes";
+      Documentation = "man:awww-daemon(1)";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+      Requisite = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "simple";
+      ExecStart = "${nixpkgs-unstable.awww}/bin/awww-daemon";
+      Restart = "on-failure";
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
+  };
+
   home.activation.initTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     THEMES_DIR="$HOME/.config/themes"
     if [ ! -L "$THEMES_DIR/current" ]; then
       $DRY_RUN_CMD ln -sfT "$THEMES_DIR/rose-pine-moon" "$THEMES_DIR/current"
+    fi
+
+    CURRENT_THEME=$(basename "$(readlink "$THEMES_DIR/current" 2>/dev/null || echo rose-pine-moon)")
+    ZEN_CHROME="$HOME/.config/zen/default/chrome"
+    if [ -d "$ZEN_CHROME" ] && [ -f "$THEMES_DIR/$CURRENT_THEME/zen-userchrome.css" ]; then
+      $DRY_RUN_CMD ln -sf "$THEMES_DIR/$CURRENT_THEME/zen-userchrome.css" "$ZEN_CHROME/userChrome.css"
     fi
   '';
 }

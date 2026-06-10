@@ -1,6 +1,8 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs, config, ... }:
 {
-  # GTK, Qt, and dconf theming now managed by stylix
+  # GTK, Qt, and dconf theming managed by stylix; color overrides wired to runtime theme
+
+  stylix.targets.gtk.extraCss = ''@import url("${config.home.homeDirectory}/.config/themes/current/gtk.css");'';
 
   xdg.mimeApps = {
     enable = true;
