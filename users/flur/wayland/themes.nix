@@ -20,6 +20,23 @@ let
     }
   '';
 
+  mkHyprThemeLua = t: ''
+    hl.config({
+      general = {
+        col = {
+          active_border   = { colors = {"rgba(${strip t.accent}ee)", "rgba(${strip t.accent2}aa)"}, angle = 45 },
+          inactive_border = "rgba(${strip t.bg_select}aa)",
+        },
+      },
+      decoration = {
+        shadow = {
+          color          = "rgba(${strip t.bg}ee)",
+          color_inactive = "rgba(${strip t.bg}88)",
+        },
+      },
+    })
+  '';
+
   starshipBase = builtins.readFile ../shell/starship.toml;
 
   mkStarshipTheme = t: starshipBase + ''
@@ -156,8 +173,8 @@ let
     '';
 
   mkFootTheme = t: ''
-    [colors]
-    alpha=0.95
+    [colors-dark]
+    alpha=1
     background=${strip t.bg}
     foreground=${strip t.fg}
     selection-background=${strip t.bg_select}
@@ -579,6 +596,7 @@ let
     in
     {
       "themes/${name}/hyprland.conf".text = mkHyprTheme t;
+      "themes/${name}/hyprland.lua".text = mkHyprThemeLua t;
       "themes/${name}/starship.toml".text = mkStarshipTheme t;
       "themes/${name}/waybar-style.css".text = mkWaybarTheme t;
       "themes/${name}/foot-colors.ini".text = mkFootTheme t;

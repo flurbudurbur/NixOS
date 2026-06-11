@@ -220,40 +220,15 @@ in
     # For now, just use the basic none-ls without extras
 
     extraConfigLuaPre = ''
-      -- Bypass nvim-java's lspconfig wrap (jdtls is managed by nixvim's LSP module)
-      local setup_wrap = require('java.startup.lspconfig-setup-wrap')
-      setup_wrap.setup = function(_) end
-
-      -- Bypass mason: redirect debug/test JAR paths to Nix store
-      local mason_dep = require('java.startup.mason-dep')
-      mason_dep.install = function(_) return false end
-
-      local java_core_mason = require('java-core.utils.mason')
-      java_core_mason.get_shared_path = function(pkg_name)
-        if pkg_name == 'java-debug-adapter' then
-          return '${debugExtPath}'
-        elseif pkg_name == 'java-test' then
-          return '${testExtPath}'
-        else
-          return ""
-        end
+      -- Skip nvim-java package downloads (packages are provided by Nix)
+      local Manager = require('pkgm.manager')
+      Manager.install = function(self, name, version)
+        return ""
       end
 
-      -- Override jdtls config builder to use Nix-installed binary (skip mason jdtls)
-      local jdtls_server = require('java-core.ls.servers.jdtls')
-      jdtls_server.get_config = function(opts)
-        local plugins_mod = require('java-core.ls.servers.jdtls.plugins')
-        local utils = require('java-core.ls.servers.jdtls.utils')
-        local base = require('java-core.ls.servers.jdtls.config').get_config()
-        local plugin_paths = plugins_mod.get_plugin_paths(opts.jdtls_plugins or {})
-        base.cmd = { 'jdtls' }
-        base.root_dir = jdtls_server.get_root_finder(
-          opts.root_markers or { 'pom.xml', 'build.gradle', '.git' }
-        )
-        base.init_options.bundles = plugin_paths
-        base.init_options.workspace = utils.get_workspace_path()
-        return base
-      end
+      -- Skip nvim-java's jdtls LSP setup (handled by nixvim's plugins.lsp.servers.jdtls)
+      local lsp_setup = require('java.startup.lsp_setup')
+      lsp_setup.setup = function(_) end
 
       require('java').setup({
         jdk = {
@@ -264,9 +239,6 @@ in
         },
         java_debug_adapter = {
           enable = true,
-        },
-        verification = {
-          invalid_mason_registry = false,
         },
       })
     '';

@@ -15,7 +15,7 @@
   # Core gaming packages (available system-wide)
   environment.systemPackages = with pkgs; [
     # Wine with Wayland support (for Hyprland compatibility)
-    wineWowPackages.waylandFull
+    wineWow64Packages.waylandFull
     winetricks
   ];
 }

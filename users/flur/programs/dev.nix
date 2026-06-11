@@ -8,7 +8,7 @@
     fnm
     pnpm
     nodejs_24
-    nodePackages.prettier
+    prettier
     prettierd
     eslint_d
     blade-formatter

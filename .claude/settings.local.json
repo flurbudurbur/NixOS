@@ -7,7 +7,9 @@
       "Bash(cat:*)",
       "Bash(nix flake check:*)",
       "Bash(tree:*)",
-      "WebFetch(domain:nix-community.github.io)"
+      "WebFetch(domain:nix-community.github.io)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:wiki.hypr.land)"
     ],
     "deny": [],
     "ask": []
