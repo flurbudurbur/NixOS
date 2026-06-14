@@ -25,8 +25,8 @@
     proton-pass
     kew
     prismlauncher
-    opentrack
     obs-studio
+    openrgb
 
     # System utils
     grimblast

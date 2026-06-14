@@ -167,7 +167,7 @@
               name = "NixPKGS";
               urls = [
                 {
-                  template = "https://search.nixos.org/packages?channel=25.11&query={searchTerms}";
+                  template = "https://search.nixos.org/packages?query={searchTerms}";
                 }
               ];
               icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
@@ -180,7 +180,7 @@
               name = "Options";
               urls = [
                 {
-                  template = "https://search.nixos.org/options?channel=25.11&query={searchTerms}";
+                  template = "https://search.nixos.org/options?query={searchTerms}";
                 }
               ];
               icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
