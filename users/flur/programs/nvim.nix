@@ -56,7 +56,6 @@ in
       maplocalleader = " ";
     };
 
-
     # LSP Configuration
     plugins.lsp = {
       enable = true;

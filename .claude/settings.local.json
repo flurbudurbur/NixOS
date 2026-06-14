@@ -9,7 +9,10 @@
       "Bash(tree:*)",
       "WebFetch(domain:nix-community.github.io)",
       "WebFetch(domain:github.com)",
-      "WebFetch(domain:wiki.hypr.land)"
+      "WebFetch(domain:wiki.hypr.land)",
+      "Skill(todo-txt:todo-done)",
+      "Skill(todo-txt:todo-list)",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ],
     "deny": [],
     "ask": []

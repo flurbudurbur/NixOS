@@ -35,6 +35,11 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    elephant.url = "github:abenz1267/elephant";
+    walker = {
+      url = "github:abenz1267/walker";
+      inputs.elephant.follows = "elephant";
+    };
     nixos-secrets = {
       url = "git+ssh://git@github.com/flurbudurbur/nix-secrets?shallow=1&ref=main";
       flake = true;
@@ -104,6 +109,7 @@
                     inputs.stylix.homeModules.stylix
                     sops-nix.homeManagerModules.sops
                     inputs.nix-flatpak.homeManagerModules.nix-flatpak
+                    inputs.walker.homeManagerModules.default
                   ];
                 };
               }

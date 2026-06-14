@@ -1,11 +1,15 @@
-{ pkgs, lib, nixpkgs-unstable, ... }:
+{
+  pkgs,
+  lib,
+  nixpkgs-unstable,
+  ...
+}:
 
 let
   themes = import ../../../modules/themes/default.nix;
 
   strip = hex: builtins.substring 1 6 hex;
   hyprColor = hex: alpha: "rgba(${strip hex}${alpha})";
-
 
   mkHyprTheme = t: ''
     general {
@@ -39,17 +43,20 @@ let
 
   starshipBase = builtins.readFile ../shell/starship.toml;
 
-  mkStarshipTheme = t: starshipBase + ''
+  mkStarshipTheme =
+    t:
+    starshipBase
+    + ''
 
-    [palettes.theme]
-    overlay = '${t.bg_select}'
-    love = '${t.error}'
-    gold = '${t.warning}'
-    rose = '${t.accent2}'
-    pine = '${t.blue}'
-    foam = '${t.cyan}'
-    iris = '${t.accent}'
-  '';
+      [palettes.theme]
+      overlay = '${t.bg_select}'
+      love = '${t.error}'
+      gold = '${t.warning}'
+      rose = '${t.accent2}'
+      pine = '${t.blue}'
+      foam = '${t.cyan}'
+      iris = '${t.accent}'
+    '';
 
   hexToRgb =
     hex:
@@ -58,9 +65,22 @@ let
         h:
         let
           chars = {
-            "0" = 0; "1" = 1; "2" = 2; "3" = 3; "4" = 4;
-            "5" = 5; "6" = 6; "7" = 7; "8" = 8; "9" = 9;
-            "a" = 10; "b" = 11; "c" = 12; "d" = 13; "e" = 14; "f" = 15;
+            "0" = 0;
+            "1" = 1;
+            "2" = 2;
+            "3" = 3;
+            "4" = 4;
+            "5" = 5;
+            "6" = 6;
+            "7" = 7;
+            "8" = 8;
+            "9" = 9;
+            "a" = 10;
+            "b" = 11;
+            "c" = 12;
+            "d" = 13;
+            "e" = 14;
+            "f" = 15;
           };
           c1 = builtins.substring 0 1 h;
           c2 = builtins.substring 1 1 h;
@@ -578,20 +598,22 @@ let
     base0F = strip t.accent2;
   };
 
-  schemes = lib.mapAttrs (name: t:
-    pkgs.writeText "${name}.yaml" (mkBase16Yaml name t)
-  ) themes;
+  schemes = lib.mapAttrs (name: t: pkgs.writeText "${name}.yaml" (mkBase16Yaml name t)) themes;
 
-  mkThemeFiles = name: t:
+  mkThemeFiles =
+    name: t:
     let
-      wallpaperExts = [ "jpg" "png" "webp" "gif" ];
-      wallpaperExt = lib.findFirst
-        (ext: builtins.pathExists (../../../wallpapers + "/${name}.${ext}"))
-        null
-        wallpaperExts;
+      wallpaperExts = [
+        "jpg"
+        "png"
+        "webp"
+        "gif"
+      ];
+      wallpaperExt = lib.findFirst (
+        ext: builtins.pathExists (../../../wallpapers + "/${name}.${ext}")
+      ) null wallpaperExts;
       wallpaperEntry = lib.optionalAttrs (wallpaperExt != null) {
-        "themes/${name}/wallpaper".source =
-          ../../../wallpapers + "/${name}.${wallpaperExt}";
+        "themes/${name}/wallpaper".source = ../../../wallpapers + "/${name}.${wallpaperExt}";
       };
     in
     {
@@ -606,17 +628,23 @@ let
       "themes/${name}/zen-userchrome.css".text = mkZenTheme t;
       "themes/${name}/nvim-theme.lua".text = mkNvimTheme t;
       "themes/${name}/gtk.css".text = mkGtkCss t;
-    } // wallpaperEntry;
+    }
+    // wallpaperEntry;
 
-  themeFiles = lib.foldlAttrs (acc: name: t: acc // mkThemeFiles name t) { } themes;
+  themeFiles = lib.foldlAttrs (
+    acc: name: t:
+    acc // mkThemeFiles name t
+  ) { } themes;
 
   themeNames = builtins.attrNames themes;
 
-  oscCases = lib.concatStringsSep "\n" (lib.mapAttrsToList (name: t: ''
-    ${name})
-      printf '\033]4;0;${t.bg_select}\007\033]4;1;${t.error}\007\033]4;2;${t.blue}\007\033]4;3;${t.warning}\007\033]4;4;${t.cyan}\007\033]4;5;${t.accent}\007\033]4;6;${t.accent2}\007\033]4;7;${t.fg}\007\033]4;8;${t.fg_faint}\007\033]4;9;${t.error}\007\033]4;10;${t.blue}\007\033]4;11;${t.warning}\007\033]4;12;${t.cyan}\007\033]4;13;${t.accent}\007\033]4;14;${t.accent2}\007\033]4;15;${t.fg}\007\033]10;${t.fg}\007\033]11;${t.bg}\007\033]12;${t.accent}\007' > "''${_pts}" 2>/dev/null || true
-      ;;
-  '') themes);
+  oscCases = lib.concatStringsSep "\n" (
+    lib.mapAttrsToList (name: t: ''
+      ${name})
+        printf '\033]4;0;${t.bg_select}\007\033]4;1;${t.error}\007\033]4;2;${t.blue}\007\033]4;3;${t.warning}\007\033]4;4;${t.cyan}\007\033]4;5;${t.accent}\007\033]4;6;${t.accent2}\007\033]4;7;${t.fg}\007\033]4;8;${t.fg_faint}\007\033]4;9;${t.error}\007\033]4;10;${t.blue}\007\033]4;11;${t.warning}\007\033]4;12;${t.cyan}\007\033]4;13;${t.accent}\007\033]4;14;${t.accent2}\007\033]4;15;${t.fg}\007\033]10;${t.fg}\007\033]11;${t.bg}\007\033]12;${t.accent}\007' > "''${_pts}" 2>/dev/null || true
+        ;;
+    '') themes
+  );
 
   switchScript = pkgs.writeShellScriptBin "theme-switch" ''
     set -euo pipefail
@@ -688,7 +716,10 @@ in
 
   stylix.base16Scheme = mkBase16Attrs "rose-pine-moon" themes."rose-pine-moon";
 
-  home.packages = [ switchScript nixpkgs-unstable.awww ];
+  home.packages = [
+    switchScript
+    nixpkgs-unstable.awww
+  ];
 
   systemd.user.services.awww = {
     Unit = {

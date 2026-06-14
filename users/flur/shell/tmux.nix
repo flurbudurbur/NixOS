@@ -130,7 +130,7 @@
           layout: main-vertical
           panes:
             - nvim .
-            - claude
+            - claude "Read todo.txt, identify the highest-priority incomplete tasks (items marked with (A) first, then others in order), and recommend which one to work on next."
       - git: lazygit
       - scratch:
   '';

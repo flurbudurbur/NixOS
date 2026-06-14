@@ -1,3 +1,6 @@
-fix waybar screens not switching on click @hyprland-migration
-fix Walker not working/not launching with alt+space keybind @hyprland-migration
-(A) rebase themes onto main @git
+x 2026-06-14 fix waybar screens not switching on click @hyprland-migration
+x fix Walker not working/not launching with alt+space keybind @hyprland-migration
+x (A) 2026-06-14 2026-06-14 rebase themes onto main @git
+fix nvim closing when clicking on the "x" of one of the file tabs
+x (A) 2026-06-14 2026-06-14 Make Claude read the todo.txt on launch and select the execution of one of the entries based on priority
+(B) Migrate waybar to Eww @migration

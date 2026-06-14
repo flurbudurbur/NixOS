@@ -1,4 +1,9 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 {
   # GTK, Qt, and dconf theming managed by stylix; color overrides wired to runtime theme
 

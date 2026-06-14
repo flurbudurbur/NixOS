@@ -74,7 +74,10 @@
           };
         };
 
-        inSpace = space: { workspace = space.id; container = space.container; };
+        inSpace = space: {
+          workspace = space.id;
+          container = space.container;
+        };
         pinsIn = space: ps: lib.mapAttrs (_: pin: pin // inSpace space) ps;
 
         # Pinned tabs
@@ -119,8 +122,8 @@
               url = "https://nebula.tv/";
               position = 115;
             };
-          } //
-          pinsIn spaces.School {
+          }
+          // pinsIn spaces.School {
             "Canvas" = {
               id = "46a1c942-8f78-4471-b720-fcb1c99cc016";
               url = "https://canvas.hu.nl/";
