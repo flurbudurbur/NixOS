@@ -1,0 +1,3 @@
+fix waybar screens not switching on click @hyprland-migration
+fix Walker not working/not launching with alt+space keybind @hyprland-migration
+(A) rebase themes onto main @git

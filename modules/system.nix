@@ -100,6 +100,12 @@
   # Hardware support for GPG smartcards (Yubikey)
   hardware.gpgSmartcards.enable = true;
 
+  # OpenRGB with Intel i2c support and udev rules
+  services.hardware.openrgb = {
+    enable = true;
+    motherboard = "intel";
+  };
+
   # Locale
   time.timeZone = "Europe/Amsterdam";
 

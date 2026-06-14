@@ -26,7 +26,7 @@
     kew
     prismlauncher
     obs-studio
-    openrgb
+    openrgb-with-all-plugins
 
     # System utils
     grimblast
