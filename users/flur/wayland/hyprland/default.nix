@@ -88,7 +88,8 @@ in
         };
 
         input = {
-          kb_layout = "us";
+          kb_layout = "us,us";
+          kb_variant = ",intl";
           follow_mouse = 1;
           sensitivity = 0;
           touchpad = {
@@ -329,6 +330,7 @@ in
       hl.bind(mainMod .. " + L",         hl.dsp.exec_cmd("loginctl lock-session"))
       hl.bind(mainMod .. " + Z",         hl.dsp.exec_cmd(browser))
       hl.bind("ALT + SPACE",             hl.dsp.exec_cmd(menu))
+      hl.bind(mainMod .. " + SPACE",     hl.dsp.exec_cmd("hyprctl switchxkblayout all next"))
 
       -- Fullscreen / maximize
       hl.bind("ALT + up", hl.dsp.window.fullscreen({ mode = "maximized",  action = "toggle" }))
