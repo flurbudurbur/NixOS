@@ -192,6 +192,27 @@ let
       }
     '';
 
+  mkEwwTheme =
+    t:
+    let
+      rgba = hex: alpha: "rgba(${hexToRgb hex}, ${alpha})";
+    in
+    ''
+      $bg: ${t.bg};
+      $bg-alpha: ${rgba t.bg "0.9"};
+      $bg-alt: ${t.bg_alt};
+      $bg-select: ${t.bg_select};
+      $fg: ${t.fg};
+      $fg-faint: ${t.fg_faint};
+      $fg-dim: ${t.fg_dim};
+      $accent: ${t.accent};
+      $accent2: ${t.accent2};
+      $blue: ${t.blue};
+      $cyan: ${t.cyan};
+      $error: ${t.error};
+      $warning: ${t.warning};
+    '';
+
   mkFootTheme = t: ''
     [colors-dark]
     alpha=1
@@ -628,6 +649,7 @@ let
       "themes/${name}/zen-userchrome.css".text = mkZenTheme t;
       "themes/${name}/nvim-theme.lua".text = mkNvimTheme t;
       "themes/${name}/gtk.css".text = mkGtkCss t;
+      "themes/${name}/eww-style.scss".text = mkEwwTheme t;
     }
     // wallpaperEntry;
 
@@ -682,7 +704,8 @@ let
     fi
 
     hyprctl reload
-    pkill -SIGUSR2 waybar
+    pkill -SIGUSR2 waybar 2>/dev/null || true
+    eww reload 2>/dev/null || true
     systemctl --user restart walker 2>/dev/null || true
 
     ZEN_CHROME="$HOME/.config/zen/default/chrome"
