@@ -28,8 +28,13 @@
     obs-studio
     openrgb-with-all-plugins
 
+    # Clipboard
+    cliphist
+    wl-clipboard
+
     # System utils
     grimblast
+    hyprshot
     bluetui
     bandwhich
     nethogs
@@ -44,6 +49,7 @@
 
     # Productivity
     libreoffice-fresh
+    krita
 
     # No Protondrive? No Problem!
     celeste

@@ -1,12 +1,12 @@
 { ... }:
 {
   imports = [
-    ./hyprland
+    ./hyprland.nix
     ./hyprlock.nix
     ./hypridle.nix
     ./mako.nix
-    ./eww
-    ./walker
+    ./waybar.nix
+    ./walker.nix
     ./themes.nix
   ];
 }
