@@ -536,6 +536,13 @@ let
     })
   '';
 
+  mkMakoTheme = t: ''
+    background-color=${t.bg}
+    text-color=${t.fg}
+    border-color=${t.blue}
+    progress-color=${t.cyan}
+  '';
+
   mkGtkCss = t: ''
     @define-color accent_color ${t.blue};
     @define-color accent_bg_color ${t.blue};
@@ -648,6 +655,7 @@ let
       "themes/${name}/scheme.yaml".source = schemes.${name};
       "themes/${name}/zen-userchrome.css".text = mkZenTheme t;
       "themes/${name}/nvim-theme.lua".text = mkNvimTheme t;
+      "themes/${name}/mako.conf".text = mkMakoTheme t;
       "themes/${name}/gtk.css".text = mkGtkCss t;
       "themes/${name}/eww-style.scss".text = mkEwwTheme t;
     }
@@ -704,8 +712,8 @@ let
     fi
 
     hyprctl reload
-    pkill -SIGUSR2 waybar 2>/dev/null || true
-    eww reload 2>/dev/null || true
+    makoctl reload 2>/dev/null || true
+    pkill -SIGUSR2 waybar
     systemctl --user restart walker 2>/dev/null || true
 
     ZEN_CHROME="$HOME/.config/zen/default/chrome"

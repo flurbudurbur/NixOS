@@ -24,7 +24,7 @@ let
 
     "hyprland/workspaces" = {
       format = "{name}";
-      on-click = "hyprctl dispatch hl.dsp.focus({workspace={name}})";
+      on-click = "hyprctl dispatch workspace {name}";
 
     };
 

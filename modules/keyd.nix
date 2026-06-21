@@ -2,6 +2,13 @@
 {
   services.keyd = {
     enable = true;
+    keyboards.default = {
+      ids = [ "3233:5311" ];
+      settings.main = {
+        capslock = "layer(control)";
+        leftcontrol = "capslock";
+      };
+    };
     keyboards.tartarus = {
       ids = [ "1532:0244" ];
       settings = {

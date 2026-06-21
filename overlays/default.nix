@@ -4,7 +4,7 @@
 # Each set can be selected in flake.nix via `nixpkgs.overlays = overlays.<set>`.
 #
 # Available sets:
-#   - all:     Full set with NUR, gaming (xone), rust-overlay, and custom packages
+#   - all:     Full set with NUR, gaming (xone), and custom packages
 #   - minimal: Without gaming overlays - for non-gaming hosts or VMs
 #   - gaming:  Gaming overlays only (xone Xbox controller support)
 #
@@ -14,8 +14,7 @@
 # Current overlays:
 #   - nur: Nix User Repository packages
 #   - xone: Xbox controller kernel module (nixpkgs-unstable v0.5.7)
-#   - rustOverlay: Rust toolchain overlay (rust-bin.stable, nightly, etc.)
-#   - customPackages: Custom packages (bricolage-grotesque, qobuz-player)
+#   - customPackages: Custom packages (bricolage-grotesque, qobuz-player, rose-pine-plymouth)
 { inputs }:
 let
   xone = import ./xone.nix { inherit inputs; };
