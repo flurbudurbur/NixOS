@@ -8,10 +8,12 @@
     ../../modules/gaming.nix
     ../../modules/secrets.nix
     ../../modules/keyd.nix
+    ../../modules/opentabletdriver.nix
   ];
 
   # Boot
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 15;
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Load USB HID and hub drivers early so keyboard works during initrd
