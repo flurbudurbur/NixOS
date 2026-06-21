@@ -68,10 +68,13 @@ let
     if builtins.pathExists b24 then b24 else b16;
 
   tintedThemes = builtins.listToAttrs (
-    builtins.map (name: {
-      inherit name;
-      value = validate name (parseScheme (resolvePath name));
-    }) tintedNames
+    builtins.map (
+      name:
+      {
+        inherit name;
+        value = validate name (parseScheme (resolvePath name));
+      }
+    ) tintedNames
   );
 in
 customThemes // tintedThemes
