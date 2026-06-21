@@ -96,6 +96,10 @@ in
             natural_scroll = false;
           };
         };
+
+        tablet = {
+          output = "DP-2";
+        };
       };
 
       curve = [
@@ -315,12 +319,15 @@ in
       -- Autostart
       hl.on("hyprland.start", function()
         hl.exec_cmd("hyprctl setcursor BreezeX-RosePine-Linux 24")
+        hl.exec_cmd("wl-paste --type text --watch cliphist store")
+        hl.exec_cmd("wl-paste --type image --watch cliphist store")
+        hl.exec_cmd("sleep 2 && mullvad reconnect")
       end)
 
       -- Keybindings
       hl.bind(mainMod .. " + Q",         hl.dsp.exec_cmd(terminal))
       hl.bind(mainMod .. " + SHIFT + Q", hl.dsp.exec_cmd(terminal .. " -e tmux new-session"))
-      hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("grimblast copy area"))
+      hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("hyprshot -m region --freeze --clipboard-only"))
       hl.bind(mainMod .. " + C",         hl.dsp.window.close())
       hl.bind(mainMod .. " + M",         hl.dsp.exec_cmd("hyprctl dispatch exit"))
       hl.bind(mainMod .. " + E",         hl.dsp.exec_cmd(fileManager))
@@ -330,6 +337,7 @@ in
       hl.bind(mainMod .. " + L",         hl.dsp.exec_cmd("loginctl lock-session"))
       hl.bind(mainMod .. " + Z",         hl.dsp.exec_cmd(browser))
       hl.bind("ALT + SPACE",             hl.dsp.exec_cmd(menu))
+      hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("walker --modules clipboard"))
       hl.bind(mainMod .. " + SPACE",     hl.dsp.exec_cmd("hyprctl switchxkblayout all next"))
 
       -- Fullscreen / maximize
