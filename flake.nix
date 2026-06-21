@@ -44,6 +44,10 @@
       url = "git+ssh://git@github.com/flurbudurbur/nix-secrets?shallow=1&ref=main";
       flake = true;
     };
+    tinted-schemes = {
+      url = "github:tinted-theming/schemes";
+      flake = false;
+    };
   };
 
   outputs =
@@ -94,6 +98,7 @@
                     hostname = "flurPC";
                     firefox-addons = inputs.firefox-addons;
                     secretsPath = nixos-secrets.secretsPath;
+                    tinted-schemes = inputs.tinted-schemes;
                     nixpkgs-unstable = import inputs.nixpkgs-unstable {
                       system = "x86_64-linux";
                       config.allowUnfree = true;
@@ -114,6 +119,7 @@
             ];
             specialArgs = {
               secretsPath = nixos-secrets.secretsPath;
+              tinted-schemes = inputs.tinted-schemes;
             };
           };
       };

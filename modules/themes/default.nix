@@ -1,3 +1,4 @@
+{ schemes }:
 let
   requiredAttrs = [
     "bg"
@@ -17,14 +18,6 @@ let
     "hl_high"
   ];
 
-  dir = builtins.readDir ./.;
-
-  themeFiles = builtins.filter (
-    name: name != "default.nix" && builtins.match ".*\\.nix" name != null
-  ) (builtins.attrNames dir);
-
-  themeName = fileName: builtins.substring 0 (builtins.stringLength fileName - 4) fileName;
-
   validate =
     name: theme:
     let
@@ -35,7 +28,20 @@ let
     else
       builtins.throw "Theme '${name}' is missing attributes: ${builtins.concatStringsSep ", " missing}";
 
-  themes = builtins.listToAttrs (
+  # Custom .nix themes (auto-discovered)
+  specialFiles = [
+    "default.nix"
+    "tinted.nix"
+    "parse-scheme.nix"
+  ];
+  dir = builtins.readDir ./.;
+  customFiles = builtins.filter (
+    name: !(builtins.elem name specialFiles) && builtins.match ".*\\.nix" name != null
+  ) (builtins.attrNames dir);
+
+  themeName = fileName: builtins.substring 0 (builtins.stringLength fileName - 4) fileName;
+
+  customThemes = builtins.listToAttrs (
     builtins.map (
       fileName:
       let
@@ -46,7 +52,26 @@ let
         inherit name;
         value = validate name raw;
       }
-    ) themeFiles
+    ) customFiles
+  );
+
+  # Tinted-theming schemes (parsed from YAML)
+  parseScheme = import ./parse-scheme.nix;
+  tintedNames = import ./tinted.nix;
+
+  resolvePath =
+    name:
+    let
+      b24 = "${schemes}/base24/${name}.yaml";
+      b16 = "${schemes}/base16/${name}.yaml";
+    in
+    if builtins.pathExists b24 then b24 else b16;
+
+  tintedThemes = builtins.listToAttrs (
+    builtins.map (name: {
+      inherit name;
+      value = validate name (parseScheme (resolvePath name));
+    }) tintedNames
   );
 in
-themes
+customThemes // tintedThemes

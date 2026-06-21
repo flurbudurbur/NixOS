@@ -2,11 +2,12 @@
   pkgs,
   lib,
   nixpkgs-unstable,
+  tinted-schemes,
   ...
 }:
 
 let
-  themes = import ../../../modules/themes/default.nix;
+  themes = import ../../../modules/themes/default.nix { schemes = tinted-schemes; };
 
   strip = hex: builtins.substring 1 6 hex;
   hyprColor = hex: alpha: "rgba(${strip hex}${alpha})";
@@ -728,6 +729,13 @@ let
     fi
 
     pkill -SIGUSR1 foot 2>/dev/null || true
+
+    for _pts in /dev/pts/[0-9]*; do
+      [ -w "$_pts" ] || continue
+      case "$THEME" in
+        ${oscCases}
+      esac
+    done
 
     for _sock in $(find "''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}" -maxdepth 1 -name 'nvim*' -type s 2>/dev/null || true); do
       nvim --server "$_sock" --remote-send ':source ~/.config/themes/current/nvim-theme.lua<CR>' 2>/dev/null || true
