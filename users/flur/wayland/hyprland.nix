@@ -97,9 +97,12 @@ in
           };
         };
 
-        tablet = {
-          output = "DP-2";
-        };
+        device = [
+          {
+            name = "wacom-intuos-bt-m-pen";
+            output = "DP-2";
+          }
+        ];
       };
 
       curve = [
