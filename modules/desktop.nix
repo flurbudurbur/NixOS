@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{ pkgs, tinted-schemes, ... }:
 let
-  themes = import ./themes/default.nix;
+  themes = import ./themes/default.nix { schemes = tinted-schemes; };
   colors = themes.rose-pine-moon;
 in
 {
