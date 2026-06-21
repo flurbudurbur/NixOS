@@ -56,7 +56,6 @@
       ...
     }:
     let
-      colors = import ./modules/colors.nix;
       overlays = import ./overlays { inherit inputs; };
     in
     {
@@ -99,7 +98,6 @@
                       system = "x86_64-linux";
                       config.allowUnfree = true;
                     };
-                    colors = colors;
                     inherit inputs;
                   };
                   backupFileExtension = "backup";
@@ -116,7 +114,6 @@
             ];
             specialArgs = {
               secretsPath = nixos-secrets.secretsPath;
-              colors = colors;
             };
           };
       };

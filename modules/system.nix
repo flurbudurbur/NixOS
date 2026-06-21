@@ -43,16 +43,6 @@
   services = {
     flatpak.enable = true;
     pulseaudio.enable = false;
-    keyd = {
-      enable = true;
-      keyboards.default = {
-        ids = [ "3233:5311" ];
-        settings.main = {
-          capslock = "layer(control)";
-          leftcontrol = "capslock";
-        };
-      };
-    };
     gvfs.enable = true;
     gnome.gnome-keyring.enable = true;
     gnome.gnome-online-accounts.enable = false;

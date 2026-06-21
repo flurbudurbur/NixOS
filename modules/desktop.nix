@@ -1,4 +1,8 @@
-{ pkgs, colors, ... }:
+{ pkgs, ... }:
+let
+  themes = import ./themes/default.nix;
+  colors = themes.rose-pine-moon;
+in
 {
   # Hyprland
   programs.hyprland = {
@@ -14,7 +18,7 @@
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --asterisks --cmd 'uwsm start hyprland-uwsm.desktop >/dev/null 2>&1' --greeting 'Welcome to NixOS' --container-padding 2 --width 80 --theme border=${colors.pine};text=${colors.text};prompt=${colors.foam};time=${colors.subtle};action=${colors.rose};button=${colors.iris};container=${colors.base};input=${colors.surface}";
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --asterisks --cmd 'uwsm start hyprland-uwsm.desktop >/dev/null 2>&1' --greeting 'Welcome to NixOS' --container-padding 2 --width 80 --theme border=${colors.blue};text=${colors.fg};prompt=${colors.cyan};time=${colors.fg_dim};action=${colors.accent2};button=${colors.accent};container=${colors.bg};input=${colors.bg_alt}";
       };
     };
   };

@@ -1,55 +1,42 @@
-{
-  rose-pine-moon = {
-    bg = "#232136";
-    bg_alt = "#2a273f";
-    bg_select = "#393552";
-    fg_faint = "#6e6a86";
-    fg_dim = "#908caa";
-    fg = "#e0def4";
-    error = "#eb6f92";
-    warning = "#f6c177";
-    accent2 = "#ea9a97";
-    blue = "#3e8fb0";
-    cyan = "#9ccfd8";
-    accent = "#c4a7e7";
-    hl_low = "#2a283e";
-    hl_med = "#44415a";
-    hl_high = "#56526e";
-  };
+let
+  requiredAttrs = [
+    "bg" "bg_alt" "bg_select"
+    "fg_faint" "fg_dim" "fg"
+    "error" "warning"
+    "accent2" "blue" "cyan" "accent"
+    "hl_low" "hl_med" "hl_high"
+  ];
 
-  catppuccin-mocha = {
-    bg = "#1e1e2e";
-    bg_alt = "#181825";
-    bg_select = "#313244";
-    fg_faint = "#6c7086";
-    fg_dim = "#9399b2";
-    fg = "#cdd6f4";
-    error = "#f38ba8";
-    warning = "#f9e2af";
-    accent2 = "#f5c2e7";
-    blue = "#89b4fa";
-    cyan = "#94e2d5";
-    accent = "#cba6f7";
-    hl_low = "#1e1e2e";
-    hl_med = "#313244";
-    hl_high = "#45475a";
-  };
+  dir = builtins.readDir ./.;
 
-  sweet = {
-    bg = "#1b1b2e";
-    bg_alt = "#1f1f3a";
-    bg_select = "#2d2b55";
-    fg_faint = "#706a9c";
-    fg_dim = "#9d94c4";
-    fg = "#eaeaea";
-    error = "#f694c1";
-    warning = "#ffd7a5";
-    accent2 = "#ff8aac";
-    blue = "#7fc4fd";
-    cyan = "#5af0ec";
-    accent = "#a277ff";
-    hl_low = "#24223e";
-    hl_med = "#3a3860";
-    hl_high = "#4e4b7a";
-  };
-}
+  themeFiles = builtins.filter
+    (name: name != "default.nix" && builtins.match ".*\\.nix" name != null)
+    (builtins.attrNames dir);
+
+  themeName = fileName:
+    builtins.substring 0 (builtins.stringLength fileName - 4) fileName;
+
+  validate = name: theme:
+    let
+      missing = builtins.filter (attr: !(builtins.hasAttr attr theme)) requiredAttrs;
+    in
+    if missing == [ ] then
+      theme
+    else
+      builtins.throw "Theme '${name}' is missing attributes: ${builtins.concatStringsSep ", " missing}";
+
+  themes = builtins.listToAttrs (
+    builtins.map (
+      fileName:
+      let
+        name = themeName fileName;
+        raw = import (./. + "/${fileName}");
+      in
+      {
+        inherit name;
+        value = validate name raw;
+      }
+    ) themeFiles
+  );
+in
+themes

@@ -41,13 +41,16 @@ nixos-system/
 │   └── custom-packages.nix # Adds custom packages to pkgs namespace
 ├── packages/              # Custom package definitions
 │   ├── bricolage-grotesque.nix  # Custom font package
-│   └── qobuz-player.nix         # TUI music player for Qobuz
+│   ├── qobuz-player.nix        # TUI music player for Qobuz
+│   └── rose-pine-plymouth.nix  # Plymouth boot theme
 ├── modules/               # System-level shared configuration
-│   ├── colors.nix         # Rose Pine Moon color definitions
+│   ├── themes/
+│   │   └── default.nix    # Theme color definitions (rose-pine-moon, catppuccin-mocha, sweet)
 │   ├── system.nix         # Core system config (users, nix, fonts, services)
 │   ├── graphics.nix       # Graphics hardware (NVIDIA drivers, OpenGL)
-│   ├── desktop.nix        # Desktop environment (Hyprland, regreet, XDG portals)
+│   ├── desktop.nix        # Desktop environment (Hyprland, tuigreet, XDG portals)
 │   ├── gaming.nix         # Gaming (Steam, Lutris, Wine, gamemode)
+│   ├── keyd.nix           # Keyboard remapping (default keyboard + Razer Tartarus)
 │   └── secrets.nix        # System-level secrets management
 ├── hosts/                 # Per-machine configurations
 │   └── flurPC/
@@ -57,11 +60,12 @@ nixos-system/
     └── flur/
         ├── nixos.nix      # User-specific system settings
         ├── home.nix       # Imports home-manager modules
-        ├── core.nix       # Home basics (username, stateVersion, cursor)
+        ├── core.nix       # Home basics (username, stateVersion, cursor, stylix)
         ├── secrets.nix    # User-level secrets management with sops-nix
         ├── programs/      # User programs and applications
         │   ├── default.nix    # Aggregates all program modules
-        │   ├── git.nix        # Git and SSH configuration
+        │   ├── git.nix        # Git configuration
+        │   ├── ssh.nix        # SSH configuration with FIDO2/Yubikey keys
         │   ├── packages.nix   # User packages and utilities
         │   ├── xdg.nix        # GTK, Qt, XDG theming
         │   ├── nvim.nix       # Neovim configuration
@@ -72,24 +76,23 @@ nixos-system/
         │   ├── flatpak.nix    # Flatpak package declarations
         │   ├── mullvad-vpn.nix  # Mullvad VPN client
         │   ├── heroic.nix     # Heroic Games Launcher
-        │   ├── persepolis.nix # Persepolis download manager
-        │   └── nixcord.nix    # Discord (currently disabled)
+        │   └── persepolis.nix # Persepolis download manager
         ├── shell/         # Shell environment
         │   ├── default.nix    # Zsh configuration
+        │   ├── starship.toml  # Starship prompt base config (extended by theme switcher)
         │   ├── terminals.nix  # Foot terminal
-        │   ├── starship.nix   # Starship prompt
+        │   ├── starship.nix   # Starship prompt enablement
         │   ├── tmux.nix       # Tmux terminal multiplexer
         │   └── fastfetch.nix  # System info display
         └── wayland/       # Wayland/Hyprland specific
             ├── default.nix    # Aggregates wayland modules
-            ├── hyprland/
-            │   └── default.nix  # Hyprland settings
+            ├── hyprland.nix   # Hyprland settings (Lua config)
             ├── hyprlock.nix   # Lock screen
             ├── hypridle.nix   # Idle management
-            ├── waybar/
-            │   └── default.nix  # Status bar
-            └── walker/
-                └── default.nix  # App launcher
+            ├── mako.nix       # Notification daemon
+            ├── themes.nix     # Runtime theme switcher (generates per-theme config files)
+            ├── waybar.nix     # Status bar
+            └── walker.nix     # App launcher
 ```
 
 ## Key Configuration Details
@@ -97,20 +100,20 @@ nixos-system/
 - **Window Manager**: Hyprland with UWSM integration
 - **Display Manager**: tuigreet
 - **GPU**: NVIDIA with open drivers
-- **Theme**: Rose Pine Moon (system-wide)
+- **Theme**: Multi-theme with runtime switching (rose-pine-moon, catppuccin-mocha, sweet); default rose-pine-moon
 - **Experimental Features**: Flakes and nix-command enabled
 - **Unfree Packages**: Allowed (nixpkgs.config.allowUnfree = true)
 
 ## Using Unstable Packages
 
-While the system uses nixpkgs 25.11, unstable packages are available via `nixpkgs-unstable` parameter in home-manager:
+While the system uses nixpkgs 26.05, unstable packages are available via `nixpkgs-unstable` parameter in home-manager:
 
 ```nix
 { pkgs, nixpkgs-unstable, ... }:
 {
   home.packages = [
     nixpkgs-unstable.somePackage  # Use unstable version
-    pkgs.normalPackage             # Use stable 25.11 version
+    pkgs.normalPackage             # Use stable 26.05 version
   ];
 }
 ```
@@ -122,25 +125,27 @@ This is configured in `flake.nix` extraSpecialArgs and allows mixing stable/unst
 This configuration uses several external flake inputs beyond standard nixpkgs:
 
 - **zen-browser**: Custom Firefox-based browser with zen modifications
-- **stylix**: System-wide theming framework (release-25.11 branch)
-- **nixcord**: Discord client configurator (currently disabled - see `home/programs/nixcord.nix`)
-- **nixvim**: Neovim configuration framework used in `home/programs/nvim.nix`
+- **stylix**: System-wide theming framework (release-26.05 branch)
+- **nixvim**: Neovim configuration framework used in `users/flur/programs/nvim.nix`
 - **firefox-addons**: Firefox extensions from NUR (rycee's expressions)
 - **nur**: Nix User Repository for additional packages
 - **nix-flatpak**: Declarative Flatpak package management
 - **nixpkgs-unstable**: Available for packages requiring newer versions
 - **sops-nix**: Secret management with age encryption
 - **nixos-secrets**: Private repository (`git@github.com:flurbudurbur/nix-secrets.git`) containing encrypted secrets
-- **oxicord**: TUI Discord client (used in `disco` tmuxinator session)
+- **fluxer**: Custom fluxer releases
+- **walker** + **elephant**: Application launcher with elephant dependency
+- **home-manager**: Home-manager (release-26.05 branch)
 
 ## Module Organization
 
 ### System-Level (modules/)
 - `system.nix`: Core system configuration (Nix settings, users, fonts, services)
 - `graphics.nix`: Graphics hardware configuration (NVIDIA drivers, OpenGL/Vulkan)
-- `desktop.nix`: Desktop environment (Hyprland WM, regreet DM, XDG portals, desktop apps)
+- `desktop.nix`: Desktop environment (Hyprland WM, tuigreet DM, XDG portals, desktop apps)
 - `gaming.nix`: Gaming configuration (Steam, Lutris, Wine, gamemode)
-- `colors.nix`: Centralized Rose Pine Moon color definitions
+- `keyd.nix`: Keyboard remapping (capslock/ctrl swap, Razer Tartarus profiles)
+- `themes/default.nix`: Theme color palettes (rose-pine-moon, catppuccin-mocha, sweet)
 - `secrets.nix`: System-level secrets management with sops-nix (age encryption)
 
 ### Host-Specific (hosts/flurPC/)
@@ -199,33 +204,33 @@ All user-specific configuration lives under `users/flur/`:
 
 ## Color Theming
 
-All colors are centralized in `modules/colors.nix` (Rose Pine Moon) and passed globally via `specialArgs`/`extraSpecialArgs`.
+Theming uses a **runtime theme switcher** with multiple themes defined in `modules/themes/default.nix`. Each theme is an attrset with standardized field names:
 
-**In home-manager modules** (programs/, shell/, wayland/):
 ```nix
-{ config, colors, ... }:
 {
-  # Access colors directly from the colors parameter
-  # Direct hex colors: colors.base, colors.text, colors.rose, colors.pine, colors.foam, colors.iris, etc.
-  # ANSI terminal colors: colors.ansi.black, colors.ansi.red, etc.
-
-  # Helper functions available:
-  # - colors.strip hex       -> removes '#' prefix
-  # - colors.hypr hex alpha  -> "rgba(232136ee)" format for Hyprland
-  # - colors.rgba hex alpha  -> "rgba(35, 33, 54, 0.9)" CSS format
-  # - colors.rgb hex         -> "rgb(35, 33, 54)" format for hyprlock
+  bg, bg_alt, bg_select,     # Background shades
+  fg_faint, fg_dim, fg,      # Foreground shades
+  error, warning,            # Status colors
+  accent2, blue, cyan, accent, # Accent colors
+  hl_low, hl_med, hl_high,  # Highlight shades
 }
 ```
 
-**In system modules** (modules/, hosts/):
-```nix
-{ config, colors, ... }:
-{
-  # Same access pattern - colors are passed via specialArgs
-}
-```
+### How it works
 
-**Note**: The colors module was made global in commit 80fe6d1. Legacy relative imports (`import ../../../modules/colors.nix`) still work but are no longer necessary.
+1. `modules/themes/default.nix` defines color palettes (rose-pine-moon, catppuccin-mocha, sweet)
+2. `users/flur/wayland/themes.nix` generates per-theme config files for each app (hyprland, waybar, walker, foot, starship, mako, hyprlock, zen browser, nvim, gtk) under `~/.config/themes/<name>/`
+3. `~/.config/themes/current` is a symlink to the active theme
+4. Apps source their theme file at runtime (e.g. `@import url("~/.config/themes/current/waybar-style.css")`)
+5. `theme-switch [name]` updates the symlink and reloads all apps
+
+### Adding a new theme
+1. Add the color palette to `modules/themes/default.nix`
+2. Optionally add a wallpaper to `wallpapers/<name>.{jpg,png,webp,gif}`
+3. Rebuild — theme files are auto-generated for all apps
+
+### System-level colors
+`modules/desktop.nix` (tuigreet) imports themes directly and uses rose-pine-moon — it doesn't participate in runtime switching since it runs before user login.
 
 ## Overlays and Custom Packages
 
@@ -245,6 +250,7 @@ The `overlays/default.nix` exports named sets for per-host selection:
 ### Custom Packages (via `pkgs.*`)
 - `pkgs.bricolage-grotesque` — Custom variable font
 - `pkgs.qobuz-player` — TUI music player for Qobuz
+- `pkgs.rose-pine-plymouth` — Plymouth boot splash theme
 
 ### Per-Host Overlay Selection
 ```nix
@@ -376,10 +382,9 @@ Defined in `users/flur/shell/default.nix`:
 - `nrt` — `nixos-rebuild test --sudo --flake` (test without boot entry)
 - `ncheck` — `nix flake check --no-build` (validate flake without building)
 - `nfmt` — `nix fmt` (format Nix files using nixfmt-tree)
-- `tmnix` — Start tmuxinator `dev` session in `~/nixos-system`
-- `tmstart [dir] [session]` / `tmstop [dir] [session]` — Launch/stop named tmuxinator sessions
+- `mvr` — `mullvad reconnect`
 
-**Zoxide** is initialized in zsh (`eval "$(zoxide init zsh)"`), providing smart `z` directory jumping.
+**Zoxide** is initialized in zsh (`eval "$(zoxide init zsh --cmd cd)"`), replacing `cd` with smart directory jumping.
 
 ## Tmuxinator Sessions
 
@@ -387,11 +392,11 @@ Declarative tmuxinator YAML configs are managed as `xdg.configFile` entries in `
 
 | Session | Purpose | Windows |
 |---------|---------|---------|
-| `dev`   | Development workflow | nvim, claude, lazygit, fastfetch |
+| `nixos`  | NixOS config development | nvim, claude, lazygit, scratch |
+| `flur34` | Dioxus development | nvim+claude, devenv, lazygit, scratch |
 | `netmon` | Network monitoring | bandwhich, iftop, nethogs |
-| `disco` | Media/comms | oxicord (TUI Discord), kew (music) |
 
-**Sesh** (`<prefix>t`) provides interactive tmux session switching with fzf, showing all sessions, tmuxinator configs, and zoxide directories.
+**Sesh** (`<prefix>s`) provides interactive tmux session switching with fzf, showing all sessions, tmuxinator configs, and zoxide directories.
 
 ## Security Wrappers for Network Tools
 
@@ -409,13 +414,12 @@ This allows running these tools without a password prompt.
 
 ## Important Notes
 
-- **Color access**: Colors are passed globally via specialArgs - use `colors` parameter instead of relative imports
+- **Theming**: Colors are defined in `modules/themes/default.nix` and consumed by `users/flur/wayland/themes.nix` which generates per-app theme files. Use `theme-switch [name]` to switch at runtime.
 - **Hostname parameter**: Keep `hostname = "flurPC"` in extraSpecialArgs for Hyprland monitor configs
 - **State version**: "25.11" for both system and home-manager (do not change)
 - **Hardware config**: Do not edit `hardware-configuration.nix` manually - regenerate if needed
-- **Terminal**: Foot (replaced Alacritty) — configured in `users/flur/shell/terminals.nix`
-- **nixcord status**: Currently disabled due to upstream issue #166 (see `users/flur/programs/nixcord.nix`)
+- **Terminal**: Foot — configured in `users/flur/shell/terminals.nix`
 - **Home-manager backups**: Backup files use `.backup` extension (configured in flake.nix)
 - **Flake structure**: Uses home-manager as a NixOS module, not standalone
 - **Secrets repo**: Never commit unencrypted secrets; see `.gitignore` in nixos-secrets repo
-- **Custom packages**: Use `pkgs.bricolage-grotesque` and `pkgs.qobuz-player` instead of callPackage
+- **Custom packages**: Use `pkgs.bricolage-grotesque`, `pkgs.qobuz-player`, `pkgs.rose-pine-plymouth` instead of callPackage
