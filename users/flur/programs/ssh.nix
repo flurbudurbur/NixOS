@@ -14,24 +14,30 @@ in
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = {
-      "*".addKeysToAgent = "yes";
+    settings = {
+      "*" = {
+        AddKeysToAgent = "yes";
+      };
 
-      # GitHub authentication using FIDO2 resident keys on Yubikeys
-      # Falls back to regular key if Yubikeys aren't available
       "github.com" = {
-        identitiesOnly = true;
-        identityFile = [
-          "~/.ssh/id_ed25519_sk_rk_aloha" # Backup Yubikey (Aloha)
-          "~/.ssh/id_ed25519_sk_rk_pink" # Primary Yubikey (Pink)
-          "~/.ssh/github" # Fallback non-hardware key
+        IdentitiesOnly = true;
+        IdentityFile = [
+          "~/.ssh/id_ed25519_sk_rk_aloha"
+          "~/.ssh/id_ed25519_sk_rk_pink"
+          "~/.ssh/github"
         ];
       };
 
       "shiori" = {
-        hostname = "@SHIORI_HOSTNAME@";
-        user = "flur";
-        identityFile = [ "~/.ssh/shiori" ];
+        HostName = "@SHIORI_HOSTNAME@";
+        User = "flur";
+        IdentityFile = [ "~/.ssh/shiori" ];
+      };
+
+      "music" = {
+        HostName = "@SHIORI_HOSTNAME@";
+        User = "music";
+        IdentityFile = [ "~/.ssh/music" ];
       };
     };
   };

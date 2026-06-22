@@ -11,6 +11,7 @@
     gnupg.sshKeyPaths = [ ];
 
     validateSopsFiles = true;
+    useSystemdActivation = true;
 
     secrets = {
       # Re-enable Mullvad VPN secrets now that age works non-interactively

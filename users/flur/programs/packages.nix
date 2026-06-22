@@ -33,6 +33,7 @@
     wl-clipboard
 
     # System utils
+    libnotify
     grimblast
     hyprshot
     bluetui

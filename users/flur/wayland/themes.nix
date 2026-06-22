@@ -747,7 +747,7 @@ let
 
     tmux refresh-client 2>/dev/null || true
 
-    echo "Switched to theme: $THEME"
+    notify-send -a "Theme Switcher" "Switched to $THEME" -i preferences-desktop-theme 2>/dev/null || true
   '';
 in
 {

@@ -337,6 +337,7 @@ in
       hl.bind("ALT + SPACE",             hl.dsp.exec_cmd(menu))
       hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("walker --modules clipboard"))
       hl.bind(mainMod .. " + SPACE",     hl.dsp.exec_cmd("hyprctl switchxkblayout all next"))
+      hl.bind(mainMod .. " + T",         hl.dsp.exec_cmd("theme-switch"))
 
       -- Fullscreen / maximize
       hl.bind("ALT + up", hl.dsp.window.fullscreen({ mode = "maximized",  action = "toggle" }))
