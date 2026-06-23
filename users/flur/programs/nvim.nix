@@ -244,6 +244,8 @@ in
     '';
 
     extraConfigLua = ''
+      			require('mini.bufremove').setup()
+
       			local _theme_file = vim.fn.expand("~/.config/themes/current/nvim-theme.lua")
       			if vim.fn.filereadable(_theme_file) == 1 then dofile(_theme_file) end
 
@@ -444,6 +446,11 @@ in
         mode = "buffers";
         separator_style = "slant";
         always_show_bufferline = true;
+        close_command.__raw = ''
+          function(n)
+            require('mini.bufremove').delete(n, false)
+          end
+        '';
       };
     };
 
@@ -481,7 +488,7 @@ in
       {
         mode = "n";
         key = "<leader>bd";
-        action = "<cmd>bdelete<cr>";
+        action = "<cmd>lua require('mini.bufremove').delete()<cr>";
         options.desc = "Delete buffer";
       }
 
