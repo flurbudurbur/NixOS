@@ -1,5 +1,9 @@
 { ... }:
 
+let
+  to = (import ./timeouts.nix).hypridle;
+  min = m: m * 60;
+in
 {
   services.hypridle = {
     enable = true;
@@ -7,24 +11,21 @@
       general = {
         lock_cmd = "pidof hyprlock || hyprlock";
         before_sleep_cmd = "loginctl lock-session";
-        after_sleep_cmd = "hyprctl dispatch dpms on";
+        after_sleep_cmd = "hyprctl dispatch 'hl.dsp.dpms({ action = \"enable\" })'";
       };
 
       listener = [
-        # Lock screen after 5 minutes
         {
-          timeout = 300;
+          timeout = min to.lock;
           on-timeout = "loginctl lock-session";
         }
-        # Turn off monitors 30 seconds after lock
         {
-          timeout = 330;
-          on-timeout = "hyprctl dispatch dpms off";
-          on-resume = "hyprctl dispatch dpms on";
+          timeout = min (to.lock + to.screen_off);
+          on-timeout = "hyprctl dispatch 'hl.dsp.dpms({ action = \"disable\" })'";
+          on-resume = "hyprctl dispatch 'hl.dsp.dpms({ action = \"enable\" })'";
         }
-        # Suspend after 30 minutes
         {
-          timeout = 1800;
+          timeout = min (to.lock + to.suspend);
           on-timeout = "systemctl suspend";
         }
       ];

@@ -1,12 +1,15 @@
 { lib, ... }:
 
+let
+  to = (import ./timeouts.nix).hyprlock;
+in
 {
   programs.hyprlock = {
     enable = true;
     settings = {
       general = {
         disable_loading_bar = true;
-        grace = 5;
+        grace = to.grace;
         hide_cursor = true;
         no_fade_in = false;
       };

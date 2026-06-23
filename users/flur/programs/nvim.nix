@@ -1,8 +1,14 @@
-{ pkgs, inputs, ... }:
+{
+  pkgs,
+  inputs,
+  config,
+  ...
+}:
 
 let
   debugExtPath = "${pkgs.vscode-extensions.vscjava.vscode-java-debug}/share/vscode/extensions/vscjava.vscode-java-debug/server";
   testExtPath = "${pkgs.vscode-extensions.vscjava.vscode-java-test}/share/vscode/extensions/vscjava.vscode-java-test/server";
+  flakeDir = "${config.home.homeDirectory}/nixos-system";
 in
 {
   programs.nixvim = {
@@ -79,6 +85,13 @@ in
       servers = {
         nixd = {
           enable = true;
+          settings = {
+            nixpkgs.expr = "import <nixpkgs> { }";
+            options = {
+              nixos.expr = "(builtins.getFlake (toString ${flakeDir})).nixosConfigurations.flurPC.options";
+              home-manager.expr = "(builtins.getFlake (toString ${flakeDir})).nixosConfigurations.flurPC.options.home-manager.users.type.getSubOptions []";
+            };
+          };
         };
         ts_ls = {
           enable = true;
