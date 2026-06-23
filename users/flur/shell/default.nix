@@ -1,20 +1,32 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 {
   imports = [
     ./terminals.nix
-    ./starship.nix
     ./tmux.nix
-    ./fastfetch.nix
   ];
 
   # Add ~/.local/bin to PATH
   home.sessionPath = [ "$HOME/.local/bin" ];
+
+  home.packages = with pkgs; [
+    fastfetch
+  ];
 
   # GPG environment variable for terminal pinentry
   home.sessionVariables = {
     GPG_TTY = "$(tty)";
     SOPS_EDITOR = "nvim";
     STARSHIP_CONFIG = lib.mkForce "$HOME/.config/themes/current/starship.toml";
+  };
+
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
   };
 
   programs.zsh = {

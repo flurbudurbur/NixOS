@@ -42,7 +42,7 @@ let
     })
   '';
 
-  starshipBase = builtins.readFile ../shell/starship.toml;
+  starshipBase = builtins.readFile ../../../dotfiles/starship.toml;
 
   mkStarshipTheme =
     t:

@@ -19,10 +19,10 @@
         # Detect repo location using git
         REPO_ROOT=$(${pkgs.git}/bin/git -C "${config.home.homeDirectory}" rev-parse --show-toplevel 2>/dev/null || echo "")
         if [ -n "$REPO_ROOT" ]; then
-          REPO_COMPOSER="$REPO_ROOT/composer.json"
+          REPO_COMPOSER="$REPO_ROOT/dotfiles/composer.json"
         else
           # Fallback if git detection fails
-          REPO_COMPOSER="${config.home.homeDirectory}/nixos-system/composer.json"
+          REPO_COMPOSER="${config.home.homeDirectory}/nixos-system/dotfiles/composer.json"
         fi
 
         mkdir -p "$COMPOSER_HOME"
