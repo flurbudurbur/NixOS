@@ -327,7 +327,7 @@ in
       hl.bind(mainMod .. " + SHIFT + Q", hl.dsp.exec_cmd(terminal .. " -e tmux new-session"))
       hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("hyprshot -m region --freeze --clipboard-only"))
       hl.bind(mainMod .. " + C",         hl.dsp.window.close())
-      hl.bind(mainMod .. " + M",         hl.dsp.exec_cmd("hyprctl dispatch exit"))
+      hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd("hyprctl dispatch exit"))
       hl.bind(mainMod .. " + E",         hl.dsp.exec_cmd(fileManager))
       hl.bind(mainMod .. " + V",         hl.dsp.window.float({ action = "toggle" }))
       hl.bind(mainMod .. " + P",         hl.dsp.window.pseudo())
