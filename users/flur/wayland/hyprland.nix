@@ -43,7 +43,7 @@ in
           border_size = 2;
           resize_on_border = false;
           allow_tearing = false;
-          layout = "scrolling";
+          layout = "dwindle";
         };
 
         decoration = {
