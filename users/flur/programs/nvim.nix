@@ -214,11 +214,6 @@ in
       enable = true;
     };
 
-    # Add none-ls-extras for eslint support
-    # Note: none-ls-extras might not be in nixpkgs yet
-    # The plugin would be: nvimtools/none-ls-extras.nvim
-    # For now, just use the basic none-ls without extras
-
     extraConfigLuaPre = ''
       -- Skip nvim-java package downloads (packages are provided by Nix)
       local Manager = require('pkgm.manager')
@@ -243,29 +238,17 @@ in
       })
     '';
 
+    filetype.pattern = {
+      ".*%.blade%.php" = "blade";
+      "todo%.txt" = "todotxt";
+    };
+
     extraConfigLua = ''
-      			require('mini.bufremove').setup()
+      require('mini.bufremove').setup()
 
-      			local _theme_file = vim.fn.expand("~/.config/themes/current/nvim-theme.lua")
-      			if vim.fn.filereadable(_theme_file) == 1 then dofile(_theme_file) end
-
-      			-- none-ls is still required as "null-ls" (API compatibility)
-      			local null_ls = require("null-ls")
-
-      			-- Setup none-ls without sources for now
-      			-- eslint_d requires none-ls-extras which isn't in nixpkgs yet
-      			null_ls.setup({
-      				sources = {},
-      			})
-
-      			-- Blade filetype detection (Laravel templates)
-      			vim.filetype.add({
-      				pattern = {
-      					[".*%.blade%.php"] = "blade",
-      					["todo%.txt"] = "todotxt",
-      				},
-      			})
-      		'';
+      local _theme_file = vim.fn.expand("~/.config/themes/current/nvim-theme.lua")
+      if vim.fn.filereadable(_theme_file) == 1 then dofile(_theme_file) end
+    '';
 
     # Treesitter (Syntax Highlighting)
     plugins.treesitter = {
