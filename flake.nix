@@ -76,7 +76,6 @@
             system = "x86_64-linux";
             modules = [
               ./hosts/flurPC
-              ./users/${username}/nixos.nix
               stylix.nixosModules.stylix
               sops-nix.nixosModules.sops
               # Stylix/home-manager issue

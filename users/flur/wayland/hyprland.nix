@@ -1,6 +1,27 @@
-{ hostname, ... }:
+{ hostname, lib, ... }:
 
 let
+  mkLua = lib.generators.mkLuaInline;
+  mkBind = key: dispatch: {
+    _args = [
+      key
+      dispatch
+    ];
+  };
+  mkBindWith = key: dispatch: opts: {
+    _args = [
+      key
+      dispatch
+      opts
+    ];
+  };
+
+  terminal = "foot";
+  fileManager = "nautilus --new-window";
+  menu = "walker";
+  browser = "zen-beta";
+  mainMod = "SUPER";
+
   monitorConfigs = {
     flurPC = [
       {
@@ -26,6 +47,17 @@ let
         scale = "auto";
       }
     ];
+
+  workspaceBinds = builtins.concatMap (
+    i:
+    let
+      key = toString (lib.mod i 10);
+    in
+    [
+      (mkBind "${mainMod} + ${key}" (mkLua "hl.dsp.focus({ workspace = ${toString i} })"))
+      (mkBind "${mainMod} + SHIFT + ${key}" (mkLua "hl.dsp.window.move({ workspace = ${toString i} })"))
+    ]
+  ) (lib.range 1 10);
 in
 {
   wayland.windowManager.hyprland = {
@@ -298,128 +330,196 @@ in
           style = "fade";
         }
       ];
+
+      env = [
+        {
+          _args = [
+            "XCURSOR_SIZE"
+            "24"
+          ];
+        }
+        {
+          _args = [
+            "XCURSOR_THEME"
+            "BreezeX-RosePine-Linux"
+          ];
+        }
+        {
+          _args = [
+            "HYPRCURSOR_SIZE"
+            "24"
+          ];
+        }
+        {
+          _args = [
+            "HYPRCURSOR_THEME"
+            "BreezeX-RosePine-Linux"
+          ];
+        }
+      ];
+
+      on = {
+        _args = [
+          "hyprland.start"
+          (mkLua ''
+            function()
+              hl.exec_cmd("hyprctl setcursor BreezeX-RosePine-Linux 24")
+              hl.exec_cmd("wl-paste --type text --watch cliphist store")
+              hl.exec_cmd("wl-paste --type image --watch cliphist store")
+              hl.exec_cmd("sleep 2 && mullvad reconnect")
+            end'')
+        ];
+      };
+
+      bind = [
+        # Programs
+        (mkBind "${mainMod} + Q" (mkLua ''hl.dsp.exec_cmd("${terminal}")''))
+        (mkBind "${mainMod} + SHIFT + Q" (mkLua ''hl.dsp.exec_cmd("${terminal} -e tmux new-session")''))
+        (mkBind "${mainMod} + SHIFT + S" (
+          mkLua ''hl.dsp.exec_cmd("hyprshot -m region --freeze --clipboard-only")''
+        ))
+        (mkBind "${mainMod} + C" (mkLua "hl.dsp.window.close()"))
+        (mkBind "${mainMod} + SHIFT + M" (mkLua ''hl.dsp.exec_cmd("hyprctl dispatch exit")''))
+        (mkBind "${mainMod} + E" (mkLua ''hl.dsp.exec_cmd("${fileManager}")''))
+        (mkBind "${mainMod} + V" (mkLua ''hl.dsp.window.float({ action = "toggle" })''))
+        (mkBind "${mainMod} + P" (mkLua "hl.dsp.window.pseudo()"))
+        (mkBind "${mainMod} + J" (mkLua ''hl.dsp.layout("togglesplit")''))
+        (mkBind "${mainMod} + L" (mkLua ''hl.dsp.exec_cmd("loginctl lock-session")''))
+        (mkBind "${mainMod} + Z" (mkLua ''hl.dsp.exec_cmd("${browser}")''))
+        (mkBind "ALT + SPACE" (mkLua ''hl.dsp.exec_cmd("${menu}")''))
+        (mkBind "${mainMod} + SHIFT + V" (mkLua ''hl.dsp.exec_cmd("walker --modules clipboard")''))
+        (mkBind "${mainMod} + SPACE" (mkLua ''hl.dsp.exec_cmd("hyprctl switchxkblayout all next")''))
+        (mkBind "${mainMod} + T" (mkLua ''hl.dsp.exec_cmd("theme-switch")''))
+
+        # Fullscreen / maximize
+        (mkBind "ALT + up" (mkLua ''hl.dsp.window.fullscreen({ mode = "maximized", action = "toggle" })''))
+        (mkBind "ALT + F" (mkLua ''hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" })''))
+
+        # Move focus
+        (mkBind "${mainMod} + left" (mkLua ''hl.dsp.focus({ direction = "left" })''))
+        (mkBind "${mainMod} + right" (mkLua ''hl.dsp.focus({ direction = "right" })''))
+        (mkBind "${mainMod} + up" (mkLua ''hl.dsp.focus({ direction = "up" })''))
+        (mkBind "${mainMod} + down" (mkLua ''hl.dsp.focus({ direction = "down" })''))
+      ]
+      ++ workspaceBinds
+      ++ [
+        # Special workspace
+        (mkBind "${mainMod} + S" (mkLua ''hl.dsp.workspace.toggle_special("magic")''))
+        (mkBind "${mainMod} + ALT + S" (mkLua ''hl.dsp.window.move({ workspace = "special:magic" })''))
+
+        # Scroll through workspaces
+        (mkBind "${mainMod} + mouse_down" (mkLua ''hl.dsp.focus({ workspace = "e+1" })''))
+        (mkBind "${mainMod} + mouse_up" (mkLua ''hl.dsp.focus({ workspace = "e-1" })''))
+
+        # Swap windows
+        (mkBind "${mainMod} + SHIFT + left" (mkLua ''hl.dsp.window.swap({ direction = "left" })''))
+        (mkBind "${mainMod} + SHIFT + right" (mkLua ''hl.dsp.window.swap({ direction = "right" })''))
+        (mkBind "${mainMod} + SHIFT + up" (mkLua ''hl.dsp.window.swap({ direction = "up" })''))
+        (mkBind "${mainMod} + SHIFT + down" (mkLua ''hl.dsp.window.swap({ direction = "down" })''))
+
+        # Move window to monitor
+        (mkBind "${mainMod} + ALT + left" (mkLua ''hl.dsp.window.move({ monitor = "DP-1" })''))
+        (mkBind "${mainMod} + ALT + right" (mkLua ''hl.dsp.window.move({ monitor = "DP-2" })''))
+
+        # Resize (repeating)
+        (mkBindWith "${mainMod} + CTRL + right"
+          (mkLua "hl.dsp.window.resize({ x = 50, y = 0, relative = true })")
+          { repeating = true; }
+        )
+        (mkBindWith "${mainMod} + CTRL + left"
+          (mkLua "hl.dsp.window.resize({ x = -50, y = 0, relative = true })")
+          { repeating = true; }
+        )
+        (mkBindWith "${mainMod} + CTRL + up"
+          (mkLua "hl.dsp.window.resize({ x = 0, y = -50, relative = true })")
+          { repeating = true; }
+        )
+        (mkBindWith "${mainMod} + CTRL + down"
+          (mkLua "hl.dsp.window.resize({ x = 0, y = 50, relative = true })")
+          { repeating = true; }
+        )
+
+        # Mouse binds
+        (mkBindWith "${mainMod} + mouse:272" (mkLua "hl.dsp.window.drag()") { mouse = true; })
+        (mkBindWith "${mainMod} + mouse:273" (mkLua "hl.dsp.window.resize()") { mouse = true; })
+
+        # Media keys
+        (mkBindWith "XF86AudioRaiseVolume"
+          (mkLua ''hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+")'')
+          {
+            locked = true;
+            repeating = true;
+          }
+        )
+        (mkBindWith "XF86AudioLowerVolume"
+          (mkLua ''hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-")'')
+          {
+            locked = true;
+            repeating = true;
+          }
+        )
+        (mkBindWith "XF86AudioMute"
+          (mkLua ''hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")'')
+          {
+            locked = true;
+            repeating = true;
+          }
+        )
+        (mkBindWith "XF86AudioMicMute"
+          (mkLua ''hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle")'')
+          {
+            locked = true;
+            repeating = true;
+          }
+        )
+        (mkBindWith "XF86MonBrightnessUp" (mkLua ''hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+")'') {
+          locked = true;
+          repeating = true;
+        })
+        (mkBindWith "XF86MonBrightnessDown" (mkLua ''hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-")'') {
+          locked = true;
+          repeating = true;
+        })
+        (mkBindWith "XF86AudioNext" (mkLua ''hl.dsp.exec_cmd("playerctl next")'') { locked = true; })
+        (mkBindWith "XF86AudioPause" (mkLua ''hl.dsp.exec_cmd("playerctl play-pause")'') { locked = true; })
+        (mkBindWith "XF86AudioPlay" (mkLua ''hl.dsp.exec_cmd("playerctl play-pause")'') { locked = true; })
+        (mkBindWith "XF86AudioPrev" (mkLua ''hl.dsp.exec_cmd("playerctl previous")'') { locked = true; })
+      ];
+
+      window_rule = [
+        {
+          match = {
+            class = "^$";
+            title = "^$";
+            xwayland = true;
+            float = true;
+            fullscreen = false;
+            pin = false;
+          };
+          no_focus = true;
+        }
+        {
+          match = {
+            class = "com.saivert.pwvucontrol";
+          };
+          float = true;
+          size = "600 400";
+          move = "50% 50";
+        }
+        {
+          match = {
+            class = "^walker$";
+          };
+          float = true;
+          center = true;
+          size = "600 400";
+          stay_focused = true;
+          border_size = 0;
+        }
+      ];
     };
 
     extraConfig = ''
-      -- Programs
-      local terminal    = "foot"
-      local fileManager = "nautilus --new-window"
-      local menu        = "walker"
-      local browser     = "zen-beta"
-      local mainMod     = "SUPER"
-
-      -- Environment variables
-      hl.env("XCURSOR_SIZE",     "24")
-      hl.env("XCURSOR_THEME",    "BreezeX-RosePine-Linux")
-      hl.env("HYPRCURSOR_SIZE",  "24")
-      hl.env("HYPRCURSOR_THEME", "BreezeX-RosePine-Linux")
-
-      -- Autostart
-      hl.on("hyprland.start", function()
-        hl.exec_cmd("hyprctl setcursor BreezeX-RosePine-Linux 24")
-        hl.exec_cmd("wl-paste --type text --watch cliphist store")
-        hl.exec_cmd("wl-paste --type image --watch cliphist store")
-        hl.exec_cmd("sleep 2 && mullvad reconnect")
-      end)
-
-      -- Keybindings
-      hl.bind(mainMod .. " + Q",         hl.dsp.exec_cmd(terminal))
-      hl.bind(mainMod .. " + SHIFT + Q", hl.dsp.exec_cmd(terminal .. " -e tmux new-session"))
-      hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("hyprshot -m region --freeze --clipboard-only"))
-      hl.bind(mainMod .. " + C",         hl.dsp.window.close())
-      hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd("hyprctl dispatch exit"))
-      hl.bind(mainMod .. " + E",         hl.dsp.exec_cmd(fileManager))
-      hl.bind(mainMod .. " + V",         hl.dsp.window.float({ action = "toggle" }))
-      hl.bind(mainMod .. " + P",         hl.dsp.window.pseudo())
-      hl.bind(mainMod .. " + J",         hl.dsp.layout("togglesplit"))
-      hl.bind(mainMod .. " + L",         hl.dsp.exec_cmd("loginctl lock-session"))
-      hl.bind(mainMod .. " + Z",         hl.dsp.exec_cmd(browser))
-      hl.bind("ALT + SPACE",             hl.dsp.exec_cmd(menu))
-      hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("walker --modules clipboard"))
-      hl.bind(mainMod .. " + SPACE",     hl.dsp.exec_cmd("hyprctl switchxkblayout all next"))
-      hl.bind(mainMod .. " + T",         hl.dsp.exec_cmd("theme-switch"))
-
-      -- Fullscreen / maximize
-      hl.bind("ALT + up", hl.dsp.window.fullscreen({ mode = "maximized",  action = "toggle" }))
-      hl.bind("ALT + F",  hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }))
-
-      -- Move focus
-      hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left"  }))
-      hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "right" }))
-      hl.bind(mainMod .. " + up",    hl.dsp.focus({ direction = "up"    }))
-      hl.bind(mainMod .. " + down",  hl.dsp.focus({ direction = "down"  }))
-
-      -- Workspaces 1-10
-      for i = 1, 10 do
-        local key = i % 10
-        hl.bind(mainMod .. " + " .. key,         hl.dsp.focus({ workspace = i }))
-        hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
-      end
-
-      -- Special workspace
-      hl.bind(mainMod .. " + S",       hl.dsp.workspace.toggle_special("magic"))
-      hl.bind(mainMod .. " + ALT + S", hl.dsp.window.move({ workspace = "special:magic" }))
-
-      -- Scroll through workspaces
-      hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
-      hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
-
-      -- Swap windows
-      hl.bind(mainMod .. " + SHIFT + left",  hl.dsp.window.swap({ direction = "left"  }))
-      hl.bind(mainMod .. " + SHIFT + right", hl.dsp.window.swap({ direction = "right" }))
-      hl.bind(mainMod .. " + SHIFT + up",    hl.dsp.window.swap({ direction = "up"    }))
-      hl.bind(mainMod .. " + SHIFT + down",  hl.dsp.window.swap({ direction = "down"  }))
-
-      -- Move window to monitor
-      hl.bind(mainMod .. " + ALT + left",  hl.dsp.window.move({ monitor = "DP-1" }))
-      hl.bind(mainMod .. " + ALT + right", hl.dsp.window.move({ monitor = "DP-2" }))
-
-      -- Resize (repeating)
-      hl.bind(mainMod .. " + CTRL + right", hl.dsp.window.resize({ x =  50, y =   0, relative = true }), { repeating = true })
-      hl.bind(mainMod .. " + CTRL + left",  hl.dsp.window.resize({ x = -50, y =   0, relative = true }), { repeating = true })
-      hl.bind(mainMod .. " + CTRL + up",    hl.dsp.window.resize({ x =   0, y = -50, relative = true }), { repeating = true })
-      hl.bind(mainMod .. " + CTRL + down",  hl.dsp.window.resize({ x =   0, y =  50, relative = true }), { repeating = true })
-
-      -- Mouse binds
-      hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
-      hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
-
-      -- Media keys
-      hl.bind("XF86AudioRaiseVolume",  hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"),   { locked = true, repeating = true })
-      hl.bind("XF86AudioLowerVolume",  hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),        { locked = true, repeating = true })
-      hl.bind("XF86AudioMute",         hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),       { locked = true, repeating = true })
-      hl.bind("XF86AudioMicMute",      hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),     { locked = true, repeating = true })
-      hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"),                    { locked = true, repeating = true })
-      hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"),                    { locked = true, repeating = true })
-
-      hl.bind("XF86AudioNext",  hl.dsp.exec_cmd("playerctl next"),        { locked = true })
-      hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"),  { locked = true })
-      hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd("playerctl play-pause"),  { locked = true })
-      hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),    { locked = true })
-
-      -- Window rules
-      hl.window_rule({
-        match    = { class = "^$", title = "^$", xwayland = true, float = true, fullscreen = false, pin = false },
-        no_focus = true,
-      })
-
-      hl.window_rule({
-        match = { class = "com.saivert.pwvucontrol" },
-        float = true,
-        size  = "600 400",
-        move  = "50% 50",
-      })
-
-      hl.window_rule({
-        match        = { class = "^walker$" },
-        float        = true,
-        center       = true,
-        size         = "600 400",
-        stay_focused = true,
-        border_size  = 0,
-      })
-
-      -- Theme colors (overrides general/decoration defaults above)
       dofile(os.getenv("HOME") .. "/.config/themes/current/hyprland.lua")
     '';
   };

@@ -3,9 +3,7 @@ let
   content = builtins.readFile yamlPath;
   lines = builtins.filter builtins.isString (builtins.split "\n" content);
 
-  paletteLines = builtins.filter (
-    l: builtins.match "^  base[0-9A-Fa-f]+:.*" l != null
-  ) lines;
+  paletteLines = builtins.filter (l: builtins.match "^  base[0-9A-Fa-f]+:.*" l != null) lines;
 
   parseLine =
     l:
