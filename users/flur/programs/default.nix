@@ -13,6 +13,5 @@
     ./flatpak.nix
     ./mullvad-vpn.nix
     ./heroic.nix
-    ./composer.nix
   ];
 }
