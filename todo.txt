@@ -4,8 +4,8 @@ x 2026-06-14 2026-06-14 rebase themes onto main @git pri:A start:2026-06-14
 x 2026-06-14 2026-06-14 fix nvim closing when clicking on the "x" of one of the file tabs start:2026-06-14
 x 2026-06-14 2026-06-14 Make Claude read the todo.txt on launch and select the execution of one of the entries based on priority pri:A start:2026-06-14
 (B) Migrate waybar to Eww @migration start:2026-06-14
-x 2026-06-24 2026-06-14 Investigate and fix SUPER+L (locking/hyprlock) not going to sleep after the time has passed. +context:Only_leaving_the_screen_to_timeout_on_it's_own_makes_it_go_to_sleep/hibernation @fix pri:A start:2026-06-14
-Figure out why openRGB can't change my RAM RGBs start:2026-06-14
+x 2026-06-24 2026-06-14 Investigate and fix SUPER+L (locking/hyprlock) not going to sleep after the time has passed. @fix pri:A start:2026-06-14 ctx:"Only leaving the screen to timeout on its own makes it go to sleep/hibernation"
+Figure out why openRGB can't change my RAM RGBs start:2026-06-14 blocked:"hardware issues (Lenovo)"
 Figure out a better way to provide context for a todo.txt entry. start:2026-06-14
 x 2026-06-24 2026-06-24 Make CTRL+L clear the terminal in TMUX (not clear the buffer, just what's visible on the screen) start:2026-06-24
-(C) Fix claude todo-skill to follow the todo.txt specification properly. start:2026-06-24
+x 2026-06-24 2026-06-25 Fix claude todo-skill to follow the todo.txt specification properly. start:2026-06-24 pri:C

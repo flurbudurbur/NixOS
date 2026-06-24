@@ -78,6 +78,8 @@ nixos-system/
 │   ├── bricolage-grotesque.nix  # Custom font (pkgs.bricolage-grotesque)
 │   ├── qobuz-player.nix        # TUI music player (pkgs.qobuz-player)
 │   └── rose-pine-plymouth.nix  # Plymouth boot theme (pkgs.rose-pine-plymouth)
+├── dotfiles/              # Shared dotfile sources
+│   └── starship.toml      # Starship prompt base config (extended by theme switcher)
 ├── modules/               # System-level configuration
 │   ├── themes/
 │   │   └── default.nix    # Theme color palettes (rose-pine-moon, catppuccin-mocha, sweet)
@@ -86,6 +88,7 @@ nixos-system/
 │   ├── desktop.nix        # Hyprland, tuigreet, XDG portals
 │   ├── gaming.nix         # Steam, Lutris, Wine, gamemode
 │   ├── keyd.nix           # Keyboard remapping (default + Razer Tartarus)
+│   ├── opentabletdriver.nix # Drawing tablet support (OpenTabletDriver)
 │   └── secrets.nix        # System-level secrets (sops-nix)
 ├── hosts/                 # Per-machine configurations
 │   └── flurPC/
@@ -101,18 +104,16 @@ nixos-system/
         │   ├── git.nix        # Git configuration
         │   ├── ssh.nix        # SSH with FIDO2/Yubikey keys
         │   ├── nvim.nix       # Neovim (nixvim)
-        │   ├── composer.nix   # PHP/Composer with hard-linked config
         │   ├── dev.nix        # fnm, pnpm, Node.js
         │   ├── zen-browser.nix # Zen Browser + NextDNS
         │   └── ...
-        ├── shell/         # Zsh, Starship, Tmux, Fastfetch
+        ├── shell/         # Zsh, Starship, Tmux
         └── wayland/       # Hyprland, Waybar, Walker, Hyprlock, Mako, Themes
 ```
 
 ## Key Features
 
 ### Development Tools
-- **PHP**: Composer with hard-linked `composer.json` (tracked in repo + XDG config)
 - **Node.js**: fnm (Fast Node Manager) + pnpm
 - **Git**: Yubikey GPG signing, SSH aliases
 - **Neovim**: Comprehensive nixvim configuration

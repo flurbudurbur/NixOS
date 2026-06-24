@@ -43,6 +43,8 @@ nixos-system/
 │   ├── bricolage-grotesque.nix  # Custom font package
 │   ├── qobuz-player.nix        # TUI music player for Qobuz
 │   └── rose-pine-plymouth.nix  # Plymouth boot theme
+├── dotfiles/              # Shared dotfile sources
+│   └── starship.toml      # Starship prompt base config (extended by theme switcher)
 ├── modules/               # System-level shared configuration
 │   ├── themes/
 │   │   └── default.nix    # Theme color definitions (rose-pine-moon, catppuccin-mocha, sweet)
@@ -51,6 +53,7 @@ nixos-system/
 │   ├── desktop.nix        # Desktop environment (Hyprland, tuigreet, XDG portals)
 │   ├── gaming.nix         # Gaming (Steam, Lutris, Wine, gamemode)
 │   ├── keyd.nix           # Keyboard remapping (default keyboard + Razer Tartarus)
+│   ├── opentabletdriver.nix # Drawing tablet support (OpenTabletDriver)
 │   └── secrets.nix        # System-level secrets management
 ├── hosts/                 # Per-machine configurations
 │   └── flurPC/
@@ -69,7 +72,6 @@ nixos-system/
         │   ├── packages.nix   # User packages and utilities
         │   ├── xdg.nix        # GTK, Qt, XDG theming
         │   ├── nvim.nix       # Neovim configuration
-        │   ├── composer.nix   # PHP/Composer with hard-linked config
         │   ├── dev.nix        # Web development tools (fnm, pnpm, Node.js)
         │   ├── gpg.nix        # GPG configuration for Yubikey
         │   ├── zen-browser.nix  # Zen Browser with NextDNS integration
@@ -78,17 +80,15 @@ nixos-system/
         │   ├── heroic.nix     # Heroic Games Launcher
         │   └── persepolis.nix # Persepolis download manager
         ├── shell/         # Shell environment
-        │   ├── default.nix    # Zsh configuration
-        │   ├── starship.toml  # Starship prompt base config (extended by theme switcher)
+        │   ├── default.nix    # Zsh configuration (aliases, starship, fastfetch)
         │   ├── terminals.nix  # Foot terminal
-        │   ├── starship.nix   # Starship prompt enablement
-        │   ├── tmux.nix       # Tmux terminal multiplexer
-        │   └── fastfetch.nix  # System info display
+        │   └── tmux.nix       # Tmux terminal multiplexer
         └── wayland/       # Wayland/Hyprland specific
             ├── default.nix    # Aggregates wayland modules
             ├── hyprland.nix   # Hyprland settings (Lua config)
             ├── hyprlock.nix   # Lock screen
             ├── hypridle.nix   # Idle management
+            ├── timeouts.nix   # Shared timeout values for hypridle/hyprlock
             ├── mako.nix       # Notification daemon
             ├── themes.nix     # Runtime theme switcher (generates per-theme config files)
             ├── waybar.nix     # Status bar
@@ -145,6 +145,7 @@ This configuration uses several external flake inputs beyond standard nixpkgs:
 - `desktop.nix`: Desktop environment (Hyprland WM, tuigreet DM, XDG portals, desktop apps)
 - `gaming.nix`: Gaming configuration (Steam, Lutris, Wine, gamemode)
 - `keyd.nix`: Keyboard remapping (capslock/ctrl swap, Razer Tartarus profiles)
+- `opentabletdriver.nix`: Drawing tablet support (OpenTabletDriver daemon)
 - `themes/default.nix`: Theme color palettes (rose-pine-moon, catppuccin-mocha, sweet)
 - `secrets.nix`: System-level secrets management with sops-nix (age encryption)
 
@@ -219,7 +220,7 @@ Theming uses a **runtime theme switcher** with multiple themes defined in `modul
 ### How it works
 
 1. `modules/themes/default.nix` defines color palettes (rose-pine-moon, catppuccin-mocha, sweet)
-2. `users/flur/wayland/themes.nix` generates per-theme config files for each app (hyprland, waybar, walker, foot, starship, mako, hyprlock, zen browser, nvim, gtk) under `~/.config/themes/<name>/`
+2. `users/flur/wayland/themes.nix` generates per-theme config files for each app (hyprland, waybar, walker, foot, starship, mako, hyprlock, zen browser, nvim, gtk) under `~/.config/themes/<name>/`. Starship base config is sourced from `dotfiles/starship.toml`
 3. `~/.config/themes/current` is a symlink to the active theme
 4. Apps source their theme file at runtime (e.g. `@import url("~/.config/themes/current/waybar-style.css")`)
 5. `theme-switch [name]` updates the symlink and reloads all apps
@@ -326,17 +327,6 @@ home.activation.substituteSecrets = lib.hm.dag.entryAfter ["writeBoundary"] ''
 '';
 ```
 
-**Pattern 3: Hard-linked configuration** (composer.nix):
-```nix
-# composer.json is hard-linked between ~/.config/composer/ and repo root
-# Activation script ensures both locations point to same inode
-# Allows both NixOS tracking and standard composer workflow
-home.activation.initComposer = lib.hm.dag.entryAfter ["writeBoundary"] ''
-  # Creates hard link between repo and XDG config location
-  ln "$REPO_COMPOSER" "$COMPOSER_JSON"
-'';
-```
-
 ### Deployment Notes
 - **No interactive prompts**: age decryption works non-interactively during nixos-rebuild
 - **Secrets location**:
@@ -380,8 +370,8 @@ Defined in `users/flur/shell/default.nix`:
 
 - `nrs` — `nixos-rebuild switch --sudo --flake` (apply config)
 - `nrt` — `nixos-rebuild test --sudo --flake` (test without boot entry)
-- `ncheck` — `nix flake check --no-build` (validate flake without building)
-- `nfmt` — `nix fmt` (format Nix files using nixfmt-tree)
+- `nfc` — `nix flake check --no-build` (validate flake without building)
+- `nf` — `nix fmt` (format Nix files using nixfmt-tree)
 - `mvr` — `mullvad reconnect`
 
 **Zoxide** is initialized in zsh (`eval "$(zoxide init zsh --cmd cd)"`), replacing `cd` with smart directory jumping.
