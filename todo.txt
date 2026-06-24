@@ -5,3 +5,4 @@ x fix nvim closing when clicking on the "x" of one of the file tabs
 x (A) 2026-06-14 2026-06-14 Make Claude read the todo.txt on launch and select the execution of one of the entries based on priority
 (B) Migrate waybar to Eww @migration
 x (A) Investigate and fix SUPER+L (locking/hyprlock) not going to sleep after the time has passed. +context:Only_leaving_the_screen_to_timeout_on_it's_own_makes_it_go_to_sleep/hibernation @fix
+Figure out why openRGB can't change my RAM RGBs
