@@ -14,7 +14,7 @@
     ShowStatus=no
   '';
 
-  stylix = {
+  stylix = with pkgs; {
     targets.zen-browser.enable = false;
     targets.starship.enable = false; # Custom starship config
     targets.waybar.enable = false; # Custom CSS with colors module
@@ -27,20 +27,20 @@
     opacity.terminal = 0.95;
     cursor = {
       name = "BreezeX-RosePine-Linux";
-      package = pkgs.rose-pine-cursor;
+      package = rose-pine-cursor;
       size = 24;
     };
     fonts = {
       monospace = {
-        package = pkgs.maple-mono.NF;
+        package = maple-mono.NF;
         name = "MapleMono NF";
       };
       sansSerif = {
-        package = pkgs.bricolage-grotesque;
+        package = bricolage-grotesque;
         name = "Bricolage Grotesque";
       };
       serif = {
-        package = pkgs.bricolage-grotesque;
+        package = bricolage-grotesque;
         name = "Bricolage Grotesque";
       };
       sizes = {
