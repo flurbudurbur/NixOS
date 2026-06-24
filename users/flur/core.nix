@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   home = {
     username = "flur";
@@ -14,38 +14,43 @@
     ShowStatus=no
   '';
 
-  stylix = with pkgs; {
-    targets.zen-browser.enable = false;
-    targets.starship.enable = false; # Custom starship config
-    targets.waybar.enable = false; # Custom CSS with colors module
-    targets.hyprlock.enable = false; # Custom colors with colors module
-    targets.hyprland.enable = false; # Theme switcher owns border/shadow colors
-    targets.foot.enable = false; # Theme switcher owns terminal colors
-    targets.nixvim.enable = false; # Explicit rose-pine colorscheme in nixvim
-    enable = true;
-    # base16Scheme is set in wayland/themes.nix from our theme definitions
-    opacity.terminal = 0.95;
-    cursor = {
-      name = "BreezeX-RosePine-Linux";
-      package = rose-pine-cursor;
-      size = 24;
-    };
-    fonts = {
-      monospace = {
-        package = maple-mono.NF;
-        name = "MapleMono NF";
-      };
-      sansSerif = {
+  stylix =
+    with pkgs;
+    let
+      bricolage = {
         package = bricolage-grotesque;
         name = "Bricolage Grotesque";
       };
-      serif = {
-        package = bricolage-grotesque;
-        name = "Bricolage Grotesque";
+    in
+    {
+      enable = true;
+      targets =
+        lib.genAttrs
+          [
+            "zen-browser"
+            "starship"
+            "waybar"
+            "hyprlock"
+            "hyprland"
+            "foot"
+            "nixvim"
+          ]
+          (_: {
+            enable = false;
+          });
+      cursor = {
+        name = "BreezeX-RosePine-Linux";
+        package = rose-pine-cursor;
+        size = 24;
       };
-      sizes = {
-        terminal = 12;
+      fonts = {
+        monospace = {
+          package = maple-mono.NF;
+          name = "MapleMono NF";
+        };
+        sansSerif = bricolage;
+        serif = bricolage;
+        sizes.terminal = 12;
       };
     };
-  };
 }
