@@ -43,8 +43,8 @@
       btw = "echo I use Nixos, btw";
       nrt = "nixos-rebuild test --sudo --flake /home/flur/nixos-system";
       nrs = "nixos-rebuild switch --sudo --flake /home/flur/nixos-system";
-      ncheck = "nix flake check --no-build /home/flur/nixos-system";
-      nfmt = "nix fmt /home/flur/nixos-system";
+      nfc = "nix flake check --no-build /home/flur/nixos-system";
+      nf = "nix fmt /home/flur/nixos-system";
       mvr = "mullvad reconnect";
     };
     initContent = ''
@@ -74,6 +74,19 @@
       }
       zle -N sesh-sessions
       bindkey '^k' sesh-sessions
+
+      # Claude wrapper for custom subcommands
+      claude() {
+        case "$1" in
+          todo)
+            shift
+            command claude "Read todo.txt and recommend the next task to work on."
+            ;;
+          *)
+            command claude "$@"
+            ;;
+        esac
+      }
 
       # Mullvad VPN status with polling until connected
       mvs() {

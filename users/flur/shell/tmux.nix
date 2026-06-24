@@ -114,7 +114,7 @@
           layout: main-vertical
           panes:
             - nvim .
-            - claude
+            - claude todo
       - serve: devenv up web
       - git: lazygit
       - scratch:
@@ -130,7 +130,7 @@
           layout: main-vertical
           panes:
             - nvim .
-            - claude
+            - claude todo
       - git: lazygit
       - scratch:
   '';
