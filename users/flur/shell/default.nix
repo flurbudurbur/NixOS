@@ -80,7 +80,7 @@
         case "$1" in
           todo)
             shift
-            command claude "Read todo.txt and recommend the next task to work on."
+            command claude "Read @todo.txt and recommend the next task to work on."
             ;;
           *)
             command claude "$@"
