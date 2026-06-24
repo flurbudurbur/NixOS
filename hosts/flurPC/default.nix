@@ -30,6 +30,7 @@
   # NVIDIA suspend/resume kernel parameters
   boot.kernelParams = [
     "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
+    "acpi_enforce_resources=lax"
     "quiet"
     "splash"
     "loglevel=3"

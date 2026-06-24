@@ -51,22 +51,42 @@
       url = "github:tinted-theming/schemes";
       flake = false;
     };
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
     inputs@{
+      self,
       nixpkgs,
       home-manager,
       stylix,
       sops-nix,
       nixos-secrets,
+      git-hooks,
       ...
     }:
     let
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
       overlays = import ./overlays { inherit inputs; };
     in
     {
-      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;
+      formatter.${system} = pkgs.nixfmt-tree;
+
+      checks.${system}.pre-commit-check = git-hooks.lib.${system}.run {
+        src = ./.;
+        hooks = {
+          nixfmt.enable = true;
+        };
+      };
+
+      devShells.${system}.default = pkgs.mkShell {
+        inherit (self.checks.${system}.pre-commit-check) shellHook;
+        buildInputs = self.checks.${system}.pre-commit-check.enabledPackages;
+      };
       nixosConfigurations = {
         flurPC =
           let

@@ -96,6 +96,23 @@
     motherboard = "intel";
   };
 
+  # Disable RAM RGB LEDs via openRGB on boot
+  systemd.services.openrgb-disable-ram-rgb = {
+    description = "Set RAM RGB to off via OpenRGB";
+    after = [ "openrgb.service" ];
+    wants = [ "openrgb.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = toString (
+        pkgs.writeShellScript "openrgb-disable-ram" ''
+          ${pkgs.openrgb-with-all-plugins}/bin/openrgb --device "Corsair Dominator Platinum" --mode direct --color 000000
+        ''
+      );
+      RemainAfterExit = true;
+    };
+  };
+
   # Locale
   time.timeZone = "Europe/Amsterdam";
 
