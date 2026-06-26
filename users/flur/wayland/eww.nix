@@ -84,23 +84,19 @@ in
     }
 
     button.workspace {
-      min-width: 12px;
-      min-height: 12px;
-      border-radius: 50%;
-      padding: 0;
-      margin: 0;
       background: transparent;
-      border: 2px solid $fg-faint;
+      border: none;
+      padding: 2px 0;
+      margin: 0;
+      color: $fg-faint;
     }
 
     button.workspace.active {
-      background: $accent;
-      border-color: $accent;
+      color: $accent;
     }
 
     button.workspace.occupied {
-      background: $fg-dim;
-      border-color: $fg-dim;
+      color: $fg-dim;
     }
 
     .volume-slider trough {
@@ -193,7 +189,10 @@ in
                 :class {ws.id == mon.activeWorkspace ? "workspace active"
                         : (ws.windows > 0 ? "workspace occupied" : "workspace empty")}
                 :onclick "hyprctl dispatch workspace ''${ws.id}"
-                ""))))))
+                :valign "center"
+                :vexpand false
+                {ws.id == mon.activeWorkspace ? "" : (ws.windows > 0 ? "" : "")}
+              ))))))
 
     (defwidget volume []
       (scale
