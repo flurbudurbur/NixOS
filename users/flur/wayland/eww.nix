@@ -12,7 +12,7 @@ let
 
   netScript = pkgs.writeShellScript "net-icon" ''
     t=$(nmcli -t -f TYPE,STATE connection show --active 2>/dev/null | grep activated | head -1 | cut -d: -f1)
-    if [ "$t" = "wifi" ]; then
+    if echo "$t" | grep -q "wireless\|wifi"; then
       s=$(nmcli -t -f IN-USE,SIGNAL device wifi 2>/dev/null | grep '^\*' | head -1 | cut -d: -f2)
       s=''${s:-0}
       if   [ "$s" -ge 75 ]; then echo "󰤨"
@@ -20,7 +20,7 @@ let
       elif [ "$s" -ge 25 ]; then echo "󰤢"
       else echo "󰤟"
       fi
-    elif [ "$t" = "ethernet" ]; then
+    elif echo "$t" | grep -q "ethernet"; then
       echo "󰈀"
     else
       echo "󰤭"
@@ -255,14 +255,14 @@ in
 
     (defwindow bar
       :monitor "DP-1"
-      :anchor "left center"
+      :anchor "left top bottom"
       :exclusive true
       :windowtype "dock"
       :stacking "fg"
       :geometry (geometry
-        :x "0"
+        :x "-55px"
         :y "0"
-        :width "50px"
+        :width "55px"
         :height "100%")
       (bar-layout))
   '';

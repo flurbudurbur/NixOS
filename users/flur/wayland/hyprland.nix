@@ -36,6 +36,15 @@ let
         position = "0x0";
         scale = "1";
       }
+      {
+        output = "DP-1";
+        reserved = {
+          top = 0;
+          right = 0;
+          bottom = 0;
+          left = 55;
+        };
+      }
     ];
   };
   monitors =
