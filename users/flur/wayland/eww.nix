@@ -1,6 +1,8 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 
 let
+  icons = import ./icons.nix;
+
   startScript = pkgs.writeShellScript "bar-start" ''
     ${pkgs.eww}/bin/eww kill 2>/dev/null || true
     ${pkgs.eww}/bin/eww daemon --no-daemonize &
@@ -15,15 +17,15 @@ let
     if echo "$t" | grep -q "wireless\|wifi"; then
       s=$(nmcli -t -f IN-USE,SIGNAL device wifi 2>/dev/null | grep '^\*' | head -1 | cut -d: -f2)
       s=''${s:-0}
-      if   [ "$s" -ge 75 ]; then echo "󰤨"
-      elif [ "$s" -ge 50 ]; then echo "󰤥"
-      elif [ "$s" -ge 25 ]; then echo "󰤢"
-      else echo "󰤟"
+      if   [ "$s" -ge 75 ]; then echo "${icons.wifiFull}"
+      elif [ "$s" -ge 50 ]; then echo "${icons.wifiHigh}"
+      elif [ "$s" -ge 25 ]; then echo "${icons.wifiMed}"
+      else echo "${icons.wifiLow}"
       fi
     elif echo "$t" | grep -q "ethernet"; then
-      echo "󰈀"
+      echo "${icons.ethernet}"
     else
-      echo "󰤭"
+      echo "${icons.wifiOff}"
     fi
   '';
 
@@ -97,6 +99,15 @@ in
 
     button.workspace.occupied {
       color: $fg-dim;
+    }
+
+    button.workspace.new {
+      opacity: 0.4;
+    }
+
+    button.workspace.new:hover {
+      opacity: 1;
+      color: $accent;
     }
 
     .volume-slider trough {
@@ -184,15 +195,27 @@ in
             :orientation "v"
             :spacing 4
             :space-evenly false
-            (for ws in {mon.workspaces}
+            (box
+              :orientation "v"
+              :spacing 4
+              :space-evenly false
+              :vexpand false
+              (for ws in {mon.workspaces}
               (button
                 :class {ws.id == mon.activeWorkspace ? "workspace active"
                         : (ws.windows > 0 ? "workspace occupied" : "workspace empty")}
-                :onclick "hyprctl dispatch workspace ''${ws.id}"
+                :onclick "hyprctl dispatch 'hl.dsp.focus({ workspace = \"''${ws.id}\" })'"
                 :valign "center"
                 :vexpand false
-                {ws.id == mon.activeWorkspace ? "" : (ws.windows > 0 ? "" : "")}
-              ))))))
+                {ws.id == mon.activeWorkspace ? "${icons.wsActive}" : (ws.windows > 0 ? "${icons.wsOccupied}" : "${icons.wsEmpty}")}
+              )))
+            (button
+              :class "workspace new"
+              :onclick {"hyprctl dispatch focusmonitor " + mon.monitor + " && hyprctl dispatch workspace emptynm"}
+              :valign "center"
+              :vexpand false
+              "${icons.wsEmpty}")
+          ))))))
 
     (defwidget volume []
       (scale
@@ -215,13 +238,13 @@ in
       (box
         :class "cpu module"
         :orientation "h"
-        (label :text {"󰻠 " + cpu-usage + "%"})))
+        (label :text {"${icons.cpu} " + cpu-usage + "%"})))
 
     (defwidget memory []
       (box
         :class "memory module"
         :orientation "h"
-        (label :text {"󰍛 " + mem-usage + "%"})))
+        (label :text {"${icons.memory} " + mem-usage + "%"})))
 
     ;;; ─── Bar layout ─────────────────────────────────────────────────────────────
 
