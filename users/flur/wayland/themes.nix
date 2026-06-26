@@ -193,7 +193,7 @@ let
       }
     '';
 
-  mkEwwTheme =
+  mkBarTheme =
     t:
     let
       rgba = hex: alpha: "rgba(${hexToRgb hex}, ${alpha})";
@@ -658,7 +658,7 @@ let
       "themes/${name}/nvim-theme.lua".text = mkNvimTheme t;
       "themes/${name}/mako.conf".text = mkMakoTheme t;
       "themes/${name}/gtk.css".text = mkGtkCss t;
-      "themes/${name}/eww-style.scss".text = mkEwwTheme t;
+      "themes/${name}/bar.scss".text = mkBarTheme t;
     }
     // wallpaperEntry;
 
@@ -715,6 +715,7 @@ let
     hyprctl reload
     makoctl reload 2>/dev/null || true
     pkill -SIGUSR2 waybar
+    ${pkgs.eww}/bin/eww reload 2>/dev/null || true
     systemctl --user restart walker 2>/dev/null || true
 
     ZEN_CHROME="$HOME/.config/zen/default/chrome"
