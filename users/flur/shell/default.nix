@@ -88,6 +88,18 @@
         esac
       }
 
+      # Sesh wrapper: omit "connect" subcommand (sesh <name> → sesh connect <name>)
+      sesh() {
+        case "$1" in
+          connect|last|list|new|root|clone|"")
+            command sesh "$@"
+            ;;
+          *)
+            command sesh connect "$@"
+            ;;
+        esac
+      }
+
       # Mullvad VPN status with polling until connected
       mvs() {
         while true; do
