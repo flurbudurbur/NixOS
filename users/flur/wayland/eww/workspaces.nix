@@ -2,6 +2,14 @@
 
 let
   ws = icons.workspace;
+  newWsScript = pkgs.writeShellScript "new-workspace" ''
+    MONITOR="$1"
+    # Find max workspace on this monitor; fall back to base offset so DP-2 starts at 11
+    MAX_WS=$(hyprctl workspaces -j | ${pkgs.jq}/bin/jq --arg mon "$MONITOR" \
+      '[.[] | select(.monitor == $mon) | .id] | if length > 0 then max else (if $mon == "DP-2" then 10 else 0 end) end')
+    NEXT=$((MAX_WS + 1))
+    hyprctl --batch "dispatch hl.dsp.focus({ workspace = $NEXT }) ; dispatch hl.dsp.workspace.move({ workspace = $NEXT, monitor = \"$MONITOR\" }) ; dispatch hl.dsp.focus({ monitor = \"$MONITOR\" })"
+  '';
   script = pkgs.writeShellScript "workspaces" ''
     MONITORS=$(hyprctl monitors -j)
     WORKSPACES=$(hyprctl workspaces -j)
@@ -57,7 +65,7 @@ in
               )))
             (button
               :class "workspace new"
-              :onclick {"hyprctl dispatch focusmonitor " + mon.monitor + " && hyprctl dispatch workspace emptynm"}
+              :onclick {"${newWsScript} " + mon.monitor}
               :valign "center"
               :vexpand false
               "${ws.empty}")
