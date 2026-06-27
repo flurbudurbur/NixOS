@@ -1,4 +1,9 @@
-{ hostname, lib, ... }:
+{
+  hostname,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   mkLua = lib.generators.mkLuaInline;
@@ -57,14 +62,34 @@ let
       }
     ];
 
+  wsScript = pkgs.writeShellScript "ws-switch" ''
+    WS=$1
+    MON=$(hyprctl activeworkspace -j | jq -r .monitor)
+    if [ "$MON" = "DP-2" ]; then
+      hyprctl dispatch "hl.dsp.focus({ workspace = $((WS + 10)) })"
+    else
+      hyprctl dispatch "hl.dsp.focus({ workspace = $WS })"
+    fi
+  '';
+
+  mvScript = pkgs.writeShellScript "ws-move" ''
+    WS=$1
+    MON=$(hyprctl activeworkspace -j | jq -r .monitor)
+    if [ "$MON" = "DP-2" ]; then
+      hyprctl dispatch "hl.dsp.window.move({ workspace = $((WS + 10)) })"
+    else
+      hyprctl dispatch "hl.dsp.window.move({ workspace = $WS })"
+    fi
+  '';
+
   workspaceBinds = builtins.concatMap (
     i:
     let
       key = toString (lib.mod i 10);
     in
     [
-      (mkBind "${mainMod} + ${key}" (mkLua "hl.dsp.focus({ workspace = ${toString i} })"))
-      (mkBind "${mainMod} + SHIFT + ${key}" (mkLua "hl.dsp.window.move({ workspace = ${toString i} })"))
+      (mkBind "${mainMod} + ${key}" (mkLua ''hl.dsp.exec_cmd("${wsScript} ${toString i}")''))
+      (mkBind "${mainMod} + SHIFT + ${key}" (mkLua ''hl.dsp.exec_cmd("${mvScript} ${toString i}")''))
     ]
   ) (lib.range 1 10);
 in

@@ -13,7 +13,11 @@ let
         {
           monitor: ($mon.name // $g[0].monitor),
           activeWorkspace: ($mon.activeWorkspace.id // 0),
-          workspaces: [$g[] | {id: .id, windows: .windows}] | sort_by(.id)
+          workspaces: [$g[] | select(
+          (($mon.name == "DP-1") and (.id >= 1) and (.id <= 10)) or
+          (($mon.name == "DP-2") and (.id >= 11) and (.id <= 20)) or
+          (($mon.name != "DP-1") and ($mon.name != "DP-2"))
+        ) | {id: .id, windows: .windows}] | sort_by(.id)
         }] | sort_by(.monitor)'
   '';
 in
