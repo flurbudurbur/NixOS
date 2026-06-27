@@ -27,9 +27,9 @@ in
     package = pkgs.eww;
   };
 
-  home.packages = [
-    pkgs.jq
-    pkgs.socat
+  home.packages = with pkgs; [
+    jq
+    socat
   ];
 
   xdg.configFile."eww/eww.scss".text = builtins.concatStringsSep "\n" (map (c: c.scss) components);
