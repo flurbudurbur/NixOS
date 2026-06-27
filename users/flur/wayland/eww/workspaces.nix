@@ -4,9 +4,13 @@ let
   ws = icons.workspace;
   newWsScript = pkgs.writeShellScript "new-workspace" ''
     MONITOR="$1"
-    # Find max workspace on this monitor; fall back to base offset so DP-2 starts at 11
-    MAX_WS=$(hyprctl workspaces -j | ${pkgs.jq}/bin/jq --arg mon "$MONITOR" \
-      '[.[] | select(.monitor == $mon) | .id] | if length > 0 then max else (if $mon == "DP-2" then 10 else 0 end) end')
+    MONITORS=$(hyprctl monitors -j)
+    MON_IDX=$(echo "$MONITORS" | ${pkgs.jq}/bin/jq --arg mon "$MONITOR" \
+      '[sort_by([.x, .y]) | .[].name] | index($mon)')
+    BASE=$((MON_IDX * 10 + 1))
+    TOP=$((BASE + 9))
+    MAX_WS=$(hyprctl workspaces -j | ${pkgs.jq}/bin/jq --argjson base "$BASE" --argjson top "$TOP" \
+      '[.[] | select(.id >= $base and .id <= $top) | .id] | if length > 0 then max else ($base - 1) end')
     NEXT=$((MAX_WS + 1))
     hyprctl --batch "dispatch hl.dsp.focus({ monitor = \"$MONITOR\" }) ; dispatch hl.dsp.focus({ workspace = $NEXT })"
   '';
@@ -15,18 +19,19 @@ let
     WORKSPACES=$(hyprctl workspaces -j)
     echo "$WORKSPACES" | ${pkgs.jq}/bin/jq -c \
       --argjson m "$MONITORS" \
-      '[group_by(.monitor) | .[] |
-        . as $g |
-        ([$m[] | select(.name == $g[0].monitor)][0]) as $mon |
-        {
-          monitor: ($mon.name // $g[0].monitor),
-          activeWorkspace: ($mon.activeWorkspace.id // 0),
-          workspaces: [$g[] | select(
-          (($mon.name == "DP-1") and (.id >= 1) and (.id <= 10)) or
-          (($mon.name == "DP-2") and (.id >= 11) and (.id <= 20)) or
-          (($mon.name != "DP-1") and ($mon.name != "DP-2"))
-        ) | {id: .id, windows: .windows}] | sort_by(.id)
-        }] | sort_by(.monitor)'
+      '([$m | sort_by([.x, .y]) | .[].name]) as $sorted_monitors |
+        [group_by(.monitor) | .[] |
+          . as $g |
+          ([$m[] | select(.name == $g[0].monitor)][0]) as $mon |
+          ($sorted_monitors | index($mon.name)) as $mon_idx |
+          (($mon_idx * 10) + 1) as $base |
+          ($base + 9) as $top |
+          {
+            monitor: ($mon.name // $g[0].monitor),
+            activeWorkspace: ($mon.activeWorkspace.id // 0),
+            workspaces: [$g[] | select(.id >= $base and .id <= $top) | {id: .id, windows: .windows}] | sort_by(.id)
+          }
+        ] | sort_by(.monitor)'
   '';
 in
 {
