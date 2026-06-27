@@ -10,7 +10,8 @@
       (box
         :class "memory module"
         :orientation "h"
-        (label :text {"${icons.memory} " + mem-usage + "%"})))
+        (label :text "${icons.memory}" :halign "center" :hexpand true)
+        (label :text {mem-usage + "%"} :halign "center" :hexpand true)))
   '';
 
   scss = ''

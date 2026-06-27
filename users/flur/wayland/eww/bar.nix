@@ -69,13 +69,13 @@ in
 
     .bar-top,
     .bar-bottom {
-      padding: 8px 4px;
+      padding: 8px 2px;
     }
 
     .module {
       background: $bg-alpha;
       border-radius: 10px;
-      padding: 6px 4px;
+      padding: 6px 2px;
       margin: 2px 0;
     }
   '';

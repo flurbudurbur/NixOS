@@ -33,17 +33,17 @@ in
       (box
         :class "workspaces module"
         :orientation "h"
-        :spacing 4
+        :spacing 2
         :space-evenly true
         (for mon in monitors-data
           (box
             :class "workspace-col"
             :orientation "v"
-            :spacing 4
+            :spacing 2
             :space-evenly false
             (box
               :orientation "v"
-              :spacing 4
+              :spacing 2
               :space-evenly false
               :vexpand false
               (for ws in {mon.workspaces}
@@ -68,7 +68,7 @@ in
     button.workspace {
       background: transparent;
       border: none;
-      padding: 2px 0;
+      padding: 1px 0;
       margin: 0;
       color: $fg-faint;
     }

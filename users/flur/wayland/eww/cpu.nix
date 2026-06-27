@@ -10,7 +10,8 @@
       (box
         :class "cpu module"
         :orientation "h"
-        (label :text {"${icons.cpu} " + cpu-usage + "%"})))
+        (label :text "${icons.cpu}" :halign "center" :hexpand true)
+        (label :text {cpu-usage + "%"} :halign "center" :hexpand true)))
   '';
 
   scss = ''
