@@ -8,7 +8,7 @@ let
     MAX_WS=$(hyprctl workspaces -j | ${pkgs.jq}/bin/jq --arg mon "$MONITOR" \
       '[.[] | select(.monitor == $mon) | .id] | if length > 0 then max else (if $mon == "DP-2" then 10 else 0 end) end')
     NEXT=$((MAX_WS + 1))
-    hyprctl --batch "dispatch hl.dsp.focus({ workspace = $NEXT }) ; dispatch hl.dsp.workspace.move({ workspace = $NEXT, monitor = \"$MONITOR\" }) ; dispatch hl.dsp.focus({ monitor = \"$MONITOR\" })"
+    hyprctl --batch "dispatch hl.dsp.focus({ monitor = \"$MONITOR\" }) ; dispatch hl.dsp.focus({ workspace = $NEXT })"
   '';
   script = pkgs.writeShellScript "workspaces" ''
     MONITORS=$(hyprctl monitors -j)
