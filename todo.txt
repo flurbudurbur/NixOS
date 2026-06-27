@@ -3,7 +3,7 @@ x 2026-06-14 2026-06-14 fix Walker not working/not launching with alt+space keyb
 x 2026-06-14 2026-06-14 rebase themes onto main @git pri:A start:2026-06-14
 x 2026-06-14 2026-06-14 fix nvim closing when clicking on the "x" of one of the file tabs start:2026-06-14
 x 2026-06-14 2026-06-14 Make Claude read the todo.txt on launch and select the execution of one of the entries based on priority pri:A start:2026-06-14
-(B) Migrate waybar to Eww @migration start:2026-06-14
+x 2026-06-28 2026-06-14 Migrate waybar to Eww @migration pri:B start:2026-06-14
 x 2026-06-24 2026-06-14 Investigate and fix SUPER+L (locking/hyprlock) not going to sleep after the time has passed. @fix pri:A start:2026-06-14 ctx:"Only leaving the screen to timeout on its own makes it go to sleep/hibernation"
 Figure out why openRGB can't change my RAM RGBs start:2026-06-14 blocked:"hardware issues (Lenovo)"
 x 2026-06-26 2026-06-26 Figure out a better way to provide context for a todo.txt entry. start:2026-06-14

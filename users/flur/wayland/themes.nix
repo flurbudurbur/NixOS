@@ -93,106 +93,6 @@ let
     in
     "${toString r}, ${toString g}, ${toString b}";
 
-  mkWaybarTheme =
-    t:
-    let
-      rgba = hex: alpha: "rgba(${hexToRgb hex}, ${alpha})";
-    in
-    ''
-      * {
-        font-family: "Bricolage Grotesque", sans-serif;
-        font-size: 13px;
-        border: none;
-        border-radius: 0;
-      }
-
-      window#waybar {
-        background-color: transparent;
-      }
-
-      .modules-left, .modules-center, .modules-right {
-        background-color: ${rgba t.bg "0.9"};
-        border-radius: 10px;
-        margin-top: 10px;
-        margin-left: 10px;
-        margin-right: 10px;
-        margin-bottom: 0;
-        padding: 0 10px;
-        transition: all 0.3s ease-in-out;
-      }
-
-      #workspaces button {
-        padding: 0 5px;
-        color: ${t.fg};
-        background: transparent;
-        border: none;
-        min-width: 20px;
-      }
-
-      #workspaces button.active {
-        color: ${t.accent2};
-        background: ${rgba t.accent2 "0.2"};
-        border: none;
-      }
-
-      #workspaces button:hover {
-        background: ${rgba t.accent2 "0.1"};
-      }
-
-      #window {
-        color: ${t.fg};
-      }
-
-      #mpris {
-        color: ${t.accent2};
-      }
-
-      #mpris.paused {
-        color: ${t.fg_faint};
-      }
-
-      #clock {
-        color: ${t.accent};
-      }
-
-      #cpu {
-        color: ${t.error};
-      }
-
-      #memory {
-        color: ${t.warning};
-      }
-
-      #network {
-        color: ${t.cyan};
-      }
-
-      #wireplumber {
-        color: ${t.blue};
-      }
-
-      #bluetooth {
-        color: ${t.accent};
-      }
-
-      #bluetooth.disabled,
-      #bluetooth.off {
-        color: ${t.fg_faint};
-      }
-
-      #tray {
-        color: ${t.fg};
-      }
-
-      #clock, #cpu, #memory, #network, #wireplumber, #bluetooth, #tray, #window, #mpris {
-        padding: 0 10px;
-      }
-
-      #tray > .passive {
-        -gtk-icon-effect: dim;
-      }
-    '';
-
   mkBarTheme =
     t:
     let
@@ -649,7 +549,6 @@ let
       "themes/${name}/hyprland.conf".text = mkHyprTheme t;
       "themes/${name}/hyprland.lua".text = mkHyprThemeLua t;
       "themes/${name}/starship.toml".text = mkStarshipTheme t;
-      "themes/${name}/waybar-style.css".text = mkWaybarTheme t;
       "themes/${name}/foot-colors.ini".text = mkFootTheme t;
       "themes/${name}/walker-style.css".text = mkWalkerTheme t;
       "themes/${name}/hyprlock.conf".text = mkHyprLockTheme t;
@@ -714,7 +613,6 @@ let
 
     hyprctl reload
     makoctl reload 2>/dev/null || true
-    pkill -SIGUSR2 waybar
     ${pkgs.eww}/bin/eww reload 2>/dev/null || true
     systemctl --user restart walker 2>/dev/null || true
 

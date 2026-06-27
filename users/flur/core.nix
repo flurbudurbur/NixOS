@@ -29,7 +29,6 @@
           [
             "zen-browser"
             "starship"
-            "waybar"
             "hyprlock"
             "hyprland"
             "foot"

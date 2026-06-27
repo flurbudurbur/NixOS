@@ -36,7 +36,6 @@ in
   # Desktop packages
   environment.systemPackages = with pkgs; [
     mako
-    waybar
     rose-pine-gtk-theme
     rose-pine-icon-theme
   ];
