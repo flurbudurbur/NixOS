@@ -1,7 +1,9 @@
 { pkgs, ... }:
 
 let
-  icons = import ./icons.nix;
+  icons = import ./icons.nix { };
+  ws = icons.workspace;
+  net = icons.network;
 
   startScript = pkgs.writeShellScript "bar-start" ''
     ${pkgs.eww}/bin/eww kill 2>/dev/null || true
@@ -17,15 +19,15 @@ let
     if echo "$t" | grep -q "wireless\|wifi"; then
       s=$(nmcli -t -f IN-USE,SIGNAL device wifi 2>/dev/null | grep '^\*' | head -1 | cut -d: -f2)
       s=''${s:-0}
-      if   [ "$s" -ge 75 ]; then echo "${icons.wifiFull}"
-      elif [ "$s" -ge 50 ]; then echo "${icons.wifiHigh}"
-      elif [ "$s" -ge 25 ]; then echo "${icons.wifiMed}"
-      else echo "${icons.wifiLow}"
+      if   [ "$s" -ge 75 ]; then echo "${net.full}"
+      elif [ "$s" -ge 50 ]; then echo "${net.high}"
+      elif [ "$s" -ge 25 ]; then echo "${net.medium}"
+      else echo "${net.low}"
       fi
     elif echo "$t" | grep -q "ethernet"; then
-      echo "${icons.ethernet}"
+      echo "${net.ethernet}"
     else
-      echo "${icons.wifiOff}"
+      echo "${net.off}"
     fi
   '';
 
@@ -207,14 +209,14 @@ in
                 :onclick "hyprctl dispatch 'hl.dsp.focus({ workspace = \"''${ws.id}\" })'"
                 :valign "center"
                 :vexpand false
-                {ws.id == mon.activeWorkspace ? "${icons.wsActive}" : (ws.windows > 0 ? "${icons.wsOccupied}" : "${icons.wsEmpty}")}
+                {ws.id == mon.activeWorkspace ? "${ws.active}" : (ws.windows > 0 ? "${ws.occupied}" : "${ws.empty}")}
               )))
             (button
               :class "workspace new"
               :onclick {"hyprctl dispatch focusmonitor " + mon.monitor + " && hyprctl dispatch workspace emptynm"}
               :valign "center"
               :vexpand false
-              "${icons.wsEmpty}")
+              "${ws.empty}")
           ))))
 
     (defwidget volume []

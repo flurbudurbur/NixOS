@@ -6,7 +6,7 @@
     ./hypridle.nix
     ./mako.nix
     # ./waybar.nix
-    ./eww.nix
+    ./eww
     ./walker.nix
     ./themes.nix
   ];
