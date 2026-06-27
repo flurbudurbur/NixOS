@@ -215,7 +215,7 @@ in
               :valign "center"
               :vexpand false
               "${icons.wsEmpty}")
-          ))))))
+          ))))
 
     (defwidget volume []
       (scale
