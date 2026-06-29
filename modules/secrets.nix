@@ -1,4 +1,4 @@
-{ pkgs, secretsPath, ... }:
+{ pkgs, ... }:
 
 {
   sops = {
@@ -13,38 +13,7 @@
     validateSopsFiles = true;
     useSystemdActivation = true;
 
-    secrets = {
-      # Re-enable Mullvad VPN secrets now that age works non-interactively
-      "mullvad-account-history" = {
-        sopsFile = "${secretsPath}/system/mullvad/account-history.enc";
-        format = "binary";
-        path = "/etc/mullvad-vpn/account-history.json";
-        owner = "root";
-        group = "root";
-        mode = "0600";
-        restartUnits = [ "mullvad-daemon.service" ];
-      };
-
-      "mullvad-device" = {
-        sopsFile = "${secretsPath}/system/mullvad/device.enc";
-        format = "binary";
-        path = "/etc/mullvad-vpn/device.json";
-        owner = "root";
-        group = "root";
-        mode = "0600";
-        restartUnits = [ "mullvad-daemon.service" ];
-      };
-
-      "mullvad-settings" = {
-        sopsFile = "${secretsPath}/system/mullvad/settings.enc";
-        format = "binary";
-        path = "/etc/mullvad-vpn/settings.json";
-        owner = "root";
-        group = "root";
-        mode = "0644";
-        restartUnits = [ "mullvad-daemon.service" ];
-      };
-    };
+    secrets = { };
   };
 
   # Add age package for sops-nix

@@ -72,8 +72,8 @@
       enable = true;
       plugins = [ pkgs.ccid ];
     };
-    # Mullvad VPN daemon
-    mullvad-vpn.enable = true;
+    # IVPN daemon
+    ivpn.enable = true;
   };
 
   # Bluetooth

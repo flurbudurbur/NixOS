@@ -11,3 +11,5 @@ x 2026-06-24 2026-06-24 Make CTRL+L clear the terminal in TMUX (not clear the bu
 x 2026-06-24 2026-06-25 Fix claude todo-skill to follow the todo.txt specification properly. start:2026-06-24 pri:C
 x 2026-06-26 2026-06-26 Add function wrapper to Sesh so that "connect" command can be omitted. pri:C start:2026-06-26
 x 2026-06-26 2026-06-26 Add /todo-start to the claude skills start:2026-06-26
+x 2026-06-29 2026-06-29 Migrate mullvad VPN to IVPN completely. pri:A start:2026-06-29
+(C) Fix eww workspace module upon startup not registering workspace 11 ctx:"workspace 2 is displayed on DP-2 instead of 11."

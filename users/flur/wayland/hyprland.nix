@@ -27,6 +27,8 @@ let
   browser = "zen-beta";
   mainMod = "SUPER";
 
+  seshToggle = (import ./eww/sesh.nix { inherit pkgs; }).toggleScript;
+
   monitorConfigs = {
     flurPC = [
       {
@@ -400,7 +402,7 @@ in
               hl.exec_cmd("hyprctl setcursor BreezeX-RosePine-Linux 24")
               hl.exec_cmd("wl-paste --type text --watch cliphist store")
               hl.exec_cmd("wl-paste --type image --watch cliphist store")
-              hl.exec_cmd("sleep 2 && mullvad reconnect")
+              hl.exec_cmd("sleep 2 && ivpn connect -f")
             end'')
         ];
       };
@@ -424,6 +426,7 @@ in
         (mkBind "${mainMod} + SHIFT + V" (mkLua ''hl.dsp.exec_cmd("walker --modules clipboard")''))
         (mkBind "${mainMod} + SPACE" (mkLua ''hl.dsp.exec_cmd("hyprctl switchxkblayout all next")''))
         (mkBind "${mainMod} + T" (mkLua ''hl.dsp.exec_cmd("theme-switch")''))
+        (mkBind "${mainMod} + SHIFT + T" (mkLua ''hl.dsp.exec_cmd("${seshToggle}")''))
 
         # Fullscreen / maximize
         (mkBind "ALT + up" (mkLua ''hl.dsp.window.fullscreen({ mode = "maximized", action = "toggle" })''))

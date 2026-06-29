@@ -11,7 +11,7 @@
     ./gpg.nix
     ./persepolis.nix
     ./flatpak.nix
-    ./mullvad-vpn.nix
+    ./ivpn.nix
     ./heroic.nix
   ];
 }

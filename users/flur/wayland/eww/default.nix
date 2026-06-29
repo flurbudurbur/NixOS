@@ -6,6 +6,7 @@ let
   bar = import ./bar.nix { inherit pkgs; };
   clock = import ./clock.nix { };
   workspaces = import ./workspaces.nix { inherit pkgs icons; };
+  sesh = import ./sesh.nix { inherit pkgs; };
   volume = import ./volume.nix { };
   network = import ./network.nix { inherit pkgs icons; };
   cpu = import ./cpu.nix { inherit icons; };
@@ -15,6 +16,7 @@ let
     bar
     clock
     workspaces
+    sesh
     volume
     network
     cpu

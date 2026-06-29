@@ -45,7 +45,7 @@
       nrs = "nixos-rebuild switch --sudo --flake /home/flur/nixos-system";
       nfc = "nix flake check --no-build /home/flur/nixos-system";
       nf = "nix fmt /home/flur/nixos-system";
-      mvr = "mullvad reconnect";
+      ivr = "ivpn connect -f";
     };
     initContent = ''
       # Display system info on shell start
@@ -100,13 +100,13 @@
         esac
       }
 
-      # Mullvad VPN status with polling until connected
-      mvs() {
+      # IVPN status with polling until connected
+      ivs() {
         while true; do
           local vpn_status
-          vpn_status=$(mullvad status)
+          vpn_status=$(ivpn status)
           echo "$vpn_status"
-          if echo "$vpn_status" | grep -q "^Connected"; then
+          if echo "$vpn_status" | grep -q "Connected"; then
             break
           fi
           sleep 1
