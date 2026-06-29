@@ -29,59 +29,27 @@ let
 
   seshToggle = (import ./eww/sesh.nix { inherit pkgs; }).toggleScript;
 
-  monitorConfigs = {
-    flurPC = [
-      {
-        output = "DP-2";
-        mode = "2560x1440@165";
-        position = "2560x0";
-        scale = "1";
-      }
-      {
-        output = "DP-1";
-        mode = "2560x1440@165";
-        position = "0x0";
-        scale = "1";
-      }
-      {
-        output = "DP-1";
-        reserved = {
-          top = 0;
-          right = 0;
-          bottom = 0;
-          left = 55;
-        };
-      }
-    ];
-  };
-  monitors =
-    monitorConfigs.${hostname} or [
-      {
-        output = "";
-        mode = "preferred";
-        position = "auto";
-        scale = "auto";
-      }
-    ];
+  monitorsData = import ./monitors.nix { inherit hostname lib; };
+  inherit (monitorsData) monitors sortedMonitors monitorCase;
 
   wsScript = pkgs.writeShellScript "ws-switch" ''
-    WS=$1
-    MON=$(hyprctl activeworkspace -j | jq -r .monitor)
-    if [ "$MON" = "DP-2" ]; then
-      hyprctl dispatch "hl.dsp.focus({ workspace = $((WS + 10)) })"
-    else
-      hyprctl dispatch "hl.dsp.focus({ workspace = $WS })"
-    fi
+        WS=$1
+        MON=$(hyprctl activeworkspace -j | ${pkgs.jq}/bin/jq -r .monitor)
+        case "$MON" in
+    ${monitorCase}
+          *) MON_IDX=0 ;;
+        esac
+        hyprctl dispatch "hl.dsp.focus({ workspace = $((MON_IDX * 10 + WS)) })"
   '';
 
   mvScript = pkgs.writeShellScript "ws-move" ''
-    WS=$1
-    MON=$(hyprctl activeworkspace -j | jq -r .monitor)
-    if [ "$MON" = "DP-2" ]; then
-      hyprctl dispatch "hl.dsp.window.move({ workspace = $((WS + 10)) })"
-    else
-      hyprctl dispatch "hl.dsp.window.move({ workspace = $WS })"
-    fi
+        WS=$1
+        MON=$(hyprctl activeworkspace -j | ${pkgs.jq}/bin/jq -r .monitor)
+        case "$MON" in
+    ${monitorCase}
+          *) MON_IDX=0 ;;
+        esac
+        hyprctl dispatch "hl.dsp.window.move({ workspace = $((MON_IDX * 10 + WS)) })"
   '';
 
   workspaceBinds = builtins.concatMap (

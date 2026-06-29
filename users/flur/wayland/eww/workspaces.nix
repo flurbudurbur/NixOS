@@ -1,7 +1,24 @@
-{ pkgs, icons }:
+{
+  pkgs,
+  icons,
+  primaryMonitor,
+}:
 
 let
   ws = icons.workspace;
+  switchWsScript = pkgs.writeShellScript "switch-workspace" ''
+    WS_ID="$1"
+    MON="$2"
+    if [ "$MON" != "${primaryMonitor}" ]; then
+      CURRENT_MON=$(hyprctl monitors -j | ${pkgs.jq}/bin/jq -r '.[] | select(.focused == true) | .name')
+      CURSOR=$(hyprctl cursorpos -j)
+      CURSOR_X=$(echo "$CURSOR" | ${pkgs.jq}/bin/jq -r '.x')
+      CURSOR_Y=$(echo "$CURSOR" | ${pkgs.jq}/bin/jq -r '.y')
+      hyprctl --batch "dispatch hl.dsp.focus({ monitor = \"$MON\" }) ; dispatch hl.dsp.focus({ workspace = $WS_ID }) ; dispatch hl.dsp.focus({ monitor = \"$CURRENT_MON\" }) ; dispatch hl.dsp.cursor.move({x = $CURSOR_X, y = $CURSOR_Y})"
+    else
+      hyprctl dispatch "hl.dsp.focus({ workspace = \"$WS_ID\" })"
+    fi
+  '';
   newWsScript = pkgs.writeShellScript "new-workspace" ''
     MONITOR="$1"
     MONITORS=$(hyprctl monitors -j)
@@ -63,7 +80,7 @@ in
               (button
                 :class {ws.id == mon.activeWorkspace ? "workspace active"
                         : (ws.windows > 0 ? "workspace occupied" : "workspace empty")}
-                :onclick "hyprctl dispatch 'hl.dsp.focus({ workspace = \"''${ws.id}\" })'"
+                :onclick {"${switchWsScript} " + ws.id + " " + mon.monitor}
                 :valign "center"
                 :vexpand false
                 {ws.id == mon.activeWorkspace ? "${ws.active}" : (ws.windows > 0 ? "${ws.occupied}" : "${ws.empty}")}

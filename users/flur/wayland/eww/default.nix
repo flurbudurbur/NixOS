@@ -1,11 +1,17 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  hostname,
+  lib,
+  ...
+}:
 
 let
   icons = import ./icons.nix { };
+  primaryMonitor = (import ../monitors.nix { inherit hostname lib; }).primaryMonitor;
 
   bar = import ./bar.nix { inherit pkgs; };
   clock = import ./clock.nix { };
-  workspaces = import ./workspaces.nix { inherit pkgs icons; };
+  workspaces = import ./workspaces.nix { inherit pkgs icons primaryMonitor; };
   sesh = import ./sesh.nix { inherit pkgs; };
   volume = import ./volume.nix { };
   network = import ./network.nix { inherit pkgs icons; };
