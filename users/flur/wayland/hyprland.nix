@@ -394,6 +394,19 @@ in
         }
       ];
 
+      workspace_rule = [
+        {
+          workspace = "1";
+          monitor = "DP-1";
+          default = true;
+        }
+        {
+          workspace = "11";
+          monitor = "DP-2";
+          default = true;
+        }
+      ];
+
       on = {
         _args = [
           "hyprland.start"
@@ -403,6 +416,7 @@ in
               hl.exec_cmd("wl-paste --type text --watch cliphist store")
               hl.exec_cmd("wl-paste --type image --watch cliphist store")
               hl.exec_cmd("sleep 2 && ivpn connect -f")
+              hl.exec_cmd("theme-switch")
             end'')
         ];
       };
