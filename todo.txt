@@ -12,4 +12,5 @@ x 2026-06-24 2026-06-25 Fix claude todo-skill to follow the todo.txt specificati
 x 2026-06-26 2026-06-26 Add function wrapper to Sesh so that "connect" command can be omitted. pri:C start:2026-06-26
 x 2026-06-26 2026-06-26 Add /todo-start to the claude skills start:2026-06-26
 x 2026-06-29 2026-06-29 Migrate mullvad VPN to IVPN completely. pri:A start:2026-06-29
-(C) Fix eww workspace module upon startup not registering workspace 11 ctx:"workspace 2 is displayed on DP-2 instead of 11."
+x 2026-07-01 2026-06-29 Fix eww workspace module upon startup not registering workspace 11 ctx:"workspace 2 is displayed on DP-2 instead of 11." pri:C start:2026-06-29
+2026-07-01 Fix eww workspace middle-click closing not working ctx:"The middle click does trigger the script, but the workspace doesn't close." start:2026-07-01

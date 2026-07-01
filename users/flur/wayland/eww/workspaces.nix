@@ -16,12 +16,13 @@ let
     CURSOR_X=$(echo "$CURSOR" | ${jq} -r '.x')
     CURSOR_Y=$(echo "$CURSOR" | ${jq} -r '.y')
   '';
-  restoreFocusDispatch = ''dispatch hl.dsp.focus({ monitor = \"$CURRENT_MON\" }) ; dispatch hl.dsp.focus({ workspace = $CURRENT_WS }) ; dispatch hl.dsp.cursor.move({x = $CURSOR_X, y = $CURSOR_Y})'';
+  restoreFocusDispatch = ''dispatch hl.dsp.focus({ monitor = \"$CURRENT_MON\" }) ; dispatch hl.dsp.focus({ workspace = $RESTORE_WS }) ; dispatch hl.dsp.cursor.move({x = $CURSOR_X, y = $CURSOR_Y})'';
   switchWsScript = pkgs.writeShellScript "switch-workspace" ''
     WS_ID="$1"
     MON="$2"
     if [ "$MON" != "${primaryMonitor}" ]; then
       ${saveFocus}
+      RESTORE_WS="$CURRENT_WS"
       hyprctl --batch "dispatch hl.dsp.focus({ monitor = \"$MON\" }) ; dispatch hl.dsp.focus({ workspace = $WS_ID }) ; ${restoreFocusDispatch}"
     else
       hyprctl dispatch "hl.dsp.focus({ workspace = \"$WS_ID\" })"
@@ -33,6 +34,8 @@ let
     if [ "$WS_ID" -eq "$BASE" ]; then
       exit 0
     fi
+    NEXT_LOWEST=$(hyprctl workspaces -j | ${jq} -r --argjson ws "$WS_ID" --argjson base "$BASE" '[.[] | select(.id < $ws and .id >= $base) | .id] | max')
+    IS_ACTIVE=$(hyprctl monitors -j | ${jq} -r --argjson ws "$WS_ID" '[.[] | select(.activeWorkspace.id == $ws)] | length > 0')
     WINDOWS=$(hyprctl clients -j | ${jq} -r --argjson ws "$WS_ID" '.[] | select(.workspace.id == $ws) | .address')
     BATCH=""
     for addr in $WINDOWS; do
@@ -40,7 +43,12 @@ let
     done
     if [ -n "$BATCH" ]; then
       ${saveFocus}
-      BATCH="$BATCH dispatch hl.dsp.focus({ workspace = $BASE }) ; ${restoreFocusDispatch} ;"
+      if [ "$IS_ACTIVE" = "true" ]; then
+        RESTORE_WS="$NEXT_LOWEST"
+      else
+        RESTORE_WS="$CURRENT_WS"
+      fi
+      BATCH="$BATCH ${restoreFocusDispatch} ;"
       hyprctl --batch "$BATCH"
     fi
     DISPLAY_NUM=$(( (WS_ID - 1) / ${toString wsPerMonitor} + 1 ))
