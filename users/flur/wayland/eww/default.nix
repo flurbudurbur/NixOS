@@ -15,6 +15,7 @@ let
   sesh = import ./sesh.nix { inherit pkgs; };
   volume = import ./volume.nix { };
   network = import ./network.nix { inherit pkgs icons; };
+  progressModule = import ./progress-module.nix { };
   cpu = import ./cpu.nix { inherit icons; };
   memory = import ./memory.nix { inherit icons; };
 
@@ -25,6 +26,7 @@ let
     sesh
     volume
     network
+    progressModule
     cpu
     memory
   ];

@@ -2,20 +2,23 @@
 
 {
   yuck = ''
+    (defvar cpu-hover false)
+
     (defpoll cpu-usage
       :interval "3s"
       "top -bn1 | grep 'Cpu(s)' | awk '{print int($2)}'")
 
     (defwidget cpu []
-      (box
-        :class "cpu module"
-        :orientation "h"
-        (label :text "${icons.cpu}" :halign "center" :hexpand true)
-        (label :text {cpu-usage + "%"} :halign "center" :hexpand true)))
+      (progress-module :value {cpu-usage} :icon "${icons.cpu}" :class "cpu" :hover {cpu-hover}))
   '';
 
   scss = ''
-    .cpu {
+    .cpu-progress {
+      color: $error;
+      background-color: $bg-select;
+    }
+
+    .cpu-value {
       color: $error;
     }
   '';
