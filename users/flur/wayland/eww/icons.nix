@@ -25,6 +25,13 @@
     unlocked = "";
   };
 
+  volume = {
+    high = "󰕾";
+    medium = "󰖀";
+    low = "󰕿";
+    muted = "󰝟";
+  };
+
   cpu = "";
   memory = "";
 }
