@@ -13,7 +13,7 @@ let
   clock = import ./clock.nix { };
   workspaces = import ./workspaces.nix { inherit pkgs icons primaryMonitor; };
   sesh = import ./sesh.nix { inherit pkgs; };
-  volume = import ./volume.nix { };
+  volume = import ./volume.nix { inherit pkgs; };
   network = import ./network.nix { inherit pkgs icons; };
   progressModule = import ./progress-module.nix { };
   cpu = import ./cpu.nix { inherit icons; };
