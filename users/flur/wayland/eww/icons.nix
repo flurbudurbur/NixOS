@@ -20,6 +20,11 @@
     };
   };
 
+  vpn = {
+    locked = "";
+    unlocked = "";
+  };
+
   cpu = "";
   memory = "";
 }

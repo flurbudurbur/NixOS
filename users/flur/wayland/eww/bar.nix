@@ -37,7 +37,8 @@ in
           (volume)
           (network)
           (cpu)
-          (memory))))
+          (memory)
+          (vpn))))
 
     (defwindow bar
       :monitor "DP-1"

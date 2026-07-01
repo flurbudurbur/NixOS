@@ -18,6 +18,7 @@ let
   progressModule = import ./progress-module.nix { };
   cpu = import ./cpu.nix { inherit icons; };
   memory = import ./memory.nix { inherit icons; };
+  vpn = import ./vpn.nix { inherit pkgs icons; };
 
   components = [
     bar
@@ -29,6 +30,7 @@ let
     progressModule
     cpu
     memory
+    vpn
   ];
 in
 {
