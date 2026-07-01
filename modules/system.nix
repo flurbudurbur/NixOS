@@ -35,6 +35,7 @@
 
   # Fonts
   fonts.packages = with pkgs; [
+    autour-one
     bricolage-grotesque
   ];
   fonts.fontconfig.defaultFonts.monospace = [ "Maple Mono" ];
