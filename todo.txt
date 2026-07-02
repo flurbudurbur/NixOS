@@ -15,6 +15,6 @@ x 2026-06-29 2026-06-29 Migrate mullvad VPN to IVPN completely. pri:A start:2026
 x 2026-07-01 2026-06-29 Fix eww workspace module upon startup not registering workspace 11 ctx:"workspace 2 is displayed on DP-2 instead of 11." pri:C start:2026-06-29
 x 2026-07-02 2026-07-01 Fix eww workspace middle-click closing not working ctx:"The middle click does trigger the script, but the workspace doesn't close." start:2026-07-01
 x 2026-07-02 2026-07-02 Theme Hyprlock start:2026-07-02
-2026-07-02 Theme Mako
+x 2026-07-02 2026-07-02 Theme Mako start:2026-07-02
 2026-07-02 Theme Plymouth
 x 2026-07-02 2026-07-02 Add SUPER+CTRL+(N) as a hyprland keybind for closing the Nth workspace ctx:"SUPER+SHIFT+N was already bound to move-window-to-workspace, so used SUPER+CTRL+N instead per user choice. Respects DP-1/DP-2 setup via same MON_IDX*10+WS pattern as existing wsScript/mvScript." start:2026-07-02

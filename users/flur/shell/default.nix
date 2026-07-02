@@ -1,21 +1,17 @@
 {
   lib,
   config,
-  pkgs,
   ...
 }:
 {
   imports = [
+    ./fastfetch.nix
     ./terminals.nix
     ./tmux.nix
   ];
 
   # Add ~/.local/bin to PATH
   home.sessionPath = [ "$HOME/.local/bin" ];
-
-  home.packages = with pkgs; [
-    fastfetch
-  ];
 
   # GPG environment variable for terminal pinentry
   home.sessionVariables = {

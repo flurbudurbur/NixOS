@@ -59,39 +59,61 @@ let
       iris = '${t.accent}'
     '';
 
+  hexDigits = {
+    "0" = 0;
+    "1" = 1;
+    "2" = 2;
+    "3" = 3;
+    "4" = 4;
+    "5" = 5;
+    "6" = 6;
+    "7" = 7;
+    "8" = 8;
+    "9" = 9;
+    "a" = 10;
+    "b" = 11;
+    "c" = 12;
+    "d" = 13;
+    "e" = 14;
+    "f" = 15;
+  };
+
+  hexToInt =
+    h:
+    let
+      c1 = builtins.substring 0 1 h;
+      c2 = builtins.substring 1 1 h;
+    in
+    hexDigits.${c1} * 16 + hexDigits.${c2};
+
   hexToRgb =
     hex:
     let
-      hexToInt =
-        h:
-        let
-          chars = {
-            "0" = 0;
-            "1" = 1;
-            "2" = 2;
-            "3" = 3;
-            "4" = 4;
-            "5" = 5;
-            "6" = 6;
-            "7" = 7;
-            "8" = 8;
-            "9" = 9;
-            "a" = 10;
-            "b" = 11;
-            "c" = 12;
-            "d" = 13;
-            "e" = 14;
-            "f" = 15;
-          };
-          c1 = builtins.substring 0 1 h;
-          c2 = builtins.substring 1 1 h;
-        in
-        chars.${c1} * 16 + chars.${c2};
       r = hexToInt (builtins.substring 1 2 hex);
       g = hexToInt (builtins.substring 3 2 hex);
       b = hexToInt (builtins.substring 5 2 hex);
     in
     "${toString r}, ${toString g}, ${toString b}";
+
+  intToHex2 =
+    n:
+    let
+      hexChars = "0123456789abcdef";
+      hi = n / 16;
+      lo = n - hi * 16;
+    in
+    "${builtins.substring hi 1 hexChars}${builtins.substring lo 1 hexChars}";
+
+  # Blends a hex color towards white by `factor` (0..1) to derive a distinct ANSI "bright" variant.
+  lighten =
+    hex: factor:
+    let
+      blend = c: c + builtins.floor ((255 - c) * factor);
+      r = hexToInt (builtins.substring 1 2 hex);
+      g = hexToInt (builtins.substring 3 2 hex);
+      b = hexToInt (builtins.substring 5 2 hex);
+    in
+    "#${intToHex2 (blend r)}${intToHex2 (blend g)}${intToHex2 (blend b)}";
 
   mkBarTheme =
     t:
@@ -131,12 +153,12 @@ let
     regular6=${strip t.accent2}
     regular7=${strip t.fg}
     bright0=${strip t.fg_faint}
-    bright1=${strip t.error}
-    bright2=${strip t.blue}
-    bright3=${strip t.warning}
-    bright4=${strip t.cyan}
-    bright5=${strip t.accent}
-    bright6=${strip t.accent2}
+    bright1=${strip (lighten t.error 0.25)}
+    bright2=${strip (lighten t.blue 0.25)}
+    bright3=${strip (lighten t.warning 0.25)}
+    bright4=${strip (lighten t.cyan 0.25)}
+    bright5=${strip (lighten t.accent 0.25)}
+    bright6=${strip (lighten t.accent2 0.25)}
     bright7=${strip t.fg}
     cursor=${strip t.bg} ${strip t.accent}
   '';
