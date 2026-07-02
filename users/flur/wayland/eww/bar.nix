@@ -35,6 +35,7 @@ in
           :vexpand true
           :spacing 4
           (volume)
+          (media)
           (network)
           (cpu)
           (memory)

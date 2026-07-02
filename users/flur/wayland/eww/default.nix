@@ -14,6 +14,7 @@ let
   workspaces = import ./workspaces.nix { inherit pkgs icons primaryMonitor; };
   sesh = import ./sesh.nix { inherit pkgs; };
   volume = import ./volume.nix { inherit pkgs icons; };
+  media = import ./media.nix { inherit pkgs icons; };
   network = import ./network.nix { inherit pkgs icons; };
   progressModule = import ./progress-module.nix { };
   cpu = import ./cpu.nix { inherit icons; };
@@ -26,6 +27,7 @@ let
     workspaces
     sesh
     volume
+    media
     network
     progressModule
     cpu
@@ -42,6 +44,7 @@ in
   home.packages = with pkgs; [
     jq
     socat
+    playerctl
   ];
 
   xdg.configFile."eww/eww.scss".text = builtins.concatStringsSep "\n" (map (c: c.scss) components);
