@@ -232,6 +232,10 @@ let
       font_color = rgb(${hexToRgb t.fg})
       inner_color = rgb(${hexToRgb t.bg_select})
       outer_color = rgb(${hexToRgb t.bg})
+      check_color = rgb(${hexToRgb t.accent})
+      fail_color = rgb(${hexToRgb t.error})
+      fail_text = <span foreground="##${strip t.error}">$FAIL <b>($ATTEMPTS)</b></span>
+      capslock_color = rgb(${hexToRgb t.warning})
       outline_thickness = 5
       placeholder_text = <span foreground="##${strip t.fg}">Password...</span>
       shadow_passes = 2

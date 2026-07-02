@@ -14,6 +14,13 @@ in
         no_fade_in = false;
       };
 
+      animations = {
+        enabled = true;
+        fade_out = {
+          duration = 200;
+        };
+      };
+
       background = lib.mkForce [
         {
           path = "screenshot";
