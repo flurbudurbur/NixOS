@@ -52,6 +52,41 @@ let
         hyprctl dispatch "hl.dsp.window.move({ workspace = $((MON_IDX * 10 + WS)) })"
   '';
 
+  closeWsScript = pkgs.writeShellScript "ws-close" ''
+        WS=$1
+        MON=$(hyprctl activeworkspace -j | ${pkgs.jq}/bin/jq -r .monitor)
+        case "$MON" in
+    ${monitorCase}
+          *) MON_IDX=0 ;;
+        esac
+        WS_ID=$((MON_IDX * 10 + WS))
+        BASE=$((MON_IDX * 10 + 1))
+        if [ "$WS_ID" -eq "$BASE" ]; then
+          exit 0
+        fi
+        NEXT_LOWEST=$(hyprctl workspaces -j | ${pkgs.jq}/bin/jq -r --argjson ws "$WS_ID" --argjson base "$BASE" \
+          '[.[] | select(.id < $ws and .id >= $base) | .id] | if length > 0 then max else empty end')
+        NEXT_LOWEST="''${NEXT_LOWEST:-$BASE}"
+        IS_ACTIVE=$(hyprctl monitors -j | ${pkgs.jq}/bin/jq -r --argjson ws "$WS_ID" '[.[] | select(.activeWorkspace.id == $ws)] | length > 0')
+        BATCH=$(hyprctl clients -j | ${pkgs.jq}/bin/jq -r --argjson ws "$WS_ID" '
+          [.[] | select(.workspace.id == $ws) |
+            "dispatch hl.dsp.window.close({ window = \"address:" + .address + "\" })"
+          ] | join(" ; ")
+        ')
+        if [ "$IS_ACTIVE" = "true" ]; then
+          SWITCH="dispatch hl.dsp.focus({ monitor = \"$MON\" }) ; dispatch hl.dsp.focus({ workspace = $NEXT_LOWEST })"
+          if [ -n "$BATCH" ]; then
+            BATCH="$BATCH ; $SWITCH"
+          else
+            BATCH="$SWITCH"
+          fi
+        fi
+        if [ -n "$BATCH" ]; then
+          hyprctl --batch "$BATCH"
+        fi
+        ${pkgs.libnotify}/bin/notify-send "Closed workspace $WS on $MON"
+  '';
+
   videoOpacityWatchScript = pkgs.writeShellScriptBin "video-opacity-watch" ''
     set -uo pipefail
 
@@ -90,6 +125,7 @@ let
     [
       (mkBind "${mainMod} + ${key}" (mkLua ''hl.dsp.exec_cmd("${wsScript} ${toString i}")''))
       (mkBind "${mainMod} + SHIFT + ${key}" (mkLua ''hl.dsp.exec_cmd("${mvScript} ${toString i}")''))
+      (mkBind "${mainMod} + CTRL + ${key}" (mkLua ''hl.dsp.exec_cmd("${closeWsScript} ${toString i}")''))
     ]
   ) (lib.range 1 10);
 in
