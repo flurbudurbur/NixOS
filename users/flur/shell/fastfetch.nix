@@ -30,6 +30,7 @@
           "2" = "#9ccfd8";
         };
         padding.top = 1;
+        padding.left = 3;
         width = 16;
       };
       display = {
