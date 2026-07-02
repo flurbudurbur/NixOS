@@ -34,21 +34,26 @@ let
     if [ "$WS_ID" -eq "$BASE" ]; then
       exit 0
     fi
-    NEXT_LOWEST=$(hyprctl workspaces -j | ${jq} -r --argjson ws "$WS_ID" --argjson base "$BASE" '[.[] | select(.id < $ws and .id >= $base) | .id] | max')
+    MON_IDX=$(( (WS_ID - 1) / ${toString wsPerMonitor} ))
+    OWNER_MON=$(hyprctl monitors -j | ${jq} -r --argjson idx "$MON_IDX" 'sort_by([.x, .y]) | .[$idx].name')
+    NEXT_LOWEST=$(hyprctl workspaces -j | ${jq} -r --argjson ws "$WS_ID" --argjson base "$BASE" \
+      '[.[] | select(.id < $ws and .id >= $base) | .id] | if length > 0 then max else empty end')
+    NEXT_LOWEST="''${NEXT_LOWEST:-$BASE}"
     IS_ACTIVE=$(hyprctl monitors -j | ${jq} -r --argjson ws "$WS_ID" '[.[] | select(.activeWorkspace.id == $ws)] | length > 0')
-    WINDOWS=$(hyprctl clients -j | ${jq} -r --argjson ws "$WS_ID" '.[] | select(.workspace.id == $ws) | .address')
-    BATCH=""
-    for addr in $WINDOWS; do
-      BATCH="$BATCH dispatch hl.dsp.focus({ window = \"address:$addr\" }) ; dispatch hl.dsp.window.close() ;"
-    done
-    if [ -n "$BATCH" ]; then
-      ${saveFocus}
-      if [ "$IS_ACTIVE" = "true" ]; then
-        RESTORE_WS="$NEXT_LOWEST"
+    BATCH=$(hyprctl clients -j | ${jq} -r --argjson ws "$WS_ID" '
+      [.[] | select(.workspace.id == $ws) |
+        "dispatch hl.dsp.window.close({ window = \"address:" + .address + "\" })"
+      ] | join(" ; ")
+    ')
+    if [ "$IS_ACTIVE" = "true" ]; then
+      SWITCH="dispatch hl.dsp.focus({ monitor = \"$OWNER_MON\" }) ; dispatch hl.dsp.focus({ workspace = $NEXT_LOWEST })"
+      if [ -n "$BATCH" ]; then
+        BATCH="$BATCH ; $SWITCH"
       else
-        RESTORE_WS="$CURRENT_WS"
+        BATCH="$SWITCH"
       fi
-      BATCH="$BATCH ${restoreFocusDispatch} ;"
+    fi
+    if [ -n "$BATCH" ]; then
       hyprctl --batch "$BATCH"
     fi
     DISPLAY_NUM=$(( (WS_ID - 1) / ${toString wsPerMonitor} + 1 ))

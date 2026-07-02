@@ -100,6 +100,23 @@
         esac
       }
 
+      # Close all windows on a workspace without switching to it
+      closews() {
+        local ws="$1"
+        if [[ -z "$ws" ]]; then
+          echo "usage: closews <workspace>" >&2
+          return 1
+        fi
+        local batch
+        batch=$(hyprctl clients -j | jq -r --arg ws "$ws" '
+          [.[] | select((.workspace.id | tostring) == $ws) |
+            "dispatch hl.dsp.window.close({ window = \"address:" + .address + "\" })"
+          ] | join(" ; ")
+        ')
+        [[ -z "$batch" ]] && return 0
+        hyprctl --batch "$batch"
+      }
+
       # IVPN status with polling until connected
       ivs() {
         while true; do

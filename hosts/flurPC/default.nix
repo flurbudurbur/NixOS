@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -42,6 +42,8 @@
   boot.consoleLogLevel = 3;
   boot.initrd.verbose = false;
   boot.plymouth.enable = true;
+  boot.plymouth.theme = "rose-pine-moon";
+  boot.plymouth.themePackages = [ pkgs.rose-pine-plymouth ];
 
   services.journald.extraConfig = ''
     ForwardToConsole=no

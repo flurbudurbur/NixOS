@@ -442,6 +442,16 @@ let
     text-color=${t.fg}
     border-color=${t.blue}
     progress-color=${t.cyan}
+
+    [urgency=low]
+    border-color=${t.fg_dim}
+
+    [urgency=normal]
+    border-color=${t.blue}
+
+    [urgency=critical]
+    border-color=${t.error}
+    default-timeout=0
   '';
 
   mkGtkCss = t: ''

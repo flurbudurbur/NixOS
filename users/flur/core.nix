@@ -33,6 +33,7 @@
             "hyprland"
             "foot"
             "nixvim"
+            "mako"
           ]
           (_: {
             enable = false;

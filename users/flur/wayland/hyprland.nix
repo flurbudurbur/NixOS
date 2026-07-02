@@ -52,6 +52,36 @@ let
         hyprctl dispatch "hl.dsp.window.move({ workspace = $((MON_IDX * 10 + WS)) })"
   '';
 
+  videoOpacityWatchScript = pkgs.writeShellScriptBin "video-opacity-watch" ''
+    set -uo pipefail
+
+    declare -A locked=()
+
+    while true; do
+      declare -A current=()
+      while IFS= read -r addr; do
+        [ -n "$addr" ] && current["$addr"]=1
+      done < <(hyprctl clients -j | ${pkgs.jq}/bin/jq -r '.[] | select(.inhibitingIdle == true) | .address')
+
+      for addr in "''${!current[@]}"; do
+        if [ -z "''${locked[$addr]:-}" ]; then
+          hyprctl setprop "address:$addr" forceopaque 1 lock >/dev/null 2>&1 || true
+          locked["$addr"]=1
+        fi
+      done
+
+      for addr in "''${!locked[@]}"; do
+        if [ -z "''${current[$addr]:-}" ]; then
+          hyprctl setprop "address:$addr" forceopaque 0 >/dev/null 2>&1 || true
+          unset "locked[$addr]"
+        fi
+      done
+
+      unset current
+      sleep 2
+    done
+  '';
+
   workspaceBinds = builtins.concatMap (
     i:
     let
@@ -86,7 +116,7 @@ in
           rounding = 10;
           rounding_power = 2;
           active_opacity = 1.0;
-          inactive_opacity = 1.0;
+          inactive_opacity = 0.85;
           shadow = {
             enabled = true;
             range = 4;
@@ -535,11 +565,34 @@ in
           stay_focused = true;
           border_size = 0;
         }
+        {
+          match = {
+            class = "^foot$";
+          };
+          opacity = "0.90 0.80";
+        }
       ];
     };
 
     extraConfig = ''
       dofile(os.getenv("HOME") .. "/.config/themes/current/hyprland.lua")
     '';
+  };
+
+  systemd.user.services.video-opacity-watch = {
+    Unit = {
+      Description = "Force full opacity on windows inhibiting idle (video playback)";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+      Requisite = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "simple";
+      ExecStart = "${videoOpacityWatchScript}/bin/video-opacity-watch";
+      Restart = "on-failure";
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
   };
 }

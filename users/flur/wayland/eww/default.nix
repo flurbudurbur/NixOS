@@ -47,8 +47,14 @@ in
     playerctl
   ];
 
-  xdg.configFile."eww/eww.scss".text = builtins.concatStringsSep "\n" (map (c: c.scss) components);
-  xdg.configFile."eww/eww.yuck".text = builtins.concatStringsSep "\n" (map (c: c.yuck) components);
+  xdg.configFile."eww/eww.scss" = {
+    text = builtins.concatStringsSep "\n" (map (c: c.scss) components);
+    onChange = "${pkgs.systemd}/bin/systemctl --user try-restart bar.service || true";
+  };
+  xdg.configFile."eww/eww.yuck" = {
+    text = builtins.concatStringsSep "\n" (map (c: c.yuck) components);
+    onChange = "${pkgs.systemd}/bin/systemctl --user try-restart bar.service || true";
+  };
 
   systemd.user.services.bar = {
     Unit = {
