@@ -19,7 +19,7 @@ x 2026-07-02 2026-07-02 Theme Mako start:2026-07-02
 x 2026-07-04 2026-07-02 Theme Plymouth start:2026-07-04
 x 2026-07-02 2026-07-02 Add SUPER+CTRL+(N) as a hyprland keybind for closing the Nth workspace ctx:"SUPER+SHIFT+N was already bound to move-window-to-workspace, so used SUPER+CTRL+N instead per user choice. Respects DP-1/DP-2 setup via same MON_IDX*10+WS pattern as existing wsScript/mvScript." start:2026-07-02
 x 2026-07-04 2026-07-04 Theme tmux top bar. pill shapes and formatting start:2026-07-04
-2026-07-04 Theme starship worktree:starship start:2026-07-04
+x 2026-07-04 2026-07-05 Theme starship worktree:starship start:2026-07-04
 2026-07-04 Set up "eza"
 2026-07-04 Check out fluxer TUI and implement it
-2026-07-04 Remove all startup logging from screen. Make it so that no log is visible when starting up my PC
+(C) 2026-07-04 Remove all startup logging from screen. Make it so that no log is visible when starting up my PC
