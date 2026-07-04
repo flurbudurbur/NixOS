@@ -1,6 +1,5 @@
 {
   lib,
-  config,
   ...
 }:
 {
@@ -22,19 +21,42 @@
 
   programs.starship = {
     enable = true;
-    enableZshIntegration = true;
+    enableFishIntegration = true;
   };
 
-  programs.zsh = {
+  programs.eza = {
     enable = true;
-    dotDir = config.home.homeDirectory;
-    enableCompletion = true;
-    autosuggestion.enable = true;
-    syntaxHighlighting.enable = true;
-    history = {
-      size = 10000;
-      save = 10000;
-    };
+    enableFishIntegration = true;
+    git = true;
+    icons = "auto";
+  };
+
+  programs.fzf = {
+    enable = true;
+    enableFishIntegration = true;
+  };
+
+  programs.fd.enable = true;
+
+  programs.ripgrep.enable = true;
+
+  programs.zoxide = {
+    enable = true;
+    enableFishIntegration = true;
+    options = [
+      "--cmd"
+      "cd"
+    ];
+  };
+
+  programs.sesh = {
+    enable = true;
+    enableAlias = false;
+    enableTmuxIntegration = false;
+  };
+
+  programs.fish = {
+    enable = true;
     shellAliases = {
       btw = "echo I use Nixos, btw";
       nrt = "nixos-rebuild test --sudo --flake /home/flur/nixos-system";
@@ -42,21 +64,26 @@
       nfc = "nix flake check --no-build /home/flur/nixos-system";
       nf = "nix fmt /home/flur/nixos-system";
       ivr = "ivpn connect -f";
+      ls = "eza";
     };
-    initContent = ''
+
+    interactiveShellInit = ''
       # Display system info on shell start
       fastfetch
 
       # FNM (Fast Node Manager) initialization
-      eval "$(fnm env --use-on-cd)"
-
-      # Zoxide initialization (replaces cd with smart directory jumping)
-      eval "$(zoxide init zsh --cmd cd)"
+      fnm env --use-on-cd --shell fish | source
 
       # Sesh session picker widget (Ctrl+k)
-      function sesh-sessions() {
-        local session
-        session=$(sesh list -i | fzf --height 40% --reverse --border-label ' sesh ' --prompt '⚡  ' \
+      bind \ck sesh-sessions
+
+      # ESC-ESC prepends sudo to the current commandline (oh-my-zsh sudo plugin equivalent)
+      bind \e\e __prepend_sudo
+    '';
+
+    functions = {
+      sesh-sessions = ''
+        set -l session (sesh list -i | fzf --height 40% --reverse --border-label ' sesh ' --prompt '⚡  ' \
           --header ' ^a all ^t tmux ^g configs ^x zoxide ^d kill' \
           --bind 'tab:down,btab:up' \
           --bind 'ctrl-a:change-prompt(⚡  )+reload(sesh list -i)' \
@@ -65,75 +92,70 @@
           --bind 'ctrl-x:change-prompt(📁  )+reload(sesh list -iz)' \
           --bind 'ctrl-d:execute(tmux kill-session -t {2..})+change-prompt(⚡  )+reload(sesh list -i)' \
           | awk '{print $2}')
-        [[ -z "$session" ]] && return
-        sesh connect "$session"
-      }
-      zle -N sesh-sessions
-      bindkey '^k' sesh-sessions
+        if test -z "$session"
+            return
+        end
+        sesh connect $session
+        commandline -f repaint
+      '';
+
+      __prepend_sudo = ''
+        commandline -i "sudo "
+      '';
 
       # Claude wrapper for custom subcommands
-      claude() {
-        case "$1" in
-          todo)
-            shift
-            command claude "Read @todo.txt and recommend the next task to work on."
-            ;;
-          *)
-            command claude "$@"
-            ;;
-        esac
-      }
+      claude = ''
+        switch $argv[1]
+            case todo
+                command claude "Read @todo.txt and recommend the next task to work on."
+            case '*'
+                command claude $argv
+        end
+      '';
 
-      # Sesh wrapper: omit "connect" subcommand (sesh <name> → sesh connect <name>)
-      sesh() {
-        case "$1" in
-          connect|last|list|new|root|clone|"")
-            command sesh "$@"
-            ;;
-          *)
-            command sesh connect "$@"
-            ;;
-        esac
-      }
+      # Sesh wrapper: omit "connect" subcommand (sesh <name> -> sesh connect <name>)
+      sesh = ''
+        if test (count $argv) -eq 0
+            command sesh
+            return
+        end
+        switch $argv[1]
+            case connect last list new root clone
+                command sesh $argv
+            case '*'
+                command sesh connect $argv
+        end
+      '';
 
       # Close all windows on a workspace without switching to it
-      closews() {
-        local ws="$1"
-        if [[ -z "$ws" ]]; then
-          echo "usage: closews <workspace>" >&2
-          return 1
-        fi
-        local batch
-        batch=$(hyprctl clients -j | jq -r --arg ws "$ws" '
+      closews = ''
+        set -l ws $argv[1]
+        if test -z "$ws"
+            echo "usage: closews <workspace>" >&2
+            return 1
+        end
+        set -l batch (hyprctl clients -j | jq -r --arg ws "$ws" '
           [.[] | select((.workspace.id | tostring) == $ws) |
             "dispatch hl.dsp.window.close({ window = \"address:" + .address + "\" })"
           ] | join(" ; ")
         ')
-        [[ -z "$batch" ]] && return 0
-        hyprctl --batch "$batch"
-      }
+        if test -z "$batch"
+            return 0
+        end
+        hyprctl --batch $batch
+      '';
 
       # IVPN status with polling until connected
-      ivs() {
-        while true; do
-          local vpn_status
-          vpn_status=$(ivpn status)
-          echo "$vpn_status"
-          if echo "$vpn_status" | grep -q "Connected"; then
-            break
-          fi
-          sleep 1
-        done
-      }
-    '';
-    oh-my-zsh = {
-      enable = true;
-      plugins = [
-        "git"
-        "sudo"
-        "tmux"
-        "podman"
-      ];
+      ivs = ''
+        while true
+            set -l vpn_status (ivpn status | string collect)
+            echo $vpn_status
+            if echo $vpn_status | grep -q "Connected"
+                break
+            end
+            sleep 1
+        end
+      '';
     };
   };
 }

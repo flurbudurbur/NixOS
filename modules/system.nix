@@ -29,9 +29,9 @@
       "input"
       "podman"
     ];
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
   };
-  environment.shells = with pkgs; [ zsh ];
+  environment.shells = with pkgs; [ fish ];
 
   # Fonts
   fonts.packages = with pkgs; [
@@ -129,7 +129,7 @@
     bat
   ];
 
-  programs.zsh.enable = true;
+  programs.fish.enable = true;
 
   # Enable nix-ld for dynamically linked binaries (fnm/node, etc.)
   programs.nix-ld.enable = true;

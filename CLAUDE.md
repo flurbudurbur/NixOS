@@ -80,7 +80,7 @@ nixos-system/
         │   ├── heroic.nix     # Heroic Games Launcher
         │   └── persepolis.nix # Persepolis download manager
         ├── shell/         # Shell environment
-        │   ├── default.nix    # Zsh configuration (aliases, starship, fastfetch)
+        │   ├── default.nix    # Fish configuration (aliases, functions, starship, fastfetch)
         │   ├── terminals.nix  # Foot terminal
         │   └── tmux.nix       # Tmux terminal multiplexer
         └── wayland/       # Wayland/Hyprland specific
@@ -374,7 +374,7 @@ Defined in `users/flur/shell/default.nix`:
 - `nf` — `nix fmt` (format Nix files using nixfmt-tree)
 - `mvr` — `mullvad reconnect`
 
-**Zoxide** is initialized in zsh (`eval "$(zoxide init zsh --cmd cd)"`), replacing `cd` with smart directory jumping.
+**Zoxide** is initialized in fish (`zoxide init fish --cmd cd | source`), replacing `cd` with smart directory jumping.
 
 ## Tmuxinator Sessions
 

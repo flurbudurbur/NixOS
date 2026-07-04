@@ -4,7 +4,7 @@
     enable = true;
     settings = {
       main = {
-        shell = "${pkgs.zsh}/bin/zsh";
+        shell = "${pkgs.fish}/bin/fish";
         font = "MapleMono NF:size=12";
         pad = "10x10";
         include = "/home/flur/.config/themes/current/foot-colors.ini";

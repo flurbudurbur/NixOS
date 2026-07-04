@@ -1,13 +1,33 @@
 {
+  lib,
   pkgs,
   nixpkgs-unstable,
   ...
 }:
 {
-  programs.foot.enable = true;
+  programs =
+    lib.genAttrs
+      [
+        "foot"
+        "lazygit"
+        "prismlauncher"
+        "obs-studio"
+        "hyprshot"
+        "rclone"
+        "lutris"
+      ]
+      (_: {
+        enable = true;
+      })
+    // {
+      btop.settings = {
+        theme_background = false;
+        vim_keys = true;
+        rounded_corners = false;
+      };
+    };
 
   home.packages = with pkgs; [
-    lazygit
     gnupg
     nixpkgs-unstable.claude-code
     vlc
@@ -24,8 +44,6 @@
     qbittorrent
     proton-pass
     kew
-    prismlauncher
-    obs-studio
     openrgb-with-all-plugins
 
     # Clipboard
@@ -35,18 +53,10 @@
     # System utils
     libnotify
     grimblast
-    hyprshot
     bluetui
     bandwhich
     nethogs
     iftop
-
-    # Tmux utils
-    sesh
-    fzf
-    fd
-    zoxide
-    ripgrep
 
     # Productivity
     libreoffice-fresh
@@ -54,10 +64,8 @@
 
     # No Protondrive? No Problem!
     celeste
-    rclone
 
     # Gaming
-    lutris
     protonup-ng
     nixpkgs-unstable.heroic
 
@@ -68,11 +76,4 @@
   home.sessionVariables = {
     STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
   };
-
-  programs.btop.settings = {
-    theme_background = false;
-    vim_keys = true;
-    rounded_corners = false;
-  };
-
 }

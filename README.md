@@ -6,7 +6,7 @@ Personal NixOS configuration with Hyprland, Rose Pine Moon theming, and comprehe
 
 - **WM**: Hyprland (Wayland) with UWSM integration
 - **DM**: tuigreet (Wayland greeter)
-- **Shell**: Zsh + Starship prompt + Zoxide
+- **Shell**: Fish + Starship prompt + Zoxide
 - **Terminal**: Foot + Tmux
 - **Editor**: Neovim (nixvim configuration)
 - **Browser**: Zen Browser (Firefox-based) + NextDNS integration
@@ -107,7 +107,7 @@ nixos-system/
         │   ├── dev.nix        # fnm, pnpm, Node.js
         │   ├── zen-browser.nix # Zen Browser + NextDNS
         │   └── ...
-        ├── shell/         # Zsh, Starship, Tmux
+        ├── shell/         # Fish, Starship, Tmux
         └── wayland/       # Hyprland, Waybar, Walker, Hyprlock, Mako, Themes
 ```
 
