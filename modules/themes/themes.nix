@@ -1,22 +1,22 @@
 [
   {
     theme = "rose-pine-moon";
-    icon = "";
+    icon = "󰧱";
   }
   {
     theme = "catppuccin-mocha";
-    icon = "";
+    icon = "󰄛";
   }
   {
     theme = "sakura";
-    icon = "";
+    icon = "";
   }
   {
     theme = "gruvbox-dark";
-    icon = "";
+    icon = "󰏗";
   }
   {
     theme = "sweet";
-    icon = "";
+    icon = "󰻽";
   }
 ]
