@@ -1,7 +1,7 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
-[@THEME_ICON@](fg:iris) \
+[@THEME_ICON@](fg:accent) \
 $username\
 $directory\
 $git_branch\
@@ -15,14 +15,14 @@ $rust\
 $cmd_duration\
 $time\n  \
 $status\
-[󱞪](fg:iris) \
+[󱞪](fg:accent) \
 """
 
 palette = "theme"
 
 [directory]
-format = "[](fg:overlay)[ $path ]($style)[](fg:overlay) "
-style = "bg:overlay fg:pine"
+format = "[](fg:bg_select)[ $path ]($style)[](fg:bg_select) "
+style = "bg:bg_select fg:blue"
 truncation_length = 3
 truncation_symbol = "…/"
 
@@ -33,85 +33,85 @@ Music = " "
 Pictures = " "
 
 [fill]
-style = "fg:overlay"
+style = "fg:bg_select"
 symbol = " "
 
 [git_branch]
-format = "[](fg:overlay)[ $symbol $branch ]($style)[](fg:overlay) "
-style = "bg:overlay fg:foam"
+format = "[](fg:bg_select)[ $symbol $branch ]($style)[](fg:bg_select) "
+style = "bg:bg_select fg:cyan"
 symbol = ""
 
 [git_status]
 disabled = false
-style = "bg:overlay fg:love"
-format = '[](fg:overlay)([$all_status$ahead_behind]($style))[](fg:overlay) '
-up_to_date = '[ ✓ ](bg:overlay fg:iris)'
-untracked = '[?\($count\)](bg:overlay fg:gold)'
-stashed = '[\$](bg:overlay fg:iris)'
-modified = '[!\($count\)](bg:overlay fg:gold)'
-renamed = '[»\($count\)](bg:overlay fg:iris)'
+style = "bg:bg_select fg:error"
+format = '[](fg:bg_select)([$all_status$ahead_behind]($style))[](fg:bg_select) '
+up_to_date = '[ ✓ ](bg:bg_select fg:accent)'
+untracked = '[?\($count\)](bg:bg_select fg:warning)'
+stashed = '[\$](bg:bg_select fg:accent)'
+modified = '[!\($count\)](bg:bg_select fg:warning)'
+renamed = '[»\($count\)](bg:bg_select fg:accent)'
 deleted = '[✘\($count\)](style)'
-staged = '[++\($count\)](bg:overlay fg:gold)'
-ahead = '[⇡\(${count}\)](bg:overlay fg:foam)'
-diverged = '⇕[\[](bg:overlay fg:iris)[⇡\(${ahead_count}\)](bg:overlay fg:foam)[⇣\(${behind_count}\)](bg:overlay fg:rose)[\]](bg:overlay fg:iris)'
-behind = '[⇣\(${count}\)](bg:overlay fg:rose)'
+staged = '[++\($count\)](bg:bg_select fg:warning)'
+ahead = '[⇡\(${count}\)](bg:bg_select fg:cyan)'
+diverged = '⇕[\[](bg:bg_select fg:accent)[⇡\(${ahead_count}\)](bg:bg_select fg:cyan)[⇣\(${behind_count}\)](bg:bg_select fg:accent2)[\]](bg:bg_select fg:accent)'
+behind = '[⇣\(${count}\)](bg:bg_select fg:accent2)'
 
 [time]
 disabled = false
-format = " [](fg:overlay)[ $time 󰴈 ]($style)[](fg:overlay)"
-style = "bg:overlay fg:rose"
+format = " [](fg:bg_select)[ $time 󰴈 ]($style)[](fg:bg_select)"
+style = "bg:bg_select fg:accent2"
 time_format = "%I:%M%P"
 use_12hr = true
 
 [username]
 disabled = false
-format = "[](fg:overlay)[ 󰧱 $user ]($style)[](fg:overlay) "
+format = "[](fg:bg_select)[ 󰧱 $user ]($style)[](fg:bg_select) "
 show_always = true
-style_root = "bg:overlay fg:iris"
-style_user = "bg:overlay fg:iris"
+style_root = "bg:bg_select fg:accent"
+style_user = "bg:bg_select fg:accent"
 
 # Languages
 
 [java]
-style = "bg:overlay fg:pine"
-format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
+style = "bg:bg_select fg:blue"
+format = " [](fg:bg_select)[ $symbol$version ]($style)[](fg:bg_select)"
 disabled = false
 symbol = " "
 
 [nodejs]
-style = "bg:overlay fg:pine"
-format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
+style = "bg:bg_select fg:blue"
+format = " [](fg:bg_select)[ $symbol$version ]($style)[](fg:bg_select)"
 disabled = false
 symbol = "󰎙 "
 
 [rust]
-style = "bg:overlay fg:pine"
-format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
+style = "bg:bg_select fg:blue"
+format = " [](fg:bg_select)[ $symbol$version ]($style)[](fg:bg_select)"
 disabled = false
 symbol = " "
 
 # Environment
 
 [nix_shell]
-style = "bg:overlay fg:foam"
-format = "[](fg:overlay)[ $symbol$state ]($style)[](fg:overlay) "
+style = "bg:bg_select fg:cyan"
+format = "[](fg:bg_select)[ $symbol$state ]($style)[](fg:bg_select) "
 disabled = false
 symbol = "❄ "
 
 [docker_context]
-style = "bg:overlay fg:foam"
-format = "[](fg:overlay)[ $symbol$context ]($style)[](fg:overlay) "
+style = "bg:bg_select fg:cyan"
+format = "[](fg:bg_select)[ $symbol$context ]($style)[](fg:bg_select) "
 disabled = false
 symbol = "🐳 "
 only_with_files = true
 
 [cmd_duration]
-style = "bg:overlay fg:gold"
-format = "[](fg:overlay)[ ⏱ $duration ]($style)[](fg:overlay) "
+style = "bg:bg_select fg:warning"
+format = "[](fg:bg_select)[ ⏱ $duration ]($style)[](fg:bg_select) "
 disabled = false
 min_time = 2000
 
 [status]
-style = "bg:overlay fg:love"
-format = '[](fg:overlay)[ ✘ $status ]($style)[](fg:overlay) '
+style = "bg:bg_select fg:error"
+format = '[](fg:bg_select)[ ✘ $status ]($style)[](fg:bg_select) '
 disabled = false
