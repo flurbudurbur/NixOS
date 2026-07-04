@@ -486,6 +486,27 @@ in
     plugins.dap-ui.enable = true;
     plugins.dap-virtual-text.enable = true;
 
+    # Highlight color codes (hex, rgb/hsl functions, CSS names, tailwind)
+    plugins.colorizer = {
+      enable = true;
+      settings = {
+        filetypes = [ "*" ];
+        user_default_options = {
+          names = true;
+          RGB = true;
+          RRGGBB = true;
+          RRGGBBAA = true;
+          AARRGGBB = true;
+          rgb_fn = true;
+          hsl_fn = true;
+          css = true;
+          css_fn = true;
+          tailwind = true;
+          mode = "background";
+        };
+      };
+    };
+
     # Quality of Life Plugins
     plugins.web-devicons.enable = true;
     plugins.nvim-autopairs.enable = true;
