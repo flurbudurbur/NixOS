@@ -117,6 +117,13 @@
       '';
 
       # Sesh wrapper: omit "connect" subcommand (sesh <name> -> sesh connect <name>)
+      #
+      # Also resolves worktree sessions dynamically: a name like "nixos-starship"
+      # is matched against the longest known tmuxinator project name prefix
+      # ("nixos"), and if a sibling worktree directory named
+      # "<project-root-dirname>-starship" exists (from `git worktree add`), the
+      # project's layout is started rooted there instead, under the requested
+      # session name. Falls back to plain `sesh connect` otherwise.
       sesh = ''
         if test (count $argv) -eq 0
             command sesh
@@ -125,9 +132,41 @@
         switch $argv[1]
             case connect last list new root clone
                 command sesh $argv
-            case '*'
-                command sesh connect $argv
+                return
         end
+
+        set -l name $argv[1]
+
+        if test -f "$HOME/.config/tmuxinator/$name.yml"
+            command sesh connect $argv
+            return
+        end
+        if command sesh list -t | string match -q -- "$name"
+            command sesh connect $argv
+            return
+        end
+
+        set -l best_project ""
+        set -l best_root ""
+        for f in $HOME/.config/tmuxinator/*.yml
+            set -l proj (basename $f .yml)
+            if string match -q -- "$proj-*" $name; and test (string length $proj) -gt (string length $best_project)
+                set best_project $proj
+                set best_root (string replace -r '.*"([^"]*)".*' '$1' -- (grep -m1 '^root:' $f))
+            end
+        end
+
+        if test -n "$best_project" -a -n "$best_root"
+            set -l suffix (string sub -s (math (string length $best_project) + 2) -- $name)
+            set -l root_dir (string replace -r '^~' $HOME -- $best_root)
+            set -l worktree_dir (dirname $root_dir)/(basename $root_dir)-$suffix
+            if test -d "$worktree_dir"
+                command tmuxinator start $best_project --name="$name" "root=$worktree_dir"
+                return
+            end
+        end
+
+        command sesh connect $argv
       '';
 
       # Close all windows on a workspace without switching to it

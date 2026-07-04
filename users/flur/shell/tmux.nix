@@ -33,6 +33,9 @@
       unbind '"'
       unbind %
 
+      # Kill pane without confirmation
+      bind X kill-pane
+
       # Reload config
       bind r source-file ~/.config/tmux/tmux.conf \; display "Config reloaded!"
 
@@ -104,9 +107,12 @@
   '';
 
   # Dioxus development session
+  # `root` falls back to the main checkout, but accepts an override
+  # (`root=<path>`) so worktree sessions can reuse this layout rooted
+  # elsewhere. See the `sesh` fish function for how that gets wired up.
   xdg.configFile."tmuxinator/flur34.yml".text = ''
     name: flur34
-    root: ~/Dev/flur34
+    root: <%= @settings["root"] || "~/Dev/flur34" %>
 
     windows:
       - code:
@@ -122,7 +128,7 @@
   # NixOS development session (discovered by sesh)
   xdg.configFile."tmuxinator/nixos.yml".text = ''
     name: nixos
-    root: ~/nixos-system
+    root: <%= @settings["root"] || "~/nixos-system" %>
 
     windows:
       - code:
