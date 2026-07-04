@@ -43,7 +43,7 @@
   boot.initrd.verbose = false;
   boot.plymouth.enable = true;
   boot.plymouth.theme = "rose-pine-moon";
-  boot.plymouth.themePackages = [ pkgs.rose-pine-plymouth ];
+  boot.plymouth.themePackages = builtins.attrValues pkgs.plymouthThemes;
 
   services.journald.extraConfig = ''
     ForwardToConsole=no

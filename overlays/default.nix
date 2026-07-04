@@ -14,11 +14,11 @@
 # Current overlays:
 #   - nur: Nix User Repository packages
 #   - xone: Xbox controller kernel module (nixpkgs-unstable v0.5.7)
-#   - customPackages: Custom packages (bricolage-grotesque, qobuz-player, rose-pine-plymouth)
+#   - customPackages: Custom packages (bricolage-grotesque, qobuz-player, plymouthThemes)
 { inputs }:
 let
   xone = import ./xone.nix { inherit inputs; };
-  customPackages = import ./custom-packages.nix;
+  customPackages = import ./custom-packages.nix { inherit inputs; };
   nur = inputs.nur.overlays.default;
 in
 {
