@@ -7,7 +7,7 @@
       "date '+%H'")
 
     (defpoll clock-minute
-      :interval "10s"
+      :interval "1s"
       "date '+%M'")
 
     (defpoll clock-date

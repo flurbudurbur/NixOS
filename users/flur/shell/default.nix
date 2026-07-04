@@ -68,6 +68,8 @@
     };
 
     interactiveShellInit = ''
+      set -g fish_greeting
+
       # Display system info on shell start
       fastfetch
 
@@ -83,14 +85,15 @@
 
     functions = {
       sesh-sessions = ''
-        set -l session (sesh list -i | fzf --height 40% --reverse --border-label ' sesh ' --prompt '⚡  ' \
+        set -l session (sesh list -i | fzf --height 40% --reverse --border-label ' sesh ' --prompt '  ' \
+          --color 'label:#c4a7e7:bold,prompt:#f6c177:bold' \
           --header ' ^a all ^t tmux ^g configs ^x zoxide ^d kill' \
           --bind 'tab:down,btab:up' \
-          --bind 'ctrl-a:change-prompt(⚡  )+reload(sesh list -i)' \
-          --bind 'ctrl-t:change-prompt(🪟  )+reload(sesh list -it)' \
-          --bind 'ctrl-g:change-prompt(⚙️   )+reload(sesh list -ic)' \
-          --bind 'ctrl-x:change-prompt(📁  )+reload(sesh list -iz)' \
-          --bind 'ctrl-d:execute(tmux kill-session -t {2..})+change-prompt(⚡  )+reload(sesh list -i)' \
+          --bind 'ctrl-a:change-prompt( )+reload(sesh list -i)' \
+          --bind 'ctrl-t:change-prompt( )+reload(sesh list -it)' \
+          --bind 'ctrl-g:change-prompt( )+reload(sesh list -ic)' \
+          --bind 'ctrl-x:change-prompt( )+reload(sesh list -iz)' \
+          --bind 'ctrl-d:execute(tmux kill-session -t {2..})+change-prompt( )+reload(sesh list -i)' \
           | awk '{print $2}')
         if test -z "$session"
             return
