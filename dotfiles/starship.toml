@@ -1,25 +1,20 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
+[@THEME_ICON@](fg:iris) \
 $username\
 $directory\
 $git_branch\
 $git_status\
+$docker_context\
+$nix_shell\
 $fill\
-$c\
-$elixir\
-$elm\
-$golang\
-$haskell\
-$java\
-$julia\
 $nodejs\
-$nim\
+$java\
 $rust\
-$scala\
-$conda\
-$python\
+$cmd_duration\
 $time\n  \
+$status\
 [󱞪](fg:iris) \
 """
 
@@ -77,47 +72,11 @@ style_user = "bg:overlay fg:iris"
 
 # Languages
 
-[c]
-style = "bg:overlay fg:pine"
-format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
-disabled = false
-symbol = " "
-
-[elixir]
-style = "bg:overlay fg:pine"
-format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
-disabled = false
-symbol = " "
-
-[elm]
-style = "bg:overlay fg:pine"
-format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
-disabled = false
-symbol = " "
-
-[golang]
-style = "bg:overlay fg:pine"
-format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
-disabled = false
-symbol = " "
-
-[haskell]
-style = "bg:overlay fg:pine"
-format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
-disabled = false
-symbol = " "
-
 [java]
 style = "bg:overlay fg:pine"
 format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
 disabled = false
 symbol = " "
-
-[julia]
-style = "bg:overlay fg:pine"
-format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
-disabled = false
-symbol = " "
 
 [nodejs]
 style = "bg:overlay fg:pine"
@@ -125,32 +84,34 @@ format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
 disabled = false
 symbol = "󰎙 "
 
-[nim]
-style = "bg:overlay fg:pine"
-format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
-disabled = false
-symbol = "󰆥 "
-
 [rust]
 style = "bg:overlay fg:pine"
 format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
 disabled = false
 symbol = " "
 
-[scala]
-style = "bg:overlay fg:pine"
-format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
-disabled = false
-symbol = " "
+# Environment
 
-[python]
-style = "bg:overlay fg:pine"
-format = " [](fg:overlay)[ $symbol$version ]($style)[](fg:overlay)"
+[nix_shell]
+style = "bg:overlay fg:foam"
+format = "[](fg:overlay)[ $symbol$state ]($style)[](fg:overlay) "
 disabled = false
-symbol = ' '
+symbol = "❄ "
 
-[conda]
-style = "bg:overlay fg:pine"
-format = " [](fg:overlay)[ $symbol$environment ]($style)[](fg:overlay)"
+[docker_context]
+style = "bg:overlay fg:foam"
+format = "[](fg:overlay)[ $symbol$context ]($style)[](fg:overlay) "
 disabled = false
-symbol = '🅒 '
+symbol = "🐳 "
+only_with_files = true
+
+[cmd_duration]
+style = "bg:overlay fg:gold"
+format = "[](fg:overlay)[ ⏱ $duration ]($style)[](fg:overlay) "
+disabled = false
+min_time = 2000
+
+[status]
+style = "bg:overlay fg:love"
+format = '[](fg:overlay)[ ✘ $status ]($style)[](fg:overlay) '
+disabled = false
