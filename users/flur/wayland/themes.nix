@@ -50,13 +50,13 @@ let
     + ''
 
       [palettes.theme]
-      overlay = '${t.bg_select}'
-      love = '${t.error}'
-      gold = '${t.warning}'
-      rose = '${t.accent2}'
-      pine = '${t.blue}'
-      foam = '${t.cyan}'
-      iris = '${t.accent}'
+      bg_select = '${t.bg_select}'
+      error = '${t.error}'
+      warning = '${t.warning}'
+      accent2 = '${t.accent2}'
+      blue = '${t.blue}'
+      cyan = '${t.cyan}'
+      accent = '${t.accent}'
     '';
 
   hexDigits = {
