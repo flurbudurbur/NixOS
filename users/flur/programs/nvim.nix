@@ -443,6 +443,17 @@ in
 
     plugins.lazygit.enable = true;
 
+    # Toggleable terminal
+    plugins.toggleterm = {
+      enable = true;
+      settings = {
+        open_mapping = "[[<c-t>]]";
+        direction = "float";
+        shade_terminals = true;
+        float_opts.border = "curved";
+      };
+    };
+
     # Statusline
     plugins.lualine = {
       enable = true;
