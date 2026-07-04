@@ -26,7 +26,7 @@ let
     if missing == [ ] then
       theme
     else
-      builtins.throw "Theme '${name}' is missing attributes: ${builtins.concatStringsSep ", " missing}";
+      throw "Theme '${name}' is missing attributes: ${builtins.concatStringsSep ", " missing}";
 
   # Custom .nix themes (auto-discovered)
   specialFiles = [
@@ -42,7 +42,7 @@ let
   themeName = fileName: builtins.substring 0 (builtins.stringLength fileName - 4) fileName;
 
   customThemes = builtins.listToAttrs (
-    builtins.map (
+    map (
       fileName:
       let
         name = themeName fileName;
@@ -68,7 +68,7 @@ let
     if builtins.pathExists b24 then b24 else b16;
 
   tintedThemes = builtins.listToAttrs (
-    builtins.map (name: {
+    map (name: {
       inherit name;
       value = validate name (parseScheme (resolvePath name));
     }) tintedNames

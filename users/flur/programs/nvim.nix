@@ -182,6 +182,58 @@ in
       };
     };
 
+    # Inline diagnostics (info/warning/error)
+    diagnostic.settings = {
+      underline = true;
+      update_in_insert = false;
+      severity_sort = true;
+      virtual_text = {
+        spacing = 4;
+        source = "if_many";
+        prefix.__raw = ''
+          function(diagnostic)
+            local icons = {
+              [vim.diagnostic.severity.ERROR] = "",
+              [vim.diagnostic.severity.WARN] = "",
+              [vim.diagnostic.severity.INFO] = "",
+              [vim.diagnostic.severity.HINT] = "",
+            }
+            return icons[diagnostic.severity] or "●"
+          end
+        '';
+      };
+      signs = {
+        text.__raw = ''
+          {
+                    [vim.diagnostic.severity.ERROR] = "",
+                    [vim.diagnostic.severity.WARN] = "",
+                    [vim.diagnostic.severity.INFO] = "",
+                    [vim.diagnostic.severity.HINT] = "",
+                  }'';
+      };
+      float = {
+        border = "rounded";
+        source = "if_many";
+      };
+    };
+
+    # Auto-show full diagnostic message in a wrapping float on hover,
+    # since the inline virtual text gets truncated at the window edge
+    autoCmd = [
+      {
+        event = [
+          "CursorHold"
+          "CursorHoldI"
+        ];
+        callback.__raw = ''
+          function()
+            vim.diagnostic.open_float(nil, { focusable = false, scope = "cursor" })
+          end
+        '';
+        desc = "Show full diagnostic message on hover";
+      }
+    ];
+
     plugins.conform-nvim = {
       enable = true;
       settings = {
@@ -566,6 +618,14 @@ in
         key = "<leader>f";
         action = "<cmd>lua require('conform').format({ async = true, lsp_fallback = true })<cr>";
         options.desc = "Format buffer";
+      }
+
+      # Auto-apply the sole code action, skipping the picker menu
+      {
+        mode = "n";
+        key = "<leader>cf";
+        action = "<cmd>lua vim.lsp.buf.code_action({ apply = true })<cr>";
+        options.desc = "Quick-fix (auto-apply code action)";
       }
 
       # Java (nvim-java)

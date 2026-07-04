@@ -15,7 +15,7 @@ let
       value = builtins.elemAt m 1;
     };
 
-  palette = builtins.listToAttrs (builtins.map parseLine paletteLines);
+  palette = builtins.listToAttrs (map parseLine paletteLines);
 in
 {
   bg = palette.base00;
