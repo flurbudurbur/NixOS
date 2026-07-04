@@ -28,36 +28,9 @@ let
     else
       throw "Theme '${name}' is missing attributes: ${builtins.concatStringsSep ", " missing}";
 
-  # Custom .nix themes (auto-discovered)
-  specialFiles = [
-    "default.nix"
-    "tinted.nix"
-    "parse-scheme.nix"
-  ];
-  dir = builtins.readDir ./.;
-  customFiles = builtins.filter (
-    name: !(builtins.elem name specialFiles) && builtins.match ".*\\.nix" name != null
-  ) (builtins.attrNames dir);
+  themeList = import ./themes.nix;
 
-  themeName = fileName: builtins.substring 0 (builtins.stringLength fileName - 4) fileName;
-
-  customThemes = builtins.listToAttrs (
-    map (
-      fileName:
-      let
-        name = themeName fileName;
-        raw = import (./. + "/${fileName}");
-      in
-      {
-        inherit name;
-        value = validate name raw;
-      }
-    ) customFiles
-  );
-
-  # Tinted-theming schemes (parsed from YAML)
   parseScheme = import ./parse-scheme.nix;
-  tintedNames = import ./tinted.nix;
 
   resolvePath =
     name:
@@ -67,11 +40,18 @@ let
     in
     if builtins.pathExists b24 then b24 else b16;
 
-  tintedThemes = builtins.listToAttrs (
-    map (name: {
-      inherit name;
-      value = validate name (parseScheme (resolvePath name));
-    }) tintedNames
-  );
+  loadColors =
+    name:
+    let
+      customFile = ./. + "/${name}.nix";
+    in
+    if builtins.pathExists customFile then import customFile else parseScheme (resolvePath name);
+
+  mkTheme =
+    { theme, icon }:
+    {
+      name = theme;
+      value = (validate theme (loadColors theme)) // { inherit icon; };
+    };
 in
-customThemes // tintedThemes
+builtins.listToAttrs (map mkTheme themeList)

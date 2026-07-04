@@ -46,7 +46,7 @@ let
 
   mkStarshipTheme =
     t:
-    starshipBase
+    builtins.replaceStrings [ "@THEME_ICON@" ] [ t.icon ] starshipBase
     + ''
 
       [palettes.theme]
