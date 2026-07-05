@@ -42,30 +42,34 @@ let
     })
   '';
 
-  starshipBase = builtins.readFile ../../../dotfiles/starship.toml;
+  starshipFormat = pkgs.formats.toml { };
+
+  starshipBase = import ../../../dotfiles/starship.nix;
 
   mkStarshipTheme =
     t:
-    builtins.replaceStrings [ "@THEME_ICON@" ] [ t.icon ] starshipBase
-    + ''
-
-      [palettes.theme]
-      bg = '${t.bg}'
-      bg_alt = '${t.bg_alt}'
-      bg_select = '${t.bg_select}'
-      fg_faint = '${t.fg_faint}'
-      fg_dim = '${t.fg_dim}'
-      fg = '${t.fg}'
-      error = '${t.error}'
-      warning = '${t.warning}'
-      accent2 = '${t.accent2}'
-      blue = '${t.blue}'
-      cyan = '${t.cyan}'
-      accent = '${t.accent}'
-      hl_low = '${t.hl_low}'
-      hl_med = '${t.hl_med}'
-      hl_high = '${t.hl_high}'
-    '';
+    lib.recursiveUpdate starshipBase {
+      username.format =
+        builtins.replaceStrings [ "@THEME_ICON@" ] [ t.icon ]
+          starshipBase.username.format;
+      palettes.theme = {
+        bg = t.bg;
+        bg_alt = t.bg_alt;
+        bg_select = t.bg_select;
+        fg_faint = t.fg_faint;
+        fg_dim = t.fg_dim;
+        fg = t.fg;
+        error = t.error;
+        warning = t.warning;
+        accent2 = t.accent2;
+        blue = t.blue;
+        cyan = t.cyan;
+        accent = t.accent;
+        hl_low = t.hl_low;
+        hl_med = t.hl_med;
+        hl_high = t.hl_high;
+      };
+    };
 
   hexDigits = {
     "0" = 0;
@@ -623,7 +627,9 @@ let
     {
       "themes/${name}/hyprland.conf".text = mkHyprTheme t;
       "themes/${name}/hyprland.lua".text = mkHyprThemeLua t;
-      "themes/${name}/starship.toml".text = mkStarshipTheme t;
+      "themes/${name}/starship.toml".source = starshipFormat.generate "starship-${name}.toml" (
+        mkStarshipTheme t
+      );
       "themes/${name}/foot-colors.ini".text = mkFootTheme t;
       "themes/${name}/walker-style.css".text = mkWalkerTheme t;
       "themes/${name}/hyprlock.conf".text = mkHyprLockTheme t;
