@@ -15,6 +15,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 15;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.timeout = 0;
 
   # Load USB HID and hub drivers early so keyboard works during initrd
   # NVIDIA modules loaded early for Plymouth KMS rendering

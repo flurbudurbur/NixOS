@@ -450,7 +450,6 @@ in
               hl.exec_cmd("wl-paste --type text --watch cliphist store")
               hl.exec_cmd("wl-paste --type image --watch cliphist store")
               hl.exec_cmd("sleep 2 && ivpn connect -f")
-              hl.exec_cmd("theme-switch")
             end'')
         ];
       };

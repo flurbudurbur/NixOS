@@ -29,6 +29,11 @@
     enableFishIntegration = true;
     git = true;
     icons = "auto";
+    colors = "always";
+    extraOptions = [
+      "--group-directories-first"
+      "--header"
+    ];
   };
 
   programs.fzf = {
