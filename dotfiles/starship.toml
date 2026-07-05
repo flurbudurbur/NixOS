@@ -3,6 +3,8 @@
 format = """
 $username\
 $directory\
+${custom.directory_connector_active}\
+${custom.directory_connector_inactive}\
 ${custom.git_branch_clean}\
 ${custom.git_branch_dirty}\
 $git_status\
@@ -24,10 +26,22 @@ $status
 palette = "theme"
 
 [directory]
-format = "[](fg:accent)[ $path ]($style)[](fg:blue bg:cyan)"
+format = "[ $path ]($style)"
 style = "bg:blue fg:bg"
 truncation_length = 3
 truncation_symbol = "…/"
+
+[custom.directory_connector_active]
+command = "true"
+shell = ["sh"]
+when = '[ -n "$IN_NIX_SHELL" ] || git rev-parse --is-inside-work-tree >/dev/null 2>&1'
+format = "[](fg:blue bg:cyan)"
+
+[custom.directory_connector_inactive]
+command = "true"
+shell = ["sh"]
+when = '! ( [ -n "$IN_NIX_SHELL" ] || git rev-parse --is-inside-work-tree >/dev/null 2>&1 )'
+format = "[](fg:blue bg:bg)"
 
 [fill]
 style = "fg:bg_select"
