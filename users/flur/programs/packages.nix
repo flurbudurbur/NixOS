@@ -71,6 +71,9 @@
 
     # Music
     qobuz-player
+
+    # Chat
+    fluxer-tui
   ];
 
   home.sessionVariables = {

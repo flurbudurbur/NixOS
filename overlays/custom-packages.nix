@@ -20,6 +20,7 @@ in
 {
   autour-one = final.callPackage ../packages/autour-one.nix { };
   bricolage-grotesque = final.callPackage ../packages/bricolage-grotesque.nix { };
+  fluxer-tui = final.callPackage ../packages/fluxer-tui.nix { };
   nova-mono = final.callPackage ../packages/nova-mono.nix { };
   qobuz-player = final.callPackage ../packages/qobuz-player.nix { };
 

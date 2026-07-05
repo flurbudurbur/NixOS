@@ -21,5 +21,5 @@ x 2026-07-02 2026-07-02 Add SUPER+CTRL+(N) as a hyprland keybind for closing the
 x 2026-07-04 2026-07-04 Theme tmux top bar. pill shapes and formatting start:2026-07-04
 x 2026-07-04 2026-07-05 Theme starship worktree:starship start:2026-07-04
 x 2026-07-05 2026-07-04 Set up "eza" start:2026-07-05
-2026-07-04 Check out fluxer TUI and implement it
+x 2026-07-05 2026-07-04 Check out fluxer TUI and implement it start:2026-07-05
 (C) 2026-07-04 Remove all startup logging from screen. Make it so that no log is visible when starting up my PC
