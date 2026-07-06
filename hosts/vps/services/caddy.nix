@@ -27,8 +27,11 @@ in
     enable = true;
 
     package = pkgs.caddy.withPlugins {
-      plugins = [ "github.com/caddy-dns/cloudflare@v0.2.4" ];
-      hash = "sha256-8yZDrejNKsaUnUaTUFYbarWNmxafqp2z2rWo+XRsxV8=";
+      plugins = [
+        "github.com/caddy-dns/cloudflare@v0.2.4"
+        "github.com/caddyserver/transform-encoder@v0.0.0-20260423033309-ba4124974830"
+      ];
+      hash = "sha256-gUg0u0IyX5cxgOIdVE0tXOcggvvKmcL3y2j7mBvKpxs=";
     };
 
     globalConfig = ''

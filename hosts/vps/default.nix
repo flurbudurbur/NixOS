@@ -18,6 +18,13 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # flur deploys here via `nixos-rebuild --target-host` from the desktop, which
+  # copies unsigned store paths - trusted users skip the signature check.
+  nix.settings.trusted-users = [
+    "root"
+    "flur"
+  ];
+
   # SSH/SFTP-only account for uploading music files - no service runs as this user.
   users.users.music = {
     isNormalUser = true;

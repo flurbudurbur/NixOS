@@ -20,6 +20,10 @@
 
   services.fail2ban.enable = true;
 
+  # SSH access is already key-gated (password auth + root login disabled above),
+  # so requiring a second password for sudo doesn't add meaningful security here.
+  security.sudo.wheelNeedsPassword = false;
+
   # netcup VPS run under KVM - lets the hypervisor query guest status/time-sync
   services.qemuGuest.enable = true;
 

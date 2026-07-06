@@ -5,6 +5,13 @@
 {
   virtualisation.oci-containers.backend = "podman";
 
+  users.users.searxng = {
+    isSystemUser = true;
+    group = "searxng";
+    uid = 977;
+  };
+  users.groups.searxng.gid = 977;
+
   systemd.services.podman-network-searxng = {
     description = "Ensure the podman network for SearXNG exists";
     after = [ "network.target" ];
@@ -54,10 +61,8 @@
       extraOptions = [
         "--network=searxng"
         "--network-alias=searxng"
+        "--user=977:977"
         "--cap-drop=all"
-        "--cap-add=CHOWN"
-        "--cap-add=SETGID"
-        "--cap-add=SETUID"
       ];
     };
   };
@@ -68,6 +73,6 @@
   systemd.services.podman-searxng-valkey.requires = [ "podman-network-searxng.service" ];
 
   systemd.tmpfiles.rules = [
-    "d /var/lib/searxng 0750 root root -"
+    "d /var/lib/searxng 0750 searxng searxng -"
   ];
 }

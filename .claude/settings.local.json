@@ -12,7 +12,8 @@
       "WebFetch(domain:wiki.hypr.land)",
       "Skill(todo-txt:todo-done)",
       "Skill(todo-txt:todo-list)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(ssh shiori *)"
     ],
     "deny": [],
     "ask": []

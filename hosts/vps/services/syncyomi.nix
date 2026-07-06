@@ -61,7 +61,7 @@ in
             chmod 600 /var/lib/syncyomi/config.toml
           ''
       );
-      ExecStart = "${pkgs.syncyomi}/bin/syncyomi --config /var/lib/syncyomi/config.toml";
+      ExecStart = "${pkgs.syncyomi}/bin/syncyomi --config /var/lib/syncyomi";
       WorkingDirectory = "/var/lib/syncyomi";
       StateDirectory = "syncyomi";
       User = "syncyomi";
