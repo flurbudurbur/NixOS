@@ -8,7 +8,7 @@
     inputs.nixos-hardware.nixosModules.common-pc
     inputs.nixos-hardware.nixosModules.common-pc-ssd
     ./hardware-configuration.nix
-    ../../modules/system.nix
+    ../../modules/base.nix
     ../../modules/graphics.nix
     ../../modules/desktop.nix
     ../../modules/gaming.nix

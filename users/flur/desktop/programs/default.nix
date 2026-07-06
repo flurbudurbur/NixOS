@@ -1,8 +1,8 @@
 { ... }:
 {
   imports = [
-    ./git.nix
-    ./ssh.nix
+    ../../common/git.nix
+    ../../common/ssh.nix
     ./packages.nix
     ./dev.nix
     ./xdg.nix

@@ -55,18 +55,9 @@
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-index-database = {
-      url = "github:nix-community/nix-index-database";
+    disko = {
+      url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nixos-hardware = {
-      url = "github:NixOS/nixos-hardware";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    noctalia-greeter = {
-      url = "github:noctalia-dev/noctalia-greeter";
-      # needs wlroots_0_20, not in stable 26.05
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
   };
 
@@ -79,6 +70,7 @@
       sops-nix,
       nixos-secrets,
       git-hooks,
+      disko,
       ...
     }:
     let
@@ -132,7 +124,7 @@
                   useUserPackages = true;
                   users.${username} = {
                     imports = [
-                      ./users/${username}/home.nix
+                      ./users/${username}/desktop/home.nix
                     ];
                   };
                   extraSpecialArgs = {
@@ -163,6 +155,43 @@
               inherit (nixos-secrets) secretsPath;
               inherit (inputs) tinted-schemes;
               inherit inputs;
+            };
+          };
+
+        vps =
+          let
+            username = "flur";
+          in
+          nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            modules = [
+              ./hosts/vps
+              disko.nixosModules.disko
+              sops-nix.nixosModules.sops
+              {
+                nixpkgs.config.allowUnfree = true;
+                nixpkgs.overlays = overlays.minimal;
+              }
+              home-manager.nixosModules.home-manager
+              {
+                home-manager = {
+                  useGlobalPkgs = true;
+                  useUserPackages = true;
+                  users.${username} = {
+                    imports = [
+                      ./users/${username}/vps/home.nix
+                    ];
+                  };
+                  extraSpecialArgs = {
+                    secretsPath = nixos-secrets.secretsPath;
+                    inherit inputs;
+                  };
+                  backupFileExtension = "backup";
+                };
+              }
+            ];
+            specialArgs = {
+              secretsPath = nixos-secrets.secretsPath;
             };
           };
       };

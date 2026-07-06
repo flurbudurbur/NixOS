@@ -119,4 +119,86 @@ in
     rose-pine-gtk-theme
     rose-pine-icon-theme
   ];
+
+  # Fonts
+  fonts.packages = with pkgs; [
+    autour-one
+    bricolage-grotesque
+    nova-mono
+  ];
+  fonts.fontconfig.defaultFonts.monospace = [ "Maple Mono" ];
+
+  # Services
+  services = {
+    flatpak.enable = true;
+    pulseaudio.enable = false;
+    gvfs.enable = true;
+    gnome.gnome-keyring.enable = true;
+    gnome.gnome-online-accounts.enable = false;
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+      extraConfig.pipewire."92-high-res-audio" = {
+        "context.properties" = {
+          "default.clock.rate" = 96000;
+          "default.clock.allowed-rates" = [
+            44100
+            48000
+            88200
+            96000
+            176400
+            192000
+            352800
+            384000
+          ];
+        };
+      };
+    };
+    # PC/SC Smart Card Daemon for Yubikey
+    pcscd = {
+      enable = true;
+      plugins = [ pkgs.ccid ];
+    };
+    # IVPN daemon
+    ivpn.enable = true;
+  };
+
+  # Bluetooth
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
+
+  # Security
+  security.rtkit.enable = true;
+  security.pam.services.hyprlock = { };
+  security.pam.services.greetd.enableGnomeKeyring = true;
+
+  # Hardware support for GPG smartcards (Yubikey)
+  hardware.gpgSmartcards.enable = true;
+
+  # OpenRGB with Intel i2c support and udev rules
+  services.hardware.openrgb = {
+    enable = true;
+    motherboard = "intel";
+  };
+
+  # Disable RAM RGB LEDs via openRGB on boot
+  systemd.services.openrgb-disable-ram-rgb = {
+    description = "Set RAM RGB to off via OpenRGB";
+    after = [ "openrgb.service" ];
+    wants = [ "openrgb.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = toString (
+        pkgs.writeShellScript "openrgb-disable-ram" ''
+          ${pkgs.openrgb-with-all-plugins}/bin/openrgb --device "Corsair Dominator Platinum" --mode direct --color 000000
+        ''
+      );
+      RemainAfterExit = true;
+    };
+  };
 }

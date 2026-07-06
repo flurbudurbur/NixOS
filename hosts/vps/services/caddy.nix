@@ -1,0 +1,230 @@
+# Caddy reverse proxy, migrated from the netcup box's ~/caddy_stuff.
+#
+# DNS-01 challenges go through Cloudflare, so Caddy needs the caddy-dns/cloudflare
+# plugin baked in and a CF_API_TOKEN in its environment (same as the systemd
+# EnvironmentFile override used on the old host).
+{
+  config,
+  lib,
+  pkgs,
+  secretsPath,
+  ...
+}:
+let
+  # Same fallback pattern as users/flur/programs/git.nix: build succeeds before the
+  # secret exists in nix-secrets, and picks it up automatically once it's added.
+  # The yaml needs a top-level `caddy-cloudflare-env:` key whose value is a full
+  # EnvironmentFile line: CF_API_TOKEN=<token>
+  caddySecretsFile = "${secretsPath}/system/vps/caddy.yaml";
+  haveCaddySecrets = builtins.pathExists caddySecretsFile;
+in
+{
+  sops.secrets."caddy-cloudflare-env" = lib.mkIf haveCaddySecrets {
+    sopsFile = caddySecretsFile;
+  };
+
+  services.caddy = {
+    enable = true;
+
+    package = pkgs.caddy.withPlugins {
+      plugins = [ "github.com/caddy-dns/cloudflare@v0.2.4" ];
+      hash = "sha256-8yZDrejNKsaUnUaTUFYbarWNmxafqp2z2rWo+XRsxV8=";
+    };
+
+    globalConfig = ''
+      admin off
+
+      servers {
+        client_ip_headers X-Forwarded-For X-Real-IP
+        trusted_proxies static private_ranges
+        trusted_proxies_strict
+      }
+    '';
+
+    # Snippets, imported by name from each vhost below (matches the original Caddyfile)
+    extraConfig = ''
+      (cloudflare_tls) {
+        tls {
+          dns cloudflare {$CF_API_TOKEN}
+        }
+      }
+
+      (logging) {
+        log {
+          output file /var/log/caddy/{args[0]}.log
+          format transform "{common_log}"
+        }
+      }
+    '';
+
+    virtualHosts."srx.flur.dev".logFormat = null;
+    virtualHosts."srx.flur.dev".extraConfig = ''
+      import cloudflare_tls
+      import logging srx.flur.dev
+
+      encode zstd gzip
+
+      @api {
+        path /config
+        path /healthz
+        path /stats/errors
+        path /stats/checker
+      }
+
+      @search {
+        path /search
+      }
+
+      @imageproxy {
+        path /image_proxy
+      }
+
+      @static {
+        path /static/*
+      }
+
+      header {
+        Content-Security-Policy "upgrade-insecure-requests; default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; form-action 'self' https://github.com/searxng/searxng/issues/new; font-src 'self'; frame-ancestors 'self'; base-uri 'self'; connect-src 'self' https://overpass-api.de; img-src * data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.deezer.com https://www.mixcloud.com https://w.soundcloud.com https://embed.spotify.com;"
+        Permissions-Policy "accelerometer=(),camera=(),geolocation=(),gyroscope=(),magnetometer=(),microphone=(),payment=(),usb=()"
+        Referrer-Policy "no-referrer"
+        Strict-Transport-Security "max-age=31536000"
+        X-Content-Type-Options "nosniff"
+        X-Robots-Tag "noindex, noarchive, nofollow"
+        -Server
+      }
+
+      header @api {
+        Access-Control-Allow-Methods "GET, OPTIONS"
+        Access-Control-Allow-Origin "*"
+      }
+
+      route {
+        header Cache-Control "max-age=0, no-store"
+        header @search Cache-Control "max-age=5, private"
+        header @imageproxy Cache-Control "max-age=604800, public"
+        header @static Cache-Control "max-age=31536000, public, immutable"
+      }
+
+      reverse_proxy localhost:8080 {
+        header_up X-Forwarded-Port {http.request.port}
+        header_up X-Real-IP {http.request.remote.host}
+        header_up Connection "close"
+      }
+    '';
+
+    virtualHosts."flur34.com".logFormat = null;
+    virtualHosts."flur34.com".extraConfig = ''
+      import cloudflare_tls
+      import logging flur34.com
+
+      root * /srv
+      encode zstd gzip
+      try_files {path} /index.html
+      file_server
+
+      header {
+        Permissions-Policy "accelerometer=(),camera=(),geolocation=(),gyroscope=(),magnetometer=(),microphone=(),payment=(),usb=()"
+        Referrer-Policy "same-origin"
+        X-Content-Type-Options "nosniff"
+        X-Robots-Tag "noindex, nofollow, noarchive, nositelinkssearchbox, nosnippet, notranslate, noimageindex"
+        -Server
+      }
+
+      @static {
+        path_regexp static \.(js|css|woff2?|ttf|png|jpg|jpeg|svg|gif|ico|mp4|webm)$
+      }
+      header @static Cache-Control "public, max-age=31536000, immutable"
+
+      reverse_proxy localhost:8181
+    '';
+
+    virtualHosts."beta.flur34.com".logFormat = null;
+    virtualHosts."beta.flur34.com".extraConfig = ''
+      import cloudflare_tls
+      import logging beta.flur34.com
+
+      root * /srv
+      encode zstd gzip
+
+      header {
+        Permissions-Policy "accelerometer=(),camera=(),geolocation=(),gyroscope=(),magnetometer=(),microphone=(),payment=(),usb=()"
+        Referrer-Policy "same-origin"
+        X-Content-Type-Options "nosniff"
+        -Server
+      }
+
+      @root {
+        path /
+      }
+      header @root {
+        X-Robots-Tag "nofollow, noarchive, nosnippet, noimageindex"
+      }
+
+      @other {
+        not path /
+      }
+      header @other {
+        X-Robots-Tag "noindex, nofollow, noarchive, nosnippet, noimageindex"
+      }
+
+      @static {
+        path_regexp static \.(js|css|woff2?|ttf|png|jpg|jpeg|svg|gif|ico|mp4|webm)$
+      }
+      header @static Cache-Control "public, max-age=31536000, immutable"
+
+      handle /update {
+        rewrite * /v1/update
+        reverse_proxy http://localhost:8384
+      }
+
+      try_files {path} /index.html
+      file_server
+      reverse_proxy http://localhost:8383
+    '';
+
+    virtualHosts."sync.shiori.gg".logFormat = null;
+    virtualHosts."sync.shiori.gg".extraConfig = ''
+      import cloudflare_tls
+      import logging sync.shiori.gg
+
+      reverse_proxy localhost:8282
+    '';
+
+    virtualHosts."dev.shiori.gg".logFormat = null;
+    virtualHosts."dev.shiori.gg".extraConfig = ''
+      import cloudflare_tls
+      import logging dev.shiori.gg
+
+      root * /var/www/shiori.gg/
+      file_server
+    '';
+  };
+
+  systemd.services.caddy.serviceConfig.EnvironmentFile =
+    if haveCaddySecrets then
+      config.sops.secrets."caddy-cloudflare-env".path
+    else
+      # Populate manually until secrets/system/vps/caddy.yaml exists in nix-secrets
+      "-/etc/caddy/cloudflare.env";
+
+  # Bans bot probes for wp-admin/xmlrpc.php/etc across all Caddy sites (not WordPress-specific
+  # despite the name - carried over verbatim from /etc/fail2ban/{jail.d,filter.d}/caddy-wordpress.conf)
+  services.fail2ban.jails.caddy-wordpress = {
+    filter = ''
+      [Definition]
+      failregex = ^<HOST> .* "(GET|POST|HEAD) .*/wp-(admin|content|includes|login\.php|config\.php|cron\.php|json|trackback)
+                  ^<HOST> .* "(GET|POST|HEAD) .*/xmlrpc\.php
+                  ^<HOST> .* "(GET|POST|HEAD) .*/wlwmanifest\.xml
+      ignoreregex =
+    '';
+    settings = {
+      enabled = true;
+      port = "http,https";
+      logpath = "/var/log/caddy/*.log";
+      maxretry = 1;
+      findtime = 86400;
+      bantime = 604800;
+      backend = "auto";
+    };
+  };
+}

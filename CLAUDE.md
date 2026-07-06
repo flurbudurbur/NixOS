@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is a NixOS system configuration using flakes with home-manager integration, organized following the i3-kickstarter modular pattern. The system is configured for user "flur" on hostname "flurPC".
+This is a NixOS system configuration using flakes with home-manager integration, organized following the i3-kickstarter modular pattern. It manages two hosts: **flurPC** (desktop, Hyprland) and **vps** (headless netcup server).
 
 ## Build and Apply Commands
 
@@ -22,6 +22,9 @@ nh os boot
 
 # Update flake inputs and switch in one step
 nh os switch --update
+
+# Apply to the VPS remotely (build locally, activate over SSH)
+nixos-rebuild switch --flake .#vps --target-host root@<vps-ip> --build-host localhost
 
 # Update flake inputs (updates flake.lock)
 nix flake update
@@ -57,51 +60,64 @@ nixos-system/
 ├── modules/               # System-level shared configuration
 │   ├── themes/
 │   │   └── default.nix    # Theme color definitions (rose-pine-moon, catppuccin-mocha, sweet)
-│   ├── system.nix         # Core system config (users, nix, fonts, services)
-│   ├── graphics.nix       # Graphics hardware (NVIDIA drivers, OpenGL)
-│   ├── desktop.nix        # Desktop environment (Hyprland, tuigreet, XDG portals)
-│   ├── gaming.nix         # Gaming (Steam, Lutris, Wine, gamemode)
-│   ├── keyd.nix           # Keyboard remapping (default keyboard + Razer Tartarus)
-│   ├── opentabletdriver.nix # Drawing tablet support (OpenTabletDriver)
+│   ├── base.nix           # Host-agnostic core config (users, nix, fish, base packages) - imported by every host
+│   ├── server.nix         # Headless-server concerns (firewall, sshd hardening, fail2ban, qemuGuest) - vps only
+│   ├── graphics.nix       # Graphics hardware (NVIDIA drivers, OpenGL) - flurPC only
+│   ├── desktop.nix        # Desktop/GUI environment (Hyprland, tuigreet, audio, bluetooth, fonts, OpenRGB) - flurPC only
+│   ├── gaming.nix         # Gaming (Steam, Lutris, Wine, gamemode) - flurPC only
+│   ├── keyd.nix           # Keyboard remapping (default keyboard + Razer Tartarus) - flurPC only
+│   ├── opentabletdriver.nix # Drawing tablet support (OpenTabletDriver) - flurPC only
 │   └── secrets.nix        # System-level secrets management
 ├── hosts/                 # Per-machine configurations
-│   └── flurPC/
-│       ├── default.nix    # Host-specific config (boot, networking)
-│       └── hardware-configuration.nix  # Auto-generated hardware config
+│   ├── flurPC/
+│   │   ├── default.nix    # Host-specific config (boot, networking)
+│   │   └── hardware-configuration.nix  # Auto-generated hardware config
+│   └── vps/
+│       ├── default.nix    # Host-specific config (GRUB, networking, KVM guest modules)
+│       ├── disko.nix      # Declarative disk layout for nixos-anywhere provisioning
+│       └── services/      # App config specific to this one machine (not reusable roles - see below)
+│           ├── caddy.nix
+│           ├── searxng.nix
+│           ├── syncyomi.nix
+│           └── flur34.nix
 └── users/                 # Per-user configurations
     └── flur/
         ├── nixos.nix      # User-specific system settings
-        ├── home.nix       # Imports home-manager modules
-        ├── core.nix       # Home basics (username, stateVersion, cursor, stylix)
-        ├── secrets.nix    # User-level secrets management with sops-nix
-        ├── programs/      # User programs and applications
-        │   ├── default.nix    # Aggregates all program modules
-        │   ├── git.nix        # Git configuration
-        │   ├── ssh.nix        # SSH configuration with FIDO2/Yubikey keys
-        │   ├── packages.nix   # User packages and utilities
-        │   ├── xdg.nix        # GTK, Qt, XDG theming
-        │   ├── nvim.nix       # Neovim configuration
-        │   ├── dev.nix        # Web development tools (fnm, pnpm, Node.js)
-        │   ├── gpg.nix        # GPG configuration for Yubikey
-        │   ├── zen-browser.nix  # Zen Browser with NextDNS integration
-        │   ├── flatpak.nix    # Flatpak package declarations
-        │   ├── mullvad-vpn.nix  # Mullvad VPN client
-        │   ├── heroic.nix     # Heroic Games Launcher
-        │   └── persepolis.nix # Persepolis download manager
-        ├── shell/         # Shell environment
-        │   ├── default.nix    # Fish configuration (aliases, functions, starship, fastfetch)
-        │   ├── terminals.nix  # Foot terminal
-        │   └── tmux.nix       # Tmux terminal multiplexer
-        └── wayland/       # Wayland/Hyprland specific
-            ├── default.nix    # Aggregates wayland modules
-            ├── hyprland.nix   # Hyprland settings (Lua config)
-            ├── hyprlock.nix   # Lock screen
-            ├── hypridle.nix   # Idle management
-            ├── timeouts.nix   # Shared timeout values for hypridle/hyprlock
-            ├── mako.nix       # Notification daemon
-            ├── themes.nix     # Runtime theme switcher (generates per-theme config files)
-            ├── waybar.nix     # Status bar
-            └── walker.nix     # App launcher
+        ├── common/        # Shared between desktop/ and vps/ profiles
+        │   ├── git.nix
+        │   └── ssh.nix    # SSH configuration with FIDO2/Yubikey keys
+        ├── desktop/       # flurPC home-manager profile
+        │   ├── home.nix       # Entry point (imports everything else in desktop/)
+        │   ├── core.nix       # Home basics (username, stateVersion, cursor, stylix)
+        │   ├── secrets.nix    # User-level secrets management with sops-nix
+        │   ├── programs/      # Application configurations and user packages
+        │   │   ├── default.nix    # Aggregates program modules (pulls git.nix/ssh.nix from ../../common/)
+        │   │   ├── packages.nix   # User packages and utilities
+        │   │   ├── xdg.nix        # GTK, Qt, XDG theming
+        │   │   ├── nvim.nix       # Neovim configuration
+        │   │   ├── dev.nix        # Web development tools (fnm, pnpm, Node.js)
+        │   │   ├── gpg.nix        # GPG configuration for Yubikey
+        │   │   ├── zen-browser.nix  # Zen Browser with NextDNS integration
+        │   │   ├── flatpak.nix    # Flatpak package declarations
+        │   │   ├── mullvad-vpn.nix  # Mullvad VPN client
+        │   │   ├── heroic.nix     # Heroic Games Launcher
+        │   │   └── persepolis.nix # Persepolis download manager
+        │   ├── shell/         # Shell environment
+        │   │   ├── default.nix    # Fish configuration (aliases, functions, starship, fastfetch)
+        │   │   ├── terminals.nix  # Foot terminal
+        │   │   └── tmux.nix       # Tmux terminal multiplexer
+        │   └── wayland/       # Wayland/Hyprland specific
+        │       ├── default.nix    # Aggregates wayland modules
+        │       ├── hyprland.nix   # Hyprland settings (Lua config)
+        │       ├── hyprlock.nix   # Lock screen
+        │       ├── hypridle.nix   # Idle management
+        │       ├── timeouts.nix   # Shared timeout values for hypridle/hyprlock
+        │       ├── mako.nix       # Notification daemon
+        │       ├── themes.nix     # Runtime theme switcher (generates per-theme config files)
+        │       ├── waybar.nix     # Status bar
+        │       └── walker.nix     # App launcher
+        └── vps/           # vps home-manager profile
+            └── home.nix       # Minimal entry point (git/ssh from ../common/, shell basics) - no GUI/wayland
 ```
 
 ## Key Configuration Details
@@ -135,7 +151,7 @@ This configuration uses several external flake inputs beyond standard nixpkgs:
 
 - **zen-browser**: Custom Firefox-based browser with zen modifications
 - **stylix**: System-wide theming framework (release-26.05 branch)
-- **nixvim**: Neovim configuration framework used in `users/flur/programs/nvim.nix`
+- **nixvim**: Neovim configuration framework used in `users/flur/desktop/programs/nvim.nix`
 - **firefox-addons**: Firefox extensions from NUR (rycee's expressions)
 - **nur**: Nix User Repository for additional packages
 - **nix-flatpak**: Declarative Flatpak package management
@@ -149,28 +165,42 @@ This configuration uses several external flake inputs beyond standard nixpkgs:
 ## Module Organization
 
 ### System-Level (modules/)
-- `system.nix`: Core system configuration (Nix settings, users, fonts, services)
-- `graphics.nix`: Graphics hardware configuration (NVIDIA drivers, OpenGL/Vulkan)
-- `desktop.nix`: Desktop environment (Hyprland WM, tuigreet DM, XDG portals, desktop apps)
-- `gaming.nix`: Gaming configuration (Steam, Lutris, Wine, gamemode)
-- `keyd.nix`: Keyboard remapping (capslock/ctrl swap, Razer Tartarus profiles)
-- `opentabletdriver.nix`: Drawing tablet support (OpenTabletDriver daemon)
+- `base.nix`: Host-agnostic core configuration (Nix settings, user account, fish, nix-ld, base packages, podman, network-monitor wrappers). Imported by **every** host.
+- `server.nix`: Headless-server concerns (firewall, sshd hardening, fail2ban, qemuGuest, nix.gc). Imported by `vps` only.
+- `graphics.nix`: Graphics hardware configuration (NVIDIA drivers, OpenGL/Vulkan). `flurPC` only.
+- `desktop.nix`: Desktop/GUI environment (Hyprland WM, tuigreet DM, XDG portals, audio, bluetooth, fonts, gnome-keyring, OpenRGB). `flurPC` only.
+- `gaming.nix`: Gaming configuration (Steam, Lutris, Wine, gamemode). `flurPC` only.
+- `keyd.nix`: Keyboard remapping (capslock/ctrl swap, Razer Tartarus profiles). `flurPC` only.
+- `opentabletdriver.nix`: Drawing tablet support (OpenTabletDriver daemon). `flurPC` only.
 - `themes/default.nix`: Theme color palettes (rose-pine-moon, catppuccin-mocha, sweet)
 - `secrets.nix`: System-level secrets management with sops-nix (age encryption)
 
-### Host-Specific (hosts/flurPC/)
-- `default.nix`: Boot loader, networking, hostname, imports system modules
-- `hardware-configuration.nix`: Auto-generated, do not edit manually
+The `base.nix`/`desktop.nix`/`server.nix` split mirrors the `overlays.all`/`overlays.minimal` pattern: generic config lives in one place, hardware/GUI-only config in another, so a new host only imports what applies to it.
+
+### Host-Specific (hosts/)
+- `flurPC/default.nix`: Boot loader (systemd-boot), networking (NetworkManager), imports `base.nix` + `graphics.nix` + `desktop.nix` + `gaming.nix` + `keyd.nix` + `opentabletdriver.nix`.
+- `flurPC/hardware-configuration.nix`: Auto-generated, do not edit manually.
+- `vps/default.nix`: Boot loader (GRUB, BIOS legacy - device supplied automatically by disko), KVM guest kernel modules, imports `base.nix` + `server.nix` + everything under `vps/services/`.
+- `vps/disko.nix`: Declarative disk layout (GPT: BIOS-boot + ESP + ext4 root) consumed by `nixos-anywhere` at provisioning time — there is no hand-written `hardware-configuration.nix` for this host.
+- `vps/services/`: App config specific to this one machine, as opposed to `modules/` which holds *reusable roles* (things that could plausibly apply to a hypothetical second desktop or server). These aren't reusable in that sense - they're one-off to this VPS - so they live under the host, not in `modules/`:
+  - `caddy.nix`: Reverse proxy for `srx.flur.dev` (SearXNG), `flur34.com`/`beta.flur34.com` (KuroSearch containers, see `flur34.nix`), `sync.shiori.gg` (SyncYomi), `dev.shiori.gg` (static). Built with the `caddy-dns/cloudflare` plugin for DNS-01 challenges; also carries the `caddy-wordpress` fail2ban jail (misleadingly named - it's generic bot-probe banning for all the Caddy sites, not WordPress-specific). Needs `secrets/system/vps/caddy.yaml` added to `nix-secrets` (see file for the expected key/format) - falls back to `/etc/caddy/cloudflare.env` (populate manually) until then.
+  - `searxng.nix`: SearXNG + Valkey as `virtualisation.oci-containers` (rootful podman, unlike the original rootless per-user quadlets). After first deploy, copy the synced `settings.yml`/`limiter.toml` into `/var/lib/searxng/`.
+  - `syncyomi.nix`: SyncYomi sync server as a plain systemd service (no nixpkgs module for it, just the package). Session secret is sops-managed once `secrets/system/vps/syncyomi.yaml` exists; until then a random one is generated and persisted under `/var/lib/syncyomi`.
+  - `flur34.nix`: KuroSearch (`ghcr.io/flur34/flur34`) as two `virtualisation.oci-containers` - `flur34` (`:latest`, port 8181) and `flur34-beta` (`:canary`, port 8383, watchtower-update-enabled). Real rule34 API creds go in `secrets/system/vps/{flur34,flur34-beta}.yaml`; falls back to an editable placeholder at `/etc/flur34/*.env` until those exist. Watchtower itself (the thing beta's `/update` webhook on :8384 talks to) isn't declared anywhere yet - it wasn't in the synced compose files, presumably a separate shared instance.
+
+  Migrated from the netcup box's home directory; everything under `*.flur.me` (conduwuit, coturn, LiveKit) and MariaDB/php8.3-fpm were retired, not migrated.
 
 ### User-Specific (users/flur/)
-All user-specific configuration lives under `users/flur/`:
+Split into `common/` (shared between both profiles), `desktop/` (flurPC), and `vps/` (the vps host) - same username on both machines, but the profiles themselves don't overlap beyond `common/`:
 - `nixos.nix`: User-specific system settings (currently empty)
-- `home.nix`: Home-manager entry point (imports all modules below)
-- `core.nix`: Basic home configuration (username, directory, cursor theme)
-- `secrets.nix`: User-level secrets management with sops-nix
-- `programs/`: Application configurations and user packages
-- `shell/`: Shell, terminal, and CLI tool configurations
-- `wayland/`: Hyprland and Wayland-specific configurations
+- `common/git.nix`, `common/ssh.nix`: The only two files genuinely identical across both hosts (SSH config with FIDO2/Yubikey keys, git config/signing). `vps/home.nix` still overrides some options from these (e.g. disables `commit.gpgsign` - no Yubikey on a server) rather than forking the files.
+- `desktop/home.nix`: Entry point, imports `core.nix`, `programs/`, `shell/`, `wayland/`, `secrets.nix`.
+- `desktop/core.nix`: Basic home configuration (username, directory, cursor theme, stylix).
+- `desktop/secrets.nix`: User-level secrets management with sops-nix.
+- `desktop/programs/`: Application configurations and user packages (pulls `git.nix`/`ssh.nix` in from `../../common/`).
+- `desktop/shell/`: Shell, terminal, and CLI tool configurations.
+- `desktop/wayland/`: Hyprland and Wayland-specific configurations.
+- `vps/home.nix`: Minimal entry point - `common/` git+ssh, a small fish/starship/eza/zoxide config. No GUI, no `programs/` aggregate.
 
 ## Workflow
 
@@ -183,8 +213,8 @@ All user-specific configuration lives under `users/flur/`:
 ## Adding New Modules
 
 ### New Program Configuration
-1. Create file in `users/flur/programs/yourprogram.nix`
-2. Add import to `users/flur/programs/default.nix`
+1. Create file in `users/flur/desktop/programs/yourprogram.nix`
+2. Add import to `users/flur/desktop/programs/default.nix` (desktop) and/or `users/flur/vps/home.nix` (server) as applicable
 3. Configure the program using home-manager options
 
 ### New Custom Package
@@ -201,16 +231,26 @@ All user-specific configuration lives under `users/flur/`:
 
 ### New System Service
 1. Add configuration to appropriate module:
-   - Core services → `modules/system.nix`
+   - Generic/host-agnostic → `modules/base.nix`
+   - Server-only → `modules/server.nix`
    - Graphics/GPU → `modules/graphics.nix`
-   - Desktop/WM → `modules/desktop.nix`
+   - Desktop/WM/GUI hardware → `modules/desktop.nix`
    - Gaming → `modules/gaming.nix`
 2. Rebuild to apply changes
 
 ### New Host
-1. Create `hosts/newhostname/default.nix`
-2. Copy `hardware-configuration.nix` from `/etc/nixos/`
-3. Add configuration to `flake.nix`
+1. Create `hosts/newhostname/default.nix`, importing `modules/base.nix` plus whichever of `desktop.nix`/`server.nix`/etc. apply
+2. For a physical/manually-installed machine: copy `hardware-configuration.nix` from `/etc/nixos/`. For a cloud VPS: write a `disko.nix` instead (see `hosts/vps/disko.nix`) and provision with `nixos-anywhere`
+3. Add a `nixosConfigurations.<name>` entry to `flake.nix`, picking `overlays.all`/`overlays.minimal` and either `users/flur/desktop/home.nix` (desktop) or `users/flur/vps/home.nix` (headless) for the home-manager profile
+
+## Provisioning the VPS (netcup, via nixos-anywhere + disko)
+
+The `vps` host isn't running NixOS yet — bring it up from netcup's rescue system:
+
+1. Boot the netcup rescue system, note its IP, and check `[ -d /sys/firmware/efi ]` to confirm legacy BIOS vs UEFI (the `vps/default.nix` GRUB config currently assumes legacy BIOS — flip `efiSupport` and switch `disko.nix`'s ESP mountpoint if it's UEFI). Also confirm the disk device name via `lsblk` matches `hosts/vps/disko.nix` (`/dev/vda` assumed).
+2. From this repo: `nix run github:nix-community/nixos-anywhere -- --flake .#vps root@<rescue-ip>` — this partitions the disk per `disko.nix` and installs the `vps` configuration directly.
+3. Add the VPS's own age key as a `.sops.yaml` recipient in the `nix-secrets` repo before referencing any secrets from `modules/secrets.nix` on this host (don't reuse the desktop's private key across machines).
+4. For subsequent updates, use `nixos-rebuild switch --flake .#vps --target-host root@<vps-ip> --build-host localhost` from this repo rather than building on the VPS itself.
 
 ## Color Theming
 
@@ -229,7 +269,7 @@ Theming uses a **runtime theme switcher** with multiple themes defined in `modul
 ### How it works
 
 1. `modules/themes/default.nix` defines color palettes (rose-pine-moon, catppuccin-mocha, sweet)
-2. `users/flur/wayland/themes.nix` generates per-theme config files for each app (hyprland, waybar, walker, foot, starship, mako, hyprlock, zen browser, nvim, gtk) under `~/.config/themes/<name>/`. Starship base config is sourced from `dotfiles/starship.toml`
+2. `users/flur/desktop/wayland/themes.nix` generates per-theme config files for each app (hyprland, waybar, walker, foot, starship, mako, hyprlock, zen browser, nvim, gtk) under `~/.config/themes/<name>/`. Starship base config is sourced from `dotfiles/starship.toml`
 3. `~/.config/themes/current` is a symlink to the active theme
 4. Apps source their theme file at runtime (e.g. `@import url("~/.config/themes/current/waybar-style.css")`)
 5. `theme-switch [name]` updates the symlink and reloads all apps
@@ -278,7 +318,7 @@ This configuration uses **sops-nix** for managing secrets with **age encryption*
 - **Secrets repository**: `git@github.com:flurbudurbur/nix-secrets.git` (separate from main config)
 - **Encryption**: age key at `/root/.config/sops/age/keys.txt` (user copy at `/home/flur/.config/sops/age/keys.txt`)
 - **System secrets**: Defined in `modules/secrets.nix` (Mullvad VPN configuration)
-- **User secrets**: Defined in `users/flur/secrets.nix` (NextDNS URL, SSH hostname, Git signing key)
+- **User secrets**: Defined in `users/flur/desktop/secrets.nix` (NextDNS URL, SSH hostname, Git signing key)
 
 ### Key Locations
 - **System age key**: `/root/.config/sops/age/keys.txt` (private key for system secrets)
@@ -309,8 +349,8 @@ nh os switch  # No PIN required!
 
 **Add new secrets**:
 1. Create/encrypt file in nixos-secrets repo using age key
-2. Add secret declaration to `modules/secrets.nix` (system) or `users/flur/secrets.nix` (user)
-3. Reference secret in program config (see `users/flur/programs/git.nix` or `zen-browser.nix` for patterns)
+2. Add secret declaration to `modules/secrets.nix` (system) or `users/flur/desktop/secrets.nix` (user)
+3. Reference secret in program config (see `users/flur/common/git.nix` or `zen-browser.nix` for patterns)
 
 ### Program Integration Patterns
 
@@ -370,12 +410,12 @@ This pattern allows:
 3. Subsequent rebuilds to use actual secret values
 
 Modules using this pattern:
-- `users/flur/programs/git.nix` - Git signing key ID
-- `users/flur/programs/zen-browser.nix` - NextDNS URL (uses activation-time substitution)
+- `users/flur/common/git.nix` - Git signing key ID
+- `users/flur/desktop/programs/zen-browser.nix` - NextDNS URL (uses activation-time substitution)
 
 ## Shell Aliases & Functions
 
-Defined in `users/flur/shell/default.nix`:
+Defined in `users/flur/desktop/shell/default.nix`:
 
 - `nfc` — `nix flake check --no-build` (validate flake without building)
 - `nf` — `nix fmt` (format Nix files using nixfmt-tree)
@@ -387,7 +427,7 @@ Rebuilds are done directly with `nh os switch` / `nh os test` (no aliases; see B
 
 ## Tmuxinator Sessions
 
-Declarative tmuxinator YAML configs are managed as `xdg.configFile` entries in `users/flur/shell/tmux.nix`:
+Declarative tmuxinator YAML configs are managed as `xdg.configFile` entries in `users/flur/desktop/shell/tmux.nix`:
 
 | Session | Purpose | Windows |
 |---------|---------|---------|
@@ -399,7 +439,7 @@ Declarative tmuxinator YAML configs are managed as `xdg.configFile` entries in `
 
 ## Security Wrappers for Network Tools
 
-Network monitoring tools are given elevated capabilities in `modules/system.nix` via `security.wrappers` rather than sudoers entries:
+Network monitoring tools are given elevated capabilities in `modules/base.nix` via `security.wrappers` rather than sudoers entries:
 
 ```nix
 security.wrappers = {
@@ -413,11 +453,11 @@ This allows running these tools without a password prompt.
 
 ## Important Notes
 
-- **Theming**: Colors are defined in `modules/themes/default.nix` and consumed by `users/flur/wayland/themes.nix` which generates per-app theme files. Use `theme-switch [name]` to switch at runtime.
+- **Theming**: Colors are defined in `modules/themes/default.nix` and consumed by `users/flur/desktop/wayland/themes.nix` which generates per-app theme files. Use `theme-switch [name]` to switch at runtime.
 - **Hostname parameter**: Keep `hostname = "flurPC"` in extraSpecialArgs for Hyprland monitor configs
 - **State version**: "25.11" for both system and home-manager (do not change)
 - **Hardware config**: Do not edit `hardware-configuration.nix` manually - regenerate if needed
-- **Terminal**: Foot — configured in `users/flur/shell/terminals.nix`
+- **Terminal**: Foot — configured in `users/flur/desktop/shell/terminals.nix`
 - **Home-manager backups**: Backup files use `.backup` extension (configured in flake.nix)
 - **Flake structure**: Uses home-manager as a NixOS module, not standalone
 - **Secrets repo**: Never commit unencrypted secrets; see `.gitignore` in nixos-secrets repo

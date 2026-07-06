@@ -7,7 +7,7 @@
 }:
 
 let
-  themes = import ../../../modules/themes/default.nix { schemes = tinted-schemes; };
+  themes = import ../../../../modules/themes/default.nix { schemes = tinted-schemes; };
 
   strip = hex: builtins.substring 1 6 hex;
   hyprColor = hex: alpha: "rgba(${strip hex}${alpha})";
@@ -44,7 +44,7 @@ let
 
   starshipFormat = pkgs.formats.toml { };
 
-  starshipBase = import ../../../dotfiles/starship.nix;
+  starshipBase = import ../../../../dotfiles/starship.nix;
 
   mkStarshipTheme =
     t:
@@ -618,10 +618,10 @@ let
         "gif"
       ];
       wallpaperExt = lib.findFirst (
-        ext: builtins.pathExists (../../../wallpapers + "/${name}.${ext}")
+        ext: builtins.pathExists (../../../../wallpapers + "/${name}.${ext}")
       ) null wallpaperExts;
       wallpaperEntry = lib.optionalAttrs (wallpaperExt != null) {
-        "themes/${name}/wallpaper".source = ../../../wallpapers + "/${name}.${wallpaperExt}";
+        "themes/${name}/wallpaper".source = ../../../../wallpapers + "/${name}.${wallpaperExt}";
       };
     in
     {
