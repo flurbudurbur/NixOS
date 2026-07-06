@@ -1,11 +1,8 @@
 # netcup VPS - provisioned via nixos-anywhere + disko.
 #
-# TODO before first install: boot the netcup rescue system and check
-# `[ -d /sys/firmware/efi ]`. If it exists, switch to systemd-boot below;
-# if not, GRUB legacy (the current default) is correct. Also confirm the
-# disk device name in ./disko.nix matches `lsblk` output (usually /dev/vda
-# for netcup's KVM plans).
-{ ... }:
+# UEFI - requires the "EFI Boot" toggle enabled in the netcup panel before
+# booting the rescue system (it defaults to Legacy BIOS otherwise).
+{ pkgs, ... }:
 {
   imports = [
     ./disko.nix
@@ -18,10 +15,17 @@
     ./services/flur34.nix
   ];
 
-  # boot.loader.grub.devices is supplied by disko (see disko.nix's EF02 partition)
-  boot.loader.grub = {
-    enable = true;
-    efiSupport = false;
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
+  # SSH/SFTP-only account for uploading music files - no service runs as this user.
+  users.users.music = {
+    isNormalUser = true;
+    home = "/srv/music";
+    shell = pkgs.fish;
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILnpkT52t3MkXqJUEWAeWRyHXlTNrgIpGy+A12wkJm5s music@v2202512321715414857"
+    ];
   };
 
   # KVM/virtio guest kernel modules (netcup runs standard KVM)

@@ -30,6 +30,9 @@
       "podman"
     ];
     shell = pkgs.fish;
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMwJBOgc5FkuGdI7ywT+vf79pX4iSl+1nTOkk/klUixb flur@flurPC"
+    ];
   };
   environment.shells = with pkgs; [ fish ];
 
