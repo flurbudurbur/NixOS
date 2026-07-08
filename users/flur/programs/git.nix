@@ -18,10 +18,24 @@ in
   programs.git = {
     enable = true;
     lfs.enable = true;
+
+    # Codeberg can only verify signatures against emails on the Codeberg
+    # account, so override the committer email for codeberg.org remotes
+    includes =
+      let
+        codebergEmail = {
+          contents.user.email = "flurbudurbur@noreply.codeberg.org";
+        };
+      in
+      [
+        (codebergEmail // { condition = "hasconfig:remote.*.url:git@codeberg.org:*/**"; })
+        (codebergEmail // { condition = "hasconfig:remote.*.url:https://codeberg.org/**"; })
+      ];
     ignores = [
       "AGENTS.md"
       ".claude/*"
       "CLAUDE.md"
+      ".direnv/*"
     ];
     settings = {
       user.name = "flurbudurbur";

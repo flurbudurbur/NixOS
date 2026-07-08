@@ -28,6 +28,15 @@ in
         ];
       };
 
+      "codeberg.org" = {
+        IdentitiesOnly = true;
+        IdentityFile = [
+          "~/.ssh/id_ed25519_sk_rk_aloha_codeberg"
+          "~/.ssh/id_ed25519_sk_rk_pink_codeberg"
+          "~/.ssh/codeberg"
+        ];
+      };
+
       "shiori" = {
         HostName = "@SHIORI_HOSTNAME@";
         User = "flur";
