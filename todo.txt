@@ -5,7 +5,7 @@ x 2026-06-14 2026-06-14 fix nvim closing when clicking on the "x" of one of the 
 x 2026-06-14 2026-06-14 Make Claude read the todo.txt on launch and select the execution of one of the entries based on priority pri:A start:2026-06-14
 x 2026-06-28 2026-06-14 Migrate waybar to Eww @migration pri:B start:2026-06-14
 x 2026-06-24 2026-06-14 Investigate and fix SUPER+L (locking/hyprlock) not going to sleep after the time has passed. @fix pri:A start:2026-06-14 ctx:"Only leaving the screen to timeout on its own makes it go to sleep/hibernation"
-Figure out why openRGB can't change my RAM RGBs start:2026-06-14 blocked:"hardware issues (Lenovo)"
+x 2026-07-10 2026-07-10 Figure out why openRGB can't change my RAM RGBs start:2026-06-14 blocked:"hardware issues (Lenovo)"
 x 2026-06-26 2026-06-26 Figure out a better way to provide context for a todo.txt entry. start:2026-06-14
 x 2026-06-24 2026-06-24 Make CTRL+L clear the terminal in TMUX (not clear the buffer, just what's visible on the screen) start:2026-06-24
 x 2026-06-24 2026-06-25 Fix claude todo-skill to follow the todo.txt specification properly. start:2026-06-24 pri:C
@@ -22,4 +22,5 @@ x 2026-07-04 2026-07-04 Theme tmux top bar. pill shapes and formatting start:202
 x 2026-07-04 2026-07-05 Theme starship worktree:starship start:2026-07-04
 x 2026-07-05 2026-07-04 Set up "eza" start:2026-07-05
 x 2026-07-05 2026-07-04 Check out fluxer TUI and implement it start:2026-07-05
-(C) 2026-07-04 Remove all startup logging from screen. Make it so that no log is visible when starting up my PC
+x 2026-07-10 2026-07-04 Remove all startup logging from screen. Make it so that no log is visible when starting up my PC pri:C start:2026-07-10
+(A) 2026-07-10 Configure SearXNG @vps ctx:"All my search engines when searching time out"
