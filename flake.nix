@@ -88,6 +88,11 @@
         src = ./.;
         hooks = {
           nixfmt.enable = true;
+          statix.enable = true;
+          deadnix = {
+            enable = true;
+            excludes = [ "hardware-configuration\\.nix" ];
+          };
         };
       };
 
@@ -126,9 +131,9 @@
                   };
                   extraSpecialArgs = {
                     hostname = "flurPC";
-                    firefox-addons = inputs.firefox-addons;
-                    secretsPath = nixos-secrets.secretsPath;
-                    tinted-schemes = inputs.tinted-schemes;
+                    inherit (inputs) firefox-addons;
+                    inherit (nixos-secrets) secretsPath;
+                    inherit (inputs) tinted-schemes;
                     nixpkgs-unstable = import inputs.nixpkgs-unstable {
                       system = "x86_64-linux";
                       config.allowUnfree = true;
@@ -149,8 +154,8 @@
               }
             ];
             specialArgs = {
-              secretsPath = nixos-secrets.secretsPath;
-              tinted-schemes = inputs.tinted-schemes;
+              inherit (nixos-secrets) secretsPath;
+              inherit (inputs) tinted-schemes;
               inherit inputs;
             };
           };

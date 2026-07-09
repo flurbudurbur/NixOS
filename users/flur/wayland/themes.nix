@@ -53,21 +53,21 @@ let
         builtins.replaceStrings [ "@THEME_ICON@" ] [ t.icon ]
           starshipBase.username.format;
       palettes.theme = {
-        bg = t.bg;
-        bg_alt = t.bg_alt;
-        bg_select = t.bg_select;
-        fg_faint = t.fg_faint;
-        fg_dim = t.fg_dim;
-        fg = t.fg;
-        error = t.error;
-        warning = t.warning;
-        accent2 = t.accent2;
-        blue = t.blue;
-        cyan = t.cyan;
-        accent = t.accent;
-        hl_low = t.hl_low;
-        hl_med = t.hl_med;
-        hl_high = t.hl_high;
+        inherit (t) bg;
+        inherit (t) bg_alt;
+        inherit (t) bg_select;
+        inherit (t) fg_faint;
+        inherit (t) fg_dim;
+        inherit (t) fg;
+        inherit (t) error;
+        inherit (t) warning;
+        inherit (t) accent2;
+        inherit (t) blue;
+        inherit (t) cyan;
+        inherit (t) accent;
+        inherit (t) hl_low;
+        inherit (t) hl_med;
+        inherit (t) hl_high;
       };
     };
 

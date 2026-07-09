@@ -1,7 +1,7 @@
-# Use nixpkgs-unstable's xone (v0.5.7) built against the current system kernel
+# Use nixpkgs-unstable's xone built against the current system kernel
 # Uses linuxKernel.packagesFor override to apply to ALL kernel package sets
 { inputs }:
-final: prev:
+_final: prev:
 let
   unstablePkgs = import inputs.nixpkgs-unstable {
     system = prev.stdenv.hostPlatform.system;
@@ -13,8 +13,8 @@ in
     packagesFor =
       kernel:
       (prev.linuxKernel.packagesFor kernel).extend (
-        lpFinal: lpPrev: {
-          xone = (unstablePkgs.linuxKernel.packagesFor kernel).xone;
+        _lpFinal: _lpPrev: {
+          inherit ((unstablePkgs.linuxKernel.packagesFor kernel)) xone;
         }
       );
   };

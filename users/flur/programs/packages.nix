@@ -75,9 +75,13 @@
     # Chat
     fluxer-tui
 
-    # Nix linting
+    # Nix tooling
     statix
     deadnix
+    nurl
+    nix-init
+    nix-update
+    nix-search-tv
   ];
 
   home.sessionVariables = {

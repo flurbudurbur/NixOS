@@ -30,7 +30,7 @@ let
   seshToggle = (import ./eww/sesh.nix { inherit pkgs; }).toggleScript;
 
   monitorsData = import ./monitors.nix { inherit hostname lib; };
-  inherit (monitorsData) monitors sortedMonitors monitorCase;
+  inherit (monitorsData) monitors monitorCase;
 
   wsScript = pkgs.writeShellScript "ws-switch" ''
         WS=$1

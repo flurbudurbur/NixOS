@@ -7,7 +7,7 @@
 
 let
   icons = import ./icons.nix { };
-  primaryMonitor = (import ../monitors.nix { inherit hostname lib; }).primaryMonitor;
+  inherit ((import ../monitors.nix { inherit hostname lib; })) primaryMonitor;
 
   bar = import ./bar.nix { inherit pkgs; };
   clock = import ./clock.nix { };

@@ -1,6 +1,6 @@
 # Overlay that adds custom packages to the pkgs namespace
 { inputs }:
-final: prev:
+final: _prev:
 let
   themes = import ../modules/themes/default.nix { schemes = inputs.tinted-schemes; };
   mkPlymouthTheme = final.callPackage ../packages/plymouth-theme.nix { };
@@ -34,7 +34,7 @@ in
     in
     mkPlymouthTheme {
       inherit name;
-      bg = t.bg;
+      inherit (t) bg;
       dot = t.blue;
       wallpaper = if ext != null then (../wallpapers + "/${name}.${ext}") else null;
     }

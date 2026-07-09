@@ -76,7 +76,7 @@
 
         inSpace = space: {
           workspace = space.id;
-          container = space.container;
+          inherit (space) container;
         };
         pinsIn = space: ps: lib.mapAttrs (_: pin: pin // inSpace space) ps;
 

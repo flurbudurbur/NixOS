@@ -253,7 +253,7 @@ The `overlays/default.nix` exports named sets for per-host selection:
 - `overlays.gaming` — Gaming-only (xone)
 
 ### Current Overlays
-- **xone** (`overlays/xone.nix`): Overrides xone kernel module to use dlundqvist fork v0.5.7 for extra button support
+- **xone** (`overlays/xone.nix`): Builds the xone kernel module from nixpkgs-unstable against the current kernel (tracks latest version via the `nixpkgs-unstable` input)
 - **custom-packages** (`overlays/custom-packages.nix`): Adds custom packages to pkgs namespace
 - **nur**: NUR overlay (imported from flake input)
 

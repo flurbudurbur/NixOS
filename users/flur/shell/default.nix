@@ -61,6 +61,8 @@
     enableTmuxIntegration = false;
   };
 
+  programs.nix-your-shell.enable = true;
+
   programs.fish = {
     enable = true;
     shellAliases = {
@@ -88,6 +90,10 @@
     '';
 
     functions = {
+      ns = ''
+        nix-search-tv print | fzf --preview 'nix-search-tv preview {}' --scheme history
+      '';
+
       sesh-sessions = ''
         set -l session (sesh list -i | fzf --height 40% --reverse --border-label ' sesh ' --prompt '  ' \
           --color 'label:#c4a7e7:bold,prompt:#f6c177:bold' \

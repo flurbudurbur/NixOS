@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   # Hardware
   hardware.graphics = {
     enable = true;

@@ -1,4 +1,4 @@
-{ ... }:
+_:
 
 let
   to = (import ./timeouts.nix).hypridle;

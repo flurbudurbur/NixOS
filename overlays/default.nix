@@ -13,7 +13,7 @@
 #
 # Current overlays:
 #   - nur: Nix User Repository packages
-#   - xone: Xbox controller kernel module (nixpkgs-unstable v0.5.7)
+#   - xone: Xbox controller kernel module (from nixpkgs-unstable)
 #   - customPackages: Custom packages (bricolage-grotesque, qobuz-player, plymouthThemes)
 { inputs }:
 let

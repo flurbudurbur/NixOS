@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   workspace = {
     active = "";
     occupied = "";

@@ -8,7 +8,7 @@
 
   programs.gamemode.enable = true;
 
-  # Xbox controller support (xone driver from nixpkgs-unstable v0.5.7)
+  # Xbox controller support (xone driver from nixpkgs-unstable)
   # Handles blacklisting xpad/mt76x2u and includes wireless dongle firmware
   hardware.xone.enable = true;
 
