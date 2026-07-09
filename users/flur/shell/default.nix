@@ -17,6 +17,7 @@
     GPG_TTY = "$(tty)";
     SOPS_EDITOR = "nvim";
     STARSHIP_CONFIG = lib.mkForce "$HOME/.config/themes/current/starship.toml";
+    NH_FLAKE = "/home/flur/nixos-system";
   };
 
   programs.starship = {
@@ -64,8 +65,6 @@
     enable = true;
     shellAliases = {
       btw = "echo I use Nixos, btw";
-      nrt = "nixos-rebuild test --sudo --flake /home/flur/nixos-system";
-      nrs = "nixos-rebuild switch --sudo --flake /home/flur/nixos-system";
       nfc = "nix flake check --no-build /home/flur/nixos-system";
       nf = "nix fmt /home/flur/nixos-system";
       ivr = "ivpn connect -f";

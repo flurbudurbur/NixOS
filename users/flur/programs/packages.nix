@@ -74,6 +74,10 @@
 
     # Chat
     fluxer-tui
+
+    # Nix linting
+    statix
+    deadnix
   ];
 
   home.sessionVariables = {

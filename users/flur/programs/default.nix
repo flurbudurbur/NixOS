@@ -7,6 +7,7 @@
     ./dev.nix
     ./xdg.nix
     ./nvim.nix
+    ./nix-index.nix
     ./zen-browser.nix
     ./gpg.nix
     ./persepolis.nix

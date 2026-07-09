@@ -29,6 +29,7 @@ in
       in
       [
         (codebergEmail // { condition = "hasconfig:remote.*.url:git@codeberg.org:*/**"; })
+        (codebergEmail // { condition = "hasconfig:remote.*.url:ssh://git@codeberg.org/**"; })
         (codebergEmail // { condition = "hasconfig:remote.*.url:https://codeberg.org/**"; })
       ];
     ignores = [

@@ -55,6 +55,14 @@
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixos-hardware = {
+      url = "github:NixOS/nixos-hardware";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -135,6 +143,7 @@
                     sops-nix.homeManagerModules.sops
                     inputs.nix-flatpak.homeManagerModules.nix-flatpak
                     inputs.walker.homeManagerModules.default
+                    inputs.nix-index-database.homeModules.nix-index
                   ];
                 };
               }
@@ -142,6 +151,7 @@
             specialArgs = {
               secretsPath = nixos-secrets.secretsPath;
               tinted-schemes = inputs.tinted-schemes;
+              inherit inputs;
             };
           };
       };

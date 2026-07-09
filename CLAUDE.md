@@ -8,15 +8,20 @@ This is a NixOS system configuration using flakes with home-manager integration,
 
 ## Build and Apply Commands
 
+Rebuilds use [nh](https://github.com/nix-community/nh) (configured in `modules/system.nix`; `NH_FLAKE` points at this repo, so no flake path argument is needed). nh self-elevates via sudo and prints an nvd package diff after each rebuild.
+
 ```bash
 # Rebuild and switch to new configuration
-sudo nixos-rebuild switch --flake .#flurPC
+nh os switch
 
-# Build without switching (test the build)
-sudo nixos-rebuild build --flake .#flurPC
+# Apply without creating a boot entry (test without switching default)
+nh os test
 
 # Build and switch to new configuration on next boot
-sudo nixos-rebuild boot --flake .#flurPC
+nh os boot
+
+# Update flake inputs and switch in one step
+nh os switch --update
 
 # Update flake inputs (updates flake.lock)
 nix flake update
@@ -26,6 +31,10 @@ nix flake lock --update-input nixpkgs
 
 # Check flake for errors without building
 nix flake check
+
+# Search packages / clean old generations
+nh search <query>
+nh clean all --keep 5 --keep-since 7d
 ```
 
 ## Architecture
@@ -168,8 +177,8 @@ All user-specific configuration lives under `users/flur/`:
 1. **System Changes**: Edit files in `modules/` or `hosts/flurPC/`
 2. **User Packages**: Add to `users/flur/programs/packages.nix`
 3. **Program Configuration**: Create/edit files in appropriate `users/flur/` subdirectory
-4. **Apply Changes**: Run `sudo nixos-rebuild switch --flake .#flurPC`
-5. **Test Before Applying**: Use `nixos-rebuild build --flake .#flurPC` first
+4. **Apply Changes**: Run `nh os switch`
+5. **Test Before Applying**: Use `nh os test` first (applies without a boot entry)
 
 ## Adding New Modules
 
@@ -295,7 +304,7 @@ git push
 # Update main config
 cd /home/flur/nixos-system
 nix flake lock --update-input nixos-secrets
-sudo nixos-rebuild switch --flake .#flurPC  # No PIN required!
+nh os switch  # No PIN required!
 ```
 
 **Add new secrets**:
@@ -368,11 +377,11 @@ Modules using this pattern:
 
 Defined in `users/flur/shell/default.nix`:
 
-- `nrs` — `nixos-rebuild switch --sudo --flake` (apply config)
-- `nrt` — `nixos-rebuild test --sudo --flake` (test without boot entry)
 - `nfc` — `nix flake check --no-build` (validate flake without building)
 - `nf` — `nix fmt` (format Nix files using nixfmt-tree)
-- `mvr` — `mullvad reconnect`
+- `ivr` — `ivpn connect -f`
+
+Rebuilds are done directly with `nh os switch` / `nh os test` (no aliases; see Build and Apply Commands).
 
 **Zoxide** is initialized in fish (`zoxide init fish --cmd cd | source`), replacing `cd` with smart directory jumping.
 
