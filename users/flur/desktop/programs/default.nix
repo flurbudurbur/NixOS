@@ -3,6 +3,7 @@
   imports = [
     ../../common/git.nix
     ../../common/ssh.nix
+    ./ssh-shiori.nix
     ./packages.nix
     ./dev.nix
     ./xdg.nix

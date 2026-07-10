@@ -1,12 +1,5 @@
-{
-  config,
-  lib,
-  ...
-}:
+_:
 
-let
-  sshHostnameFile = "${config.xdg.configHome}/sops-secrets/ssh-shiori-hostname";
-in
 {
   # Force overwrite to prevent backup file conflicts
   home.file.".ssh/config".force = true;
@@ -36,28 +29,6 @@ in
           "~/.ssh/codeberg"
         ];
       };
-
-      "shiori" = {
-        HostName = "@SHIORI_HOSTNAME@";
-        User = "flur";
-        IdentityFile = [ "~/.ssh/shiori" ];
-      };
-
-      "music" = {
-        HostName = "@SHIORI_HOSTNAME@";
-        User = "music";
-        IdentityFile = [ "~/.ssh/music" ];
-      };
     };
   };
-
-  # Substitute secret hostname into SSH config after sops-nix decrypts it
-  home.activation.substituteShioriHostname = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    if [ -f "${sshHostnameFile}" ]; then
-      HOSTNAME=$(tr -d '\n' < "${sshHostnameFile}")
-      sed -i "s|@SHIORI_HOSTNAME@|$HOSTNAME|g" ~/.ssh/config
-    else
-      echo "Warning: ${sshHostnameFile} not found, skipping hostname substitution"
-    fi
-  '';
 }

@@ -6,6 +6,19 @@
   ...
 }:
 
+let
+  # policies.json is baked into the immutable, systemwide wrapFirefox
+  # derivation at build time (not written per-user under $HOME), so it can't
+  # be patched at activation the way ~/.ssh/config can. Read the secret
+  # straight from disk at eval time instead - same pattern as the git
+  # signing key in ../../common/git.nix.
+  nextdnsUrlFile = "${config.xdg.configHome}/sops-secrets/nextdns-url";
+  nextdnsUrl =
+    if builtins.pathExists nextdnsUrlFile then
+      lib.removeSuffix "\n" (lib.fileContents nextdnsUrlFile)
+    else
+      "https://cloudflare-dns.com/dns-query";
+in
 {
   programs.zen-browser = {
     enable = true;
@@ -30,7 +43,7 @@
       };
       DNSOverHTTPS = {
         Enabled = true;
-        ProviderURL = "@NEXTDNS_URL@";
+        ProviderURL = nextdnsUrl;
         Locked = true;
         ExcludedDomains = [ "" ];
         Fallback = true;
@@ -280,18 +293,4 @@
         };
       };
   };
-
-  # Substitute secret at activation
-  home.activation.substituteZenBrowserSecrets = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    if [ -f "${config.xdg.configHome}/sops-secrets/nextdns-url" ]; then
-      NEXTDNS_URL=$(cat "${config.xdg.configHome}/sops-secrets/nextdns-url")
-
-      POLICIES_DIR="$HOME/.zen"
-      if [ -d "$POLICIES_DIR" ]; then
-        find "$POLICIES_DIR" -type f \( -name "*.js" -o -name "*.json" \) | while read file; do
-          sed -i "s|@NEXTDNS_URL@|$NEXTDNS_URL|g" "$file" 2>/dev/null || true
-        done
-      fi
-    fi
-  '';
 }
