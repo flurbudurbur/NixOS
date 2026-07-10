@@ -23,4 +23,6 @@ x 2026-07-04 2026-07-05 Theme starship worktree:starship start:2026-07-04
 x 2026-07-05 2026-07-04 Set up "eza" start:2026-07-05
 x 2026-07-05 2026-07-04 Check out fluxer TUI and implement it start:2026-07-05
 x 2026-07-10 2026-07-04 Remove all startup logging from screen. Make it so that no log is visible when starting up my PC pri:C start:2026-07-10
-(A) 2026-07-10 Configure SearXNG @vps ctx:"All my search engines when searching time out"
+(A) 2026-07-10 Configure SearXNG @vps ctx:"All my search engines when searching time out" start:2026-07-10
+(B) 2026-07-10 Explore if noctalia-greeter can be configured to always use 'hyprland-uwsm' so as to not need a select
+x 2026-07-11 2026-07-10 Fix sops-nix not replacing my ssh keys pri:A start:2026-07-11
