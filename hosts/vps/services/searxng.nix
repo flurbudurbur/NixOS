@@ -5,6 +5,13 @@
 {
   virtualisation.oci-containers.backend = "podman";
 
+  # NixOS's podman module only opens udp/53 to the default network's
+  # interface (podman0) for aardvark-dns. The searxng network is a separate
+  # user-defined bridge (podman1), so without this its containers can reach
+  # the internet by IP but can never resolve hostnames - every search engine
+  # request times out looking exactly like a network outage.
+  networking.firewall.interfaces."podman1".allowedUDPPorts = [ 53 ];
+
   users.users.searxng = {
     isSystemUser = true;
     group = "searxng";
