@@ -1,24 +1,10 @@
 {
   pkgs,
   firefox-addons,
-  config,
   lib,
   ...
 }:
 
-let
-  # policies.json is baked into the immutable, systemwide wrapFirefox
-  # derivation at build time (not written per-user under $HOME), so it can't
-  # be patched at activation the way ~/.ssh/config can. Read the secret
-  # straight from disk at eval time instead - same pattern as the git
-  # signing key in ../../common/git.nix.
-  nextdnsUrlFile = "${config.xdg.configHome}/sops-secrets/nextdns-url";
-  nextdnsUrl =
-    if builtins.pathExists nextdnsUrlFile then
-      lib.removeSuffix "\n" (lib.fileContents nextdnsUrlFile)
-    else
-      "https://cloudflare-dns.com/dns-query";
-in
 {
   programs.zen-browser = {
     enable = true;
@@ -41,9 +27,14 @@ in
         Cryptomining = true;
         Fingerprinting = true;
       };
+      # Real-world DoH provider comes from /etc/policies/policies.json
+      # (see ../../../../modules/zen-browser-policies.nix) which Zen's
+      # policy engine checks first and uses exclusively when present. This
+      # is just the bundled-package bootstrap fallback for before that
+      # file exists.
       DNSOverHTTPS = {
         Enabled = true;
-        ProviderURL = nextdnsUrl;
+        ProviderURL = "https://cloudflare-dns.com/dns-query";
         Locked = true;
         ExcludedDomains = [ "" ];
         Fallback = true;

@@ -13,6 +13,7 @@
     ../../modules/desktop.nix
     ../../modules/gaming.nix
     ../../modules/secrets.nix
+    ../../modules/zen-browser-policies.nix
     ../../modules/keyd.nix
     ../../modules/opentabletdriver.nix
   ];
