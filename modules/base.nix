@@ -52,6 +52,14 @@
 
   programs.fish.enable = true;
 
+  # Replaced by nix-index (users/flur/desktop/programs/nix-index.nix)
+  programs.command-not-found.enable = false;
+
+  programs.nh = {
+    enable = true;
+    flake = "/home/flur/nixos-system";
+  };
+
   # Enable nix-ld for dynamically linked binaries (fnm/node, etc.)
   programs.nix-ld.enable = true;
 
