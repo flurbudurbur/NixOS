@@ -1,6 +1,5 @@
 # Generic headless-server concerns: shared by any non-desktop host.
-{ ... }:
-{
+_: {
   networking.nftables.enable = true;
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [

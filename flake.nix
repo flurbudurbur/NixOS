@@ -183,7 +183,7 @@
                     ];
                   };
                   extraSpecialArgs = {
-                    secretsPath = nixos-secrets.secretsPath;
+                    inherit (nixos-secrets) secretsPath;
                     inherit inputs;
                   };
                   backupFileExtension = "backup";
@@ -191,7 +191,7 @@
               }
             ];
             specialArgs = {
-              secretsPath = nixos-secrets.secretsPath;
+              inherit (nixos-secrets) secretsPath;
             };
           };
       };
