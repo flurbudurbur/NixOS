@@ -1,19 +1,5 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
-}:
+{ pkgs, ... }:
 
-let
-  signingKeyFile = "${config.xdg.configHome}/sops-secrets/git-signing-key";
-
-  signingKey =
-    if builtins.pathExists signingKeyFile then
-      lib.removeSuffix "\n" (lib.fileContents signingKeyFile)
-    else
-      "59327CBED7938BDBE74B167D57CF006A8AD85F44";
-in
 {
   programs.git = {
     enable = true;
@@ -41,7 +27,10 @@ in
     settings = {
       user.name = "flurbudurbur";
       user.email = "69259138+flurbudurbur@users.noreply.github.com";
-      user.signingkey = signingKey;
+      # Real key comes from ../../desktop/programs/git-signing-key.nix via a
+      # sops-rendered include (desktop only - vps has no sops-nix HM module).
+      # This is the pre-age-migration key ID, kept as a bootstrap fallback.
+      user.signingkey = "59327CBED7938BDBE74B167D57CF006A8AD85F44";
       init.defaultBranch = "main";
       pull.rebase = true;
 
