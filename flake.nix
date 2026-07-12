@@ -171,6 +171,57 @@
             };
           };
 
+        # Installer ISO with SSH key baked in, for headless nixos-anywhere
+        # provisioning: nix build .#nixosConfigurations.installer.config.system.build.isoImage
+        installer = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
+            {
+              users.users.root.openssh.authorizedKeys.keys = [
+                "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMwJBOgc5FkuGdI7ywT+vf79pX4iSl+1nTOkk/klUixb flur@flurPC"
+              ];
+              isoImage.squashfsCompression = "zstd -Xcompression-level 3";
+            }
+          ];
+        };
+
+        flurLab =
+          let
+            username = "flur";
+          in
+          nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            modules = [
+              ./hosts/flurLab
+              disko.nixosModules.disko
+              sops-nix.nixosModules.sops
+              {
+                nixpkgs.overlays = overlays.minimal;
+              }
+              home-manager.nixosModules.home-manager
+              {
+                home-manager = {
+                  useGlobalPkgs = true;
+                  useUserPackages = true;
+                  users.${username} = {
+                    imports = [
+                      ./users/${username}/vps/home.nix
+                    ];
+                  };
+                  extraSpecialArgs = {
+                    inherit (nixos-secrets) secretsPath;
+                    inherit inputs;
+                  };
+                  backupFileExtension = "backup";
+                };
+              }
+            ];
+            specialArgs = {
+              inherit (nixos-secrets) secretsPath;
+            };
+          };
+
         vps =
           let
             username = "flur";

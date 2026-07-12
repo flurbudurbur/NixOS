@@ -4,6 +4,7 @@
     ../../common/git.nix
     ../../common/ssh.nix
     ./ssh-shiori.nix
+    ./ssh-flurlab.nix
     ./git-signing-key.nix
     ./packages.nix
     ./dev.nix

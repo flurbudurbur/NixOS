@@ -1,8 +1,8 @@
 # Caddy reverse proxy, migrated from the netcup box's ~/caddy_stuff.
 #
-# DNS-01 challenges go through Cloudflare, so Caddy needs the caddy-dns/cloudflare
-# plugin baked in and a CF_API_TOKEN in its environment (same as the systemd
-# EnvironmentFile override used on the old host).
+# DNS-01 challenges: srx.flur.dev goes through BunnyDNS (BUNNY_API_KEY), the
+# remaining zones still go through Cloudflare (CF_API_TOKEN) until they're
+# migrated. Both plugins are baked in; both keys live in the same EnvironmentFile.
 {
   config,
   lib,
@@ -13,8 +13,10 @@
 let
   # Same fallback pattern as users/flur/programs/git.nix: build succeeds before the
   # secret exists in nix-secrets, and picks it up automatically once it's added.
-  # The yaml needs a top-level `caddy-cloudflare-env:` key whose value is a full
-  # EnvironmentFile line: CF_API_TOKEN=<token>
+  # The yaml needs a top-level `caddy-cloudflare-env:` key whose value is full
+  # EnvironmentFile content:
+  #   CF_API_TOKEN=<token>
+  #   BUNNY_API_TOKEN=<bunny.net account API key>
   caddySecretsFile = "${secretsPath}/system/vps/caddy.yaml";
   haveCaddySecrets = builtins.pathExists caddySecretsFile;
 in
@@ -28,10 +30,11 @@ in
 
     package = pkgs.caddy.withPlugins {
       plugins = [
+        "github.com/caddy-dns/bunny@v1.2.0"
         "github.com/caddy-dns/cloudflare@v0.2.4"
         "github.com/caddyserver/transform-encoder@v0.0.0-20260423033309-ba4124974830"
       ];
-      hash = "sha256-mF0V4puEMkQKyhx5NytbWB5ygH4Bkun+7yV7lecxhDI=";
+      hash = "sha256-kRUs6cJLicDNANibXOLLwKq3nqyzxypbnKMkdBHNz+U=";
     };
 
     globalConfig = ''
@@ -52,6 +55,12 @@ in
         }
       }
 
+      (bunny_tls) {
+        tls {
+          dns bunny {$BUNNY_API_TOKEN}
+        }
+      }
+
       (logging) {
         log {
           output file /var/log/caddy/{args[0]}.log
@@ -62,7 +71,7 @@ in
 
     virtualHosts."srx.flur.dev".logFormat = null;
     virtualHosts."srx.flur.dev".extraConfig = ''
-      import cloudflare_tls
+      import bunny_tls
       import logging srx.flur.dev
 
       encode zstd gzip

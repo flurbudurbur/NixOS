@@ -28,6 +28,12 @@
         mode = "0400";
       };
 
+      "ssh-flurlab-ip" = {
+        sopsFile = "${secretsPath}/user/ssh-hosts.yaml";
+        path = "${config.xdg.configHome}/sops-secrets/ssh-flurlab-ip";
+        mode = "0400";
+      };
+
       "git-signing-key" = {
         sopsFile = "${secretsPath}/user/git-signing.yaml";
         path = "${config.xdg.configHome}/sops-secrets/git-signing-key";
