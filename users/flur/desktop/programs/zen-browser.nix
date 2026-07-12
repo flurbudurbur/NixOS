@@ -219,6 +219,20 @@
                 "@youtube"
               ];
             };
+            "alternativeto" = {
+              name = "AlternativeTo";
+              urls = [
+                {
+                  template = "https://alternativeto.net/browse/search/?q={searchTerms}";
+                }
+              ];
+              icon = "🔬";
+              definedAliases = [
+                "@alternativeto"
+                "@alt"
+                "@at"
+              ];
+            };
           };
         };
 

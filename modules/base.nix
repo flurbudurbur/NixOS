@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   # Nix settings
   nix.settings = {
@@ -9,7 +9,19 @@
     extra-substituters = [ "https://devenv.cachix.org" ];
     extra-trusted-public-keys = [ "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=" ];
   };
-  nixpkgs.config.allowUnfree = true;
+
+  nixpkgs.config.allowUnfreePredicate =
+    pkg:
+    builtins.elem (lib.getName pkg) [
+      "nvidia-x11"
+      "nvidia-settings"
+      "steam"
+      "steam-original"
+      "steam-run"
+      "steam-unwrapped"
+      "xone-dongle-firmware"
+      "unrar"
+    ];
 
   # Auto-optimize store (deduplicate files)
   nix.optimise.automatic = true;

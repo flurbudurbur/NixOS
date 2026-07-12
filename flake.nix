@@ -127,7 +127,6 @@
               # - https://github.com/nix-community/home-manager/pull/6172
               # - https://github.com/nix-community/stylix/issues/865
               {
-                nixpkgs.config.allowUnfree = true;
                 nixpkgs.overlays = overlays.all;
               }
               home-manager.nixosModules.home-manager
@@ -147,7 +146,8 @@
                     inherit (inputs) tinted-schemes;
                     nixpkgs-unstable = import inputs.nixpkgs-unstable {
                       system = "x86_64-linux";
-                      config.allowUnfree = true;
+                      # claude-code is the only unfree package pulled from unstable
+                      config.allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [ "claude-code" ];
                     };
                     inherit inputs;
                   };
@@ -182,7 +182,6 @@
               disko.nixosModules.disko
               sops-nix.nixosModules.sops
               {
-                nixpkgs.config.allowUnfree = true;
                 nixpkgs.overlays = overlays.minimal;
               }
               home-manager.nixosModules.home-manager
