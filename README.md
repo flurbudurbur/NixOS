@@ -41,6 +41,7 @@ nix flake check
 This configuration uses **sops-nix** with **age encryption** for secret management.
 
 ### Locations
+
 - **Secrets repo**: `git@github.com:flurbudurbur/nix-secrets.git` (separate from main config)
 - **Encryption key**: `/home/flur/.config/sops/age/keys.txt`
 - **Public key**: `age1cnnmaf766jhumy92hqtgrxyr8z8vjymrj05j2k6hap57g3c50gmq2uhm36`
@@ -62,6 +63,7 @@ sudo nixos-rebuild switch --flake .#flurPC
 ```
 
 ### Current Secrets
+
 - **System**: Mullvad VPN account configuration
 - **User**: NextDNS URL, SSH hostnames, Git GPG signing key
 
@@ -114,23 +116,27 @@ nixos-system/
 ## Key Features
 
 ### Development Tools
+
 - **Node.js**: fnm (Fast Node Manager) + pnpm
 - **Git**: Yubikey GPG signing, SSH aliases
 - **Neovim**: Comprehensive nixvim configuration
 
 ### Gaming
-- Steam (with gamescope)
+
+- Steam
 - Lutris
 - Heroic Games Launcher
 - Wine + gamemode
 
 ### Desktop Applications
+
 - Zen Browser (Firefox-based with NextDNS)
 - Mullvad VPN
 - Persepolis (download manager)
 - Flatpak integration
 
 ### Hyprland Configuration
+
 - Monitor configurations per hostname
 - Waybar status bar
 - Walker app launcher
@@ -169,20 +175,24 @@ Runtime theme switching across all apps via `theme-switch [name]`:
 ## Adding New Modules
 
 ### User Package
+
 1. Add to `users/flur/programs/packages.nix`
 2. Rebuild: `sudo nixos-rebuild switch --flake .#flurPC`
 
 ### Custom Package
+
 1. Create `packages/yourpackage.nix` using standard nixpkgs pattern
 2. Add to `overlays/custom-packages.nix`: `yourpackage = final.callPackage ../packages/yourpackage.nix { };`
 3. Use as `pkgs.yourpackage` in any module
 
 ### Program Configuration
+
 1. Create `users/flur/programs/yourprogram.nix`
 2. Import in `users/flur/programs/default.nix`
 3. Rebuild
 
 ### System Service
+
 1. Edit appropriate module in `modules/` (system.nix, graphics.nix, etc.)
 2. Rebuild
 
