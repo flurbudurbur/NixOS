@@ -5,11 +5,13 @@
     Host shiori
       HostName ${config.sops.placeholder."ssh-shiori-hostname"}
       User flur
+      IdentitiesOnly yes
       IdentityFile ~/.ssh/shiori
 
     Host music
       HostName ${config.sops.placeholder."ssh-shiori-hostname"}
       User music
+      IdentitiesOnly yes
       IdentityFile ~/.ssh/music
   '';
 
