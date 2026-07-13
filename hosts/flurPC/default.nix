@@ -16,6 +16,7 @@
     ../../modules/zen-browser-policies.nix
     ../../modules/keyd.nix
     ../../modules/opentabletdriver.nix
+    ./wireguard.nix
   ];
 
   # Boot

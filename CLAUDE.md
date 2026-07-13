@@ -62,6 +62,7 @@ nixos-system/
 │   │   └── default.nix    # Theme color definitions (rose-pine-moon, catppuccin-mocha, sweet)
 │   ├── base.nix           # Host-agnostic core config (users, nix, fish, base packages) - imported by every host
 │   ├── server.nix         # Headless-server concerns (firewall, sshd hardening, fail2ban, qemuGuest) - vps only
+│   ├── relay.nix          # Public relay profile (WireGuard hub for homelab spokes) - vps now, portable to a future dedicated relay host
 │   ├── graphics.nix       # Graphics hardware (NVIDIA drivers, OpenGL) - flurPC only
 │   ├── desktop.nix        # Desktop/GUI environment (Hyprland, tuigreet, audio, bluetooth, fonts, OpenRGB) - flurPC only
 │   ├── gaming.nix         # Gaming (Steam, Lutris, Wine, gamemode) - flurPC only
@@ -167,6 +168,7 @@ This configuration uses several external flake inputs beyond standard nixpkgs:
 ### System-Level (modules/)
 - `base.nix`: Host-agnostic core configuration (Nix settings, user account, fish, nix-ld, base packages, podman, network-monitor wrappers). Imported by **every** host.
 - `server.nix`: Headless-server concerns (firewall, sshd hardening, fail2ban, qemuGuest, nix.gc). Imported by `vps` only.
+- `relay.nix`: Public relay profile — WireGuard hub (`wg0`, 10.100.0.1/24, UDP 51820) that homelab spokes (flurLab, flurPC, phone) dial into; hub forwards spoke↔spoke traffic. Private key via sops (`secrets/system/relay/wireguard.yaml`, key `relay-wg-key`) with fallback `/etc/wireguard/wg0.key`. Imported by `vps` today; designed to move as-is to a future dedicated relay host (future public homelab-service vhosts belong here too).
 - `graphics.nix`: Graphics hardware configuration (NVIDIA drivers, OpenGL/Vulkan). `flurPC` only.
 - `desktop.nix`: Desktop/GUI environment (Hyprland WM, tuigreet DM, XDG portals, audio, bluetooth, fonts, gnome-keyring, OpenRGB). `flurPC` only.
 - `gaming.nix`: Gaming configuration (Steam, Lutris, Wine, gamemode). `flurPC` only.

@@ -9,6 +9,7 @@
     ../../modules/base.nix
     ../../modules/server.nix
     ../../modules/secrets.nix
+    ../../modules/relay.nix
     ./services/caddy.nix
     ./services/searxng.nix
     ./services/syncyomi.nix

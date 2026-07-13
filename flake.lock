@@ -375,10 +375,10 @@
     },
     "nixos-secrets": {
       "locked": {
-        "lastModified": 1783895633,
-        "narHash": "sha256-Ribur/9gYt85QJYtGUblnl+DyBgIH0nT8wDT0Ylx/pU=",
+        "lastModified": 1783977723,
+        "narHash": "sha256-thSZA+BnwmYAc6jEKwrcOuEKgqxNjv+DBislG6ybLRQ=",
         "ref": "main",
-        "rev": "f590fa92e2d5d781cc301693056e1910551348a9",
+        "rev": "9c65b4d27915a03a7f02fb2e7d5ea13545a909df",
         "shallow": true,
         "type": "git",
         "url": "ssh://git@github.com/flurbudurbur/nix-secrets"

@@ -6,6 +6,8 @@
     ./disko.nix
     ../../modules/base.nix
     ../../modules/server.nix
+    ../../modules/secrets.nix
+    ./services/wireguard.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
