@@ -32,6 +32,7 @@
 
   networking.hostName = "flurLab";
   networking.useDHCP = true;
+  networking.interfaces.eno2.wakeOnLan.enable = true;
 
   system.stateVersion = "25.11";
 }
