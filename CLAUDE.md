@@ -55,8 +55,6 @@ nixos-system/
 │   ├── bricolage-grotesque.nix  # Custom font package
 │   ├── qobuz-player.nix        # TUI music player for Qobuz
 │   └── rose-pine-plymouth.nix  # Plymouth boot theme
-├── dotfiles/              # Shared dotfile sources
-│   └── starship.toml      # Starship prompt base config (extended by theme switcher)
 ├── modules/               # System-level shared configuration
 │   ├── themes/
 │   │   └── default.nix    # Theme color definitions (rose-pine-moon, catppuccin-mocha, sweet)
@@ -112,6 +110,7 @@ nixos-system/
         │   │   └── persepolis.nix # Persepolis download manager
         │   ├── shell/         # Shell environment
         │   │   ├── default.nix    # Fish configuration (aliases, functions, starship, fastfetch)
+        │   │   ├── starship.nix   # Starship prompt base config (extended by theme switcher)
         │   │   ├── terminals.nix  # Foot terminal
         │   │   └── tmux.nix       # Tmux terminal multiplexer
         │   └── wayland/       # Wayland/Hyprland specific
@@ -282,7 +281,7 @@ Theming uses a **runtime theme switcher** with multiple themes defined in `modul
 ### How it works
 
 1. `modules/themes/default.nix` defines color palettes (rose-pine-moon, catppuccin-mocha, sweet)
-2. `users/flur/desktop/wayland/themes.nix` generates per-theme config files for each app (hyprland, waybar, walker, foot, starship, mako, hyprlock, zen browser, nvim, gtk) under `~/.config/themes/<name>/`. Starship base config is sourced from `dotfiles/starship.toml`
+2. `users/flur/desktop/wayland/themes.nix` generates per-theme config files for each app (hyprland, waybar, walker, foot, starship, mako, hyprlock, zen browser, nvim, gtk) under `~/.config/themes/<name>/`. Starship base config is sourced from `users/flur/desktop/shell/starship.nix`
 3. `~/.config/themes/current` is a symlink to the active theme
 4. Apps source their theme file at runtime (e.g. `@import url("~/.config/themes/current/waybar-style.css")`)
 5. `theme-switch [name]` updates the symlink and reloads all apps

@@ -44,7 +44,7 @@ let
 
   starshipFormat = pkgs.formats.toml { };
 
-  starshipBase = import ../../../../dotfiles/starship.nix;
+  starshipBase = import ../shell/starship.nix;
 
   mkStarshipTheme =
     t:
