@@ -27,7 +27,7 @@ x 2026-07-11 2026-07-10 Configure SearXNG @vps ctx:"All my search engines when s
 x 2026-07-11 2026-07-10 Explore if noctalia-greeter can be configured to always use 'hyprland-uwsm' so as to not need a select pri:B start:2026-07-11
 x 2026-07-11 2026-07-10 Fix sops-nix not replacing my ssh keys pri:A start:2026-07-11
 2026-07-13 Set up navidrome on VPS and flurLab
-(B) 2026-07-13 Set up gitea on #VPS #flurlab
+x 2026-07-14 2026-07-13 Set up gitea on #VPS #flurlab pri:B start:2026-07-14
 x 2026-07-13 2026-07-13 define a way to access the homelab from outside the network start:2026-07-13 pri:A
-(A) 2026-07-13 Make the background more blurry in hyprland
+x 2026-07-14 2026-07-13 Make the background more blurry in hyprland pri:A start:2026-07-14
 2026-07-13 Plan srx.flur.dev exit strategy off the netcup VPS @vps ctx:"needs inbound fronting to hide home IP + outbound egress so search engines don't see/rate-limit it" start:2026-07-13

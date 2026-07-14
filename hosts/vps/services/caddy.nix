@@ -28,6 +28,11 @@ in
   services.caddy = {
     enable = true;
 
+    # globalConfig below sets `admin off`, which removes the admin API that
+    # `caddy reload` depends on to push new config - reload would always fail
+    # with "connection refused" to :2019. Restart on config changes instead.
+    enableReload = false;
+
     package = pkgs.caddy.withPlugins {
       plugins = [
         "github.com/caddy-dns/bunny@v1.2.0"
@@ -121,6 +126,27 @@ in
         header_up X-Forwarded-Port {http.request.port}
         header_up X-Real-IP {http.request.remote.host}
         header_up Connection "close"
+      }
+    '';
+
+    virtualHosts."git.flur.dev".logFormat = null;
+    virtualHosts."git.flur.dev".extraConfig = ''
+      import bunny_tls
+      import logging git.flur.dev
+
+      encode zstd gzip
+
+      header {
+        Referrer-Policy "no-referrer"
+        Strict-Transport-Security "max-age=31536000"
+        X-Content-Type-Options "nosniff"
+        -Server
+      }
+
+      # flurLab, reached over the WireGuard relay tunnel (modules/relay.nix / hosts/flurLab/services/wireguard.nix)
+      reverse_proxy 10.100.0.2:3000 {
+        header_up X-Forwarded-Port {http.request.port}
+        header_up X-Real-IP {http.request.remote.host}
       }
     '';
 
