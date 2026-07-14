@@ -20,6 +20,8 @@
     stateDir = "/data/forgejo";
 
     settings = {
+      DEFAULT.APP_NAME = "Flurgejo";
+
       server = {
         DOMAIN = "git.flur.dev";
         ROOT_URL = "https://git.flur.dev/";

@@ -9,6 +9,7 @@
     ../../modules/secrets.nix
     ./services/wireguard.nix
     ./services/forgejo.nix
+    ./services/searxng.nix
   ];
 
   boot.loader.systemd-boot.enable = true;

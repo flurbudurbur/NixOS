@@ -1,16 +1,19 @@
-# SearXNG + Valkey, migrated from the rootless podman quadlets that lived in
-# ~/.config/containers/systemd/searxng on the netcup box. Runs system-wide via
-# virtualisation.oci-containers here instead of per-user quadlets.
-{ pkgs, ... }:
+# SearXNG + Valkey. Reachable over the WireGuard tunnel (10.100.0.2);
+# vps Caddy proxies srx.flur.dev to it. Egress routes through vps's
+# egress-proxy so queries exit from the vps's IP instead of home.
+{
+  config,
+  pkgs,
+  secretsPath,
+  ...
+}:
 {
   virtualisation.oci-containers.backend = "podman";
 
-  # NixOS's podman module only opens udp/53 to the default network's
-  # interface (podman0) for aardvark-dns. The searxng network is a separate
-  # user-defined bridge (podman1), so without this its containers can reach
-  # the internet by IP but can never resolve hostnames - every search engine
-  # request times out looking exactly like a network outage.
+  # podman module only opens udp/53 for aardvark-dns on podman0, not this bridge - else DNS silently fails
   networking.firewall.interfaces."podman1".allowedUDPPorts = [ 53 ];
+
+  networking.firewall.interfaces.wg0.allowedTCPPorts = [ 8080 ];
 
   users.users.searxng = {
     isSystemUser = true;
@@ -18,6 +21,22 @@
     uid = 977;
   };
   users.groups.searxng.gid = 977;
+
+  sops.secrets."searxng-secret-key".sopsFile = "${secretsPath}/system/flurLab/searxng.yaml";
+
+  # secret_key can't be a plain Nix string (would land world-readable in /nix/store)
+  sops.templates."searxng-settings.yml" = {
+    owner = "searxng";
+    content = ''
+      use_default_settings: true
+      server:
+        secret_key: "${config.sops.placeholder."searxng-secret-key"}"
+        image_proxy: true
+      outgoing:
+        proxies:
+          all://: "socks5h://10.100.0.1:1080"
+    '';
+  };
 
   systemd.services.podman-network-searxng = {
     description = "Ensure the podman network for SearXNG exists";
@@ -61,8 +80,8 @@
 
     searxng = {
       image = "docker.io/searxng/searxng:latest";
-      ports = [ "127.0.0.1:8080:8080" ];
-      volumes = [ "/var/lib/searxng:/etc/searxng" ];
+      ports = [ "10.100.0.2:8080:8080" ];
+      volumes = [ "${config.sops.templates."searxng-settings.yml".path}:/etc/searxng/settings.yml:ro" ];
       environment.SEARXNG_BASE_URL = "https://srx.flur.dev/";
       dependsOn = [ "searxng-valkey" ];
       extraOptions = [
@@ -78,8 +97,4 @@
   systemd.services.podman-searxng.requires = [ "podman-network-searxng.service" ];
   systemd.services.podman-searxng-valkey.after = [ "podman-network-searxng.service" ];
   systemd.services.podman-searxng-valkey.requires = [ "podman-network-searxng.service" ];
-
-  systemd.tmpfiles.rules = [
-    "d /var/lib/searxng 0750 searxng searxng -"
-  ];
 }

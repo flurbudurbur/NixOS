@@ -11,9 +11,9 @@
     ../../modules/secrets.nix
     ../../modules/relay.nix
     ./services/caddy.nix
-    ./services/searxng.nix
     ./services/syncyomi.nix
     ./services/flur34.nix
+    ./services/egress-proxy.nix
   ];
 
   boot.loader.systemd-boot.enable = true;

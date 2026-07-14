@@ -73,14 +73,21 @@ nixos-system/
 │   ├── flurPC/
 │   │   ├── default.nix    # Host-specific config (boot, networking)
 │   │   └── hardware-configuration.nix  # Auto-generated hardware config
-│   └── vps/
-│       ├── default.nix    # Host-specific config (GRUB, networking, KVM guest modules)
+│   ├── vps/
+│   │   ├── default.nix    # Host-specific config (GRUB, networking, KVM guest modules)
+│   │   ├── disko.nix      # Declarative disk layout for nixos-anywhere provisioning
+│   │   └── services/      # App config specific to this one machine (not reusable roles - see below)
+│   │       ├── caddy.nix
+│   │       ├── egress-proxy.nix
+│   │       ├── syncyomi.nix
+│   │       └── flur34.nix
+│   └── flurLab/
+│       ├── default.nix    # Host-specific config (homelab PC, WireGuard spoke)
 │       ├── disko.nix      # Declarative disk layout for nixos-anywhere provisioning
-│       └── services/      # App config specific to this one machine (not reusable roles - see below)
-│           ├── caddy.nix
-│           ├── searxng.nix
-│           ├── syncyomi.nix
-│           └── flur34.nix
+│       └── services/
+│           ├── wireguard.nix  # WireGuard spoke - dials out to the vps relay hub
+│           ├── forgejo.nix    # Forgejo git server, fronted by vps Caddy (git.flur.dev)
+│           └── searxng.nix    # SearXNG + Valkey, fronted by vps Caddy (srx.flur.dev)
 └── users/                 # Per-user configurations
     └── flur/
         ├── nixos.nix      # User-specific system settings
@@ -185,12 +192,16 @@ The `base.nix`/`desktop.nix`/`server.nix` split mirrors the `overlays.all`/`over
 - `vps/default.nix`: Boot loader (GRUB, BIOS legacy - device supplied automatically by disko), KVM guest kernel modules, imports `base.nix` + `server.nix` + everything under `vps/services/`.
 - `vps/disko.nix`: Declarative disk layout (GPT: BIOS-boot + ESP + ext4 root) consumed by `nixos-anywhere` at provisioning time — there is no hand-written `hardware-configuration.nix` for this host.
 - `vps/services/`: App config specific to this one machine, as opposed to `modules/` which holds *reusable roles* (things that could plausibly apply to a hypothetical second desktop or server). These aren't reusable in that sense - they're one-off to this VPS - so they live under the host, not in `modules/`:
-  - `caddy.nix`: Reverse proxy for `srx.flur.dev` (SearXNG), `flur34.com`/`beta.flur34.com` (KuroSearch containers, see `flur34.nix`), `sync.shiori.gg` (SyncYomi), `dev.shiori.gg` (static). Built with the `caddy-dns/cloudflare` plugin for DNS-01 challenges; also carries the `caddy-wordpress` fail2ban jail (misleadingly named - it's generic bot-probe banning for all the Caddy sites, not WordPress-specific). Needs `secrets/system/vps/caddy.yaml` added to `nix-secrets` (see file for the expected key/format) - falls back to `/etc/caddy/cloudflare.env` (populate manually) until then.
-  - `searxng.nix`: SearXNG + Valkey as `virtualisation.oci-containers` (rootful podman, unlike the original rootless per-user quadlets). After first deploy, copy the synced `settings.yml`/`limiter.toml` into `/var/lib/searxng/`.
+  - `caddy.nix`: Reverse proxy for `srx.flur.dev` (SearXNG, on flurLab - see below), `git.flur.dev` (Forgejo, on flurLab), `flur34.com`/`beta.flur34.com` (KuroSearch containers, see `flur34.nix`), `sync.shiori.gg` (SyncYomi), `dev.shiori.gg` (static). Built with the `caddy-dns/cloudflare` plugin for DNS-01 challenges; also carries the `caddy-wordpress` fail2ban jail (misleadingly named - it's generic bot-probe banning for all the Caddy sites, not WordPress-specific). Needs `secrets/system/vps/caddy.yaml` added to `nix-secrets` (see file for the expected key/format) - falls back to `/etc/caddy/cloudflare.env` (populate manually) until then.
+  - `egress-proxy.nix`: MicroSocks SOCKS5 proxy bound to the WireGuard hub address (`10.100.0.1:1080`, wg0-only) - lets SearXNG on flurLab route its outbound search-engine queries out through the vps's IP instead of home, without turning the mesh into a general exit node. See `flurLab/services/searxng.nix`'s `outgoing.proxies`.
   - `syncyomi.nix`: SyncYomi sync server as a plain systemd service (no nixpkgs module for it, just the package). Session secret is sops-managed once `secrets/system/vps/syncyomi.yaml` exists; until then a random one is generated and persisted under `/var/lib/syncyomi`.
   - `flur34.nix`: KuroSearch (`ghcr.io/flur34/flur34`) as two `virtualisation.oci-containers` - `flur34` (`:latest`, port 8181) and `flur34-beta` (`:canary`, port 8383, watchtower-update-enabled). Real rule34 API creds go in `secrets/system/vps/{flur34,flur34-beta}.yaml`; falls back to an editable placeholder at `/etc/flur34/*.env` until those exist. Watchtower itself (the thing beta's `/update` webhook on :8384 talks to) isn't declared anywhere yet - it wasn't in the synced compose files, presumably a separate shared instance.
 
   Migrated from the netcup box's home directory; everything under `*.flur.me` (conduwuit, coturn, LiveKit) and MariaDB/php8.3-fpm were retired, not migrated.
+- `flurLab/services/`: App config for the homelab PC, same "one-off to this host" rationale as `vps/services/`:
+  - `wireguard.nix`: WireGuard spoke - dials out to the vps relay hub, no inbound ports at home.
+  - `forgejo.nix`: Forgejo git server, bound to the tunnel address (`10.100.0.2:3000`), fronted by the vps Caddy at `git.flur.dev`.
+  - `searxng.nix`: SearXNG + Valkey as `virtualisation.oci-containers` (rootful podman), bound to the tunnel address (`10.100.0.2:8080`), fronted by the vps Caddy at `srx.flur.dev`. Migrated here from `vps/services/searxng.nix` so search-engine-facing egress can route back through `vps/services/egress-proxy.nix` instead of exiting from home. `settings.yml` is fully declarative via `sops.templates` (not manually synced) - `secret_key` comes from `secrets/system/flurLab/searxng.yaml`.
 
 ### User-Specific (users/flur/)
 Split into `common/` (shared between both profiles), `desktop/` (flurPC), and `vps/` (the vps host) - same username on both machines, but the profiles themselves don't overlap beyond `common/`:
