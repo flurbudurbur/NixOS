@@ -151,6 +151,27 @@ in
       }
     '';
 
+    virtualHosts."music.flur.dev".logFormat = null;
+    virtualHosts."music.flur.dev".extraConfig = ''
+      import bunny_tls
+      import logging music.flur.dev
+
+      encode zstd gzip
+
+      header {
+        Referrer-Policy "no-referrer"
+        Strict-Transport-Security "max-age=31536000"
+        X-Content-Type-Options "nosniff"
+        -Server
+      }
+
+      # flurLab, reached over the WireGuard relay tunnel (modules/relay.nix / hosts/flurLab/services/wireguard.nix)
+      reverse_proxy 10.100.0.2:4533 {
+        header_up X-Forwarded-Port {http.request.port}
+        header_up X-Real-IP {http.request.remote.host}
+      }
+    '';
+
     virtualHosts."flur34.com".logFormat = null;
     virtualHosts."flur34.com".extraConfig = ''
       import cloudflare_tls

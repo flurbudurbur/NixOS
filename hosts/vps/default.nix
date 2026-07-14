@@ -2,7 +2,6 @@
 #
 # UEFI - requires the "EFI Boot" toggle enabled in the netcup panel before
 # booting the rescue system (it defaults to Legacy BIOS otherwise).
-{ pkgs, ... }:
 {
   imports = [
     ./disko.nix
@@ -25,16 +24,6 @@
     "root"
     "flur"
   ];
-
-  # SSH/SFTP-only account for uploading music files - no service runs as this user.
-  users.users.music = {
-    isNormalUser = true;
-    home = "/srv/music";
-    shell = pkgs.fish;
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILnpkT52t3MkXqJUEWAeWRyHXlTNrgIpGy+A12wkJm5s music@v2202512321715414857"
-    ];
-  };
 
   # KVM/virtio guest kernel modules (netcup runs standard KVM)
   boot.initrd.availableKernelModules = [

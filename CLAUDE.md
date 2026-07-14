@@ -85,7 +85,8 @@ nixos-system/
 │       └── services/
 │           ├── wireguard.nix  # WireGuard spoke - dials out to the vps relay hub
 │           ├── forgejo.nix    # Forgejo git server, fronted by vps Caddy (git.flur.dev)
-│           └── searxng.nix    # SearXNG + Valkey, fronted by vps Caddy (srx.flur.dev)
+│           ├── searxng.nix    # SearXNG + Valkey, fronted by vps Caddy (srx.flur.dev)
+│           └── navidrome.nix  # Navidrome music server + SFTP upload user, fronted by vps Caddy (music.flur.dev)
 └── users/                 # Per-user configurations
     └── flur/
         ├── nixos.nix      # User-specific system settings
@@ -201,6 +202,7 @@ The `base.nix`/`desktop.nix`/`server.nix` split mirrors the `overlays.all`/`over
   - `wireguard.nix`: WireGuard spoke - dials out to the vps relay hub, no inbound ports at home.
   - `forgejo.nix`: Forgejo git server, bound to the tunnel address (`10.100.0.2:3000`), fronted by the vps Caddy at `git.flur.dev`.
   - `searxng.nix`: SearXNG + Valkey as `virtualisation.oci-containers` (rootful podman), bound to the tunnel address (`10.100.0.2:8080`), fronted by the vps Caddy at `srx.flur.dev`. Migrated here from `vps/services/searxng.nix` so search-engine-facing egress can route back through `vps/services/egress-proxy.nix` instead of exiting from home. `settings.yml` is fully declarative via `sops.templates` (not manually synced) - `secret_key` comes from `secrets/system/flurLab/searxng.yaml`.
+  - `navidrome.nix`: Navidrome music server, bound to the tunnel address (`10.100.0.2:4533`), fronted by the vps Caddy at `music.flur.dev`. `MusicFolder`/`DataFolder` live under `/data` (the same HDD Forgejo uses). Also declares the SFTP-only `music` user (home `/data/music`, migrated here from `vps/default.nix`'s old `/srv/music`) - shares the library directory with Navidrome via a dedicated `music` group (`music` user: rwx, `navidrome`: r-x only). Reached over wg0 on flurLab's own OpenSSH (`:2222` - Forgejo's built-in SSH server owns `:22`), so only from hosts already on the WireGuard mesh, not the vps's public IP.
 
 ### User-Specific (users/flur/)
 Split into `common/` (shared between both profiles), `desktop/` (flurPC), and `vps/` (the vps host) - same username on both machines, but the profiles themselves don't overlap beyond `common/`:

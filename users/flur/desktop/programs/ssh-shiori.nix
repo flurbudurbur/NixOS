@@ -9,7 +9,8 @@
       IdentityFile ~/.ssh/shiori
 
     Host music
-      HostName ${config.sops.placeholder."ssh-shiori-hostname"}
+      HostName ${config.sops.placeholder."ssh-flurlab-ip"}
+      Port 2222
       User music
       IdentitiesOnly yes
       IdentityFile ~/.ssh/music

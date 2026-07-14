@@ -10,6 +10,7 @@
     ./services/wireguard.nix
     ./services/forgejo.nix
     ./services/searxng.nix
+    ./services/navidrome.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
