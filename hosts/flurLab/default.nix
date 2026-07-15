@@ -30,15 +30,6 @@
   # Physical machine, not a KVM guest (server.nix enables this for the vps)
   services.qemuGuest.enable = lib.mkForce false;
 
-  # Forgejo's built-in SSH server (services/forgejo.nix) takes the conventional :22
-  # for git clone URLs, so the host's own OpenSSH moves to :2222.
-  services.openssh.ports = lib.mkForce [ 2222 ];
-  networking.firewall.allowedTCPPorts = lib.mkForce [
-    2222
-    80
-    443
-  ];
-
   nix.settings.trusted-users = [
     "root"
     "flur"

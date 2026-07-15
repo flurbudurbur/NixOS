@@ -5,18 +5,24 @@
     enable = true;
     lfs.enable = true;
 
-    # Codeberg can only verify signatures against emails on the Codeberg
-    # account, so override the committer email for codeberg.org remotes
+    # Codeberg/Forgejo can only verify signatures against emails on file for
+    # the account, so override the committer email for their remotes
     includes =
       let
         codebergEmail = {
           contents.user.email = "flurbudurbur@noreply.codeberg.org";
+        };
+        forgejoEmail = {
+          contents.user.email = "flur@noreply.flur.dev";
         };
       in
       [
         (codebergEmail // { condition = "hasconfig:remote.*.url:git@codeberg.org:*/**"; })
         (codebergEmail // { condition = "hasconfig:remote.*.url:ssh://git@codeberg.org/**"; })
         (codebergEmail // { condition = "hasconfig:remote.*.url:https://codeberg.org/**"; })
+        (forgejoEmail // { condition = "hasconfig:remote.*.url:git@git.flur.dev:*/**"; })
+        (forgejoEmail // { condition = "hasconfig:remote.*.url:ssh://git@git.flur.dev/**"; })
+        (forgejoEmail // { condition = "hasconfig:remote.*.url:https://git.flur.dev/**"; })
       ];
     ignores = [
       "AGENTS.md"

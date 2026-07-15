@@ -33,3 +33,4 @@ x 2026-07-14 2026-07-13 Make the background more blurry in hyprland pri:A start:
 x 2026-07-14 2026-07-13 Plan srx.flur.dev exit strategy off the netcup VPS @vps ctx:"needs inbound fronting to hide home IP + outbound egress so search engines don't see/rate-limit it" start:2026-07-13
 x 2026-07-15 2026-07-14 Customize Walker config as much as I can pri:B start:2026-07-15
 (C) 2026-07-14 Rename everything VPS-related to Relay in preparation of homelab migration
+(B) 2026-07-15 Migrate formatter to Alejandra

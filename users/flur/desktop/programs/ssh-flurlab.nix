@@ -4,7 +4,7 @@
   sops.templates."ssh-flurlab-config".content = ''
     Host flurLab flurlab fl
       HostName ${config.sops.placeholder."ssh-flurlab-ip"}
-      Port 2222
+      Port 22
       User flur
       IdentitiesOnly yes
       IdentityFile ~/.ssh/shiori

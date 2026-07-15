@@ -13,6 +13,7 @@
     ./services/syncyomi.nix
     ./services/flur34.nix
     ./services/egress-proxy.nix
+    ./services/forgejo-backup.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
