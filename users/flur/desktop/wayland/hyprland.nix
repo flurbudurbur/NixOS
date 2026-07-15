@@ -607,6 +607,17 @@ in
           opacity = "0.90 0.80";
         }
       ];
+
+      # Walker is a layer-shell surface, not a toplevel, so window_rule above
+      # never matches it - use layer_rule for its own pop-in/out instead.
+      layer_rule = [
+        {
+          match = {
+            namespace = "^walker$";
+          };
+          animation = "popin 85%";
+        }
+      ];
     };
 
     extraConfig = ''

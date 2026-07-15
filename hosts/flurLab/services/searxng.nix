@@ -27,8 +27,14 @@
   # secret_key can't be a plain Nix string (would land world-readable in /nix/store)
   sops.templates."searxng-settings.yml" = {
     owner = "searxng";
+    # settings.yml is only read at startup - restart on template change
+    restartUnits = [ "podman-searxng.service" ];
     content = ''
       use_default_settings: true
+      search:
+        formats:
+          - html
+          - json
       server:
         secret_key: "${config.sops.placeholder."searxng-secret-key"}"
         image_proxy: true

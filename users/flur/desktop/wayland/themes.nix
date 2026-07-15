@@ -175,6 +175,7 @@ let
     cursor=${strip t.bg} ${strip t.accent}
   '';
 
+  # Targets walker v2's GTK CSS classes, not the old v1 names (.item, .item-sub, .item-icon)
   mkWalkerTheme =
     t:
     let
@@ -182,77 +183,263 @@ let
     in
     ''
       * {
-        color: ${t.fg};
+        all: unset;
         font-family: "JetBrainsMono Nerd Font", monospace;
         font-size: 14px;
+        color: ${t.fg};
       }
 
-      .window {
-        background: transparent;
+      popover {
+        background: ${rgba t.bg_alt "0.98"};
+        border: 1px solid ${rgba t.blue "0.35"};
+        border-radius: 14px;
+        padding: 8px;
       }
 
-      .box-wrapper {
-        background: ${rgba t.bg "0.95"};
+      .normal-icons {
+        -gtk-icon-size: 18px;
+      }
+
+      .large-icons {
+        -gtk-icon-size: 32px;
+      }
+
+      scrollbar {
+        opacity: 0;
+        transition: opacity 150ms ease;
+      }
+
+      scrollbar:hover,
+      scrollbar.dragging {
+        opacity: 0.6;
+      }
+
+      scrollbar slider {
+        background: ${rgba t.fg_faint "0.6"};
         border-radius: 10px;
+      }
+
+      /* transparent flex shell; children paint their own floating cards */
+      .box-wrapper {
+      }
+
+      .left-column {
+        background: ${rgba t.bg_alt "0.92"};
+        border-radius: 22px;
         border: 2px solid ${rgba t.blue "0.3"};
-        padding: 10px;
+        box-shadow: 0 20px 40px ${rgba t.bg "0.5"};
+        padding: 20px 16px;
+      }
+
+      .middle-column {
+        background: ${rgba t.bg "0.94"};
+        padding: 18px;
+        border-radius: 22px;
+        border: 2px solid ${rgba t.blue "0.35"};
+        box-shadow:
+          0 24px 48px ${rgba t.bg "0.55"},
+          0 0 40px ${rgba t.blue "0.12"};
+      }
+
+      .search-icon {
+        color: ${t.fg_dim};
+        opacity: 0.7;
+        margin-left: 16px;
+      }
+
+      .left-watermark {
+        opacity: 0.14;
+      }
+
+      .left-legend {
+        color: ${t.fg_dim};
+        font-family: monospace;
+        font-size: 11px;
+        opacity: 0.8;
+      }
+
+      .preview-box,
+      .elephant-hint,
+      .placeholder {
+        color: ${t.fg_dim};
+      }
+
+      .search-container {
+        background: ${rgba t.bg "0.6"};
+        border: 1px solid ${rgba t.bg_select "0.6"};
+        border-radius: 14px;
+        transition: border-color 150ms ease;
+      }
+
+      .input placeholder {
+        color: ${t.fg_faint};
+        opacity: 1;
+      }
+
+      .input selection {
+        background: ${rgba t.blue "0.4"};
       }
 
       .input {
-        background: ${rgba t.bg_alt "0.8"};
+        caret-color: ${t.accent};
         color: ${t.fg};
-        border: 1px solid ${rgba t.bg_select "0.5"};
-        border-radius: 8px;
-        padding: 8px 12px;
-        margin-bottom: 10px;
+        padding: 12px 16px;
+        font-size: 15px;
+        transition: box-shadow 150ms ease;
       }
 
       .input:focus {
-        border-color: ${t.blue};
-        box-shadow: 0 0 0 2px ${rgba t.blue "0.3"};
+        box-shadow: 0 0 0 2px ${rgba t.blue "0.35"};
       }
 
-      .item {
-        background: transparent;
+      .search-container:focus-within {
+        border-color: ${rgba t.blue "0.8"};
+      }
+
+      .list {
+        color: ${t.fg};
+      }
+
+      .item-box {
+        border-radius: 12px;
+        padding: 8px 10px;
+        margin: 1px 0;
+        border-left: 3px solid transparent;
+        transition:
+          background-color 120ms ease,
+          border-left-color 120ms ease;
+      }
+
+      .item-quick-activation {
+        background: ${rgba t.accent "0.22"};
+        color: ${t.accent};
         border-radius: 6px;
-        padding: 8px 12px;
-        margin: 2px 0;
+        padding: 3px 7px;
+        font-size: 11px;
+        font-weight: bold;
       }
 
-      .item:hover {
-        background: ${rgba t.bg_select "0.5"};
+      child:hover .item-box {
+        background: ${rgba t.bg_select "0.45"};
       }
 
-      .item:selected {
-        background: ${rgba t.blue "0.3"};
-        border: 1px solid ${t.blue};
+      child:selected .item-box,
+      row:selected .item-box {
+        background: ${rgba t.blue "0.18"};
+        border-left: 3px solid ${t.blue};
       }
 
       .item-text {
         color: ${t.fg};
       }
 
-      .item-sub {
+      .item-subtext {
         color: ${t.fg_dim};
         font-size: 12px;
+        opacity: 0.8;
       }
 
-      .item-icon {
-        margin-right: 10px;
+      .providerlist .item-subtext {
+        font-size: unset;
+        opacity: 0.9;
+        color: ${t.cyan};
       }
 
-      scrollbar {
-        background: ${rgba t.bg_alt "0.3"};
+      .item-image-text {
+        font-size: 26px;
+        color: ${t.accent2};
+      }
+
+      /* its own floating card, matching .left-column/.middle-column */
+      .preview {
+        border: 2px solid ${rgba t.blue "0.3"};
+        border-radius: 22px;
+        background: ${rgba t.bg_alt "0.94"};
+        box-shadow: 0 20px 40px ${rgba t.bg "0.5"};
+        padding: 16px;
+        color: ${t.fg};
+      }
+
+      .preview .large-icons {
+        -gtk-icon-size: 64px;
+      }
+
+      .calc .item-text {
+        font-size: 22px;
+        color: ${t.accent};
+        font-weight: bold;
+      }
+
+      .symbols .item-image,
+      .symbols .item-image-text {
+        font-size: 26px;
+      }
+
+      .todo.done .item-text-box {
+        opacity: 0.35;
+      }
+
+      .todo.urgent .item-text {
+        color: ${t.error};
+        font-weight: bold;
+      }
+
+      .todo.active .item-text {
+        color: ${t.cyan};
+        font-weight: bold;
+      }
+
+      .bluetooth.disconnected {
+        opacity: 0.5;
+      }
+
+      .keybinds {
+        padding-top: 10px;
+        margin-top: 6px;
+        border-top: 1px solid ${rgba t.bg_select "0.6"};
+        font-size: 12px;
+        color: ${t.fg};
+      }
+
+      .keybind-button {
+        opacity: 0.7;
+        transition: opacity 120ms ease;
+      }
+
+      .keybind-button:hover {
+        opacity: 1;
+      }
+
+      .keybind-bind {
+        color: ${t.fg_dim};
+        font-size: 10px;
+        text-transform: lowercase;
+      }
+
+      .keybind-label {
+        color: ${t.bg};
+        background: ${t.accent2};
+        font-size: 11px;
+        font-weight: bold;
+        padding: 3px 8px;
+        border-radius: 999px;
+      }
+
+      .error {
+        padding: 10px 14px;
+        background: ${rgba t.error "0.9"};
+        color: ${t.bg};
         border-radius: 10px;
       }
 
-      scrollbar slider {
-        background: ${rgba t.fg_faint "0.5"};
-        border-radius: 10px;
+      :not(.calc).current {
+        font-style: italic;
+        color: ${t.warning};
       }
 
-      scrollbar slider:hover {
-        background: ${rgba t.blue "0.6"};
+      .preview-content.archlinuxpkgs,
+      .preview-content.dnfpackages {
+        font-family: "JetBrainsMono Nerd Font", monospace;
       }
     '';
 
